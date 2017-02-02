@@ -1,0 +1,78 @@
+﻿@model IEnumerable<BeerReviews.Models.Brewery>
+
+@{
+    ViewBag.Title = "Breweries";
+}
+
+<h2>Breweries</h2>
+
+
+    <button type="button" class="btn btn-success pull-right" onclick="location.href='@Url.Action("Create")'">
+        Add new brewery
+        <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+    @using (Html.BeginForm("Index", "Brewery", FormMethod.Get))
+    {
+
+        <label class="control-label col-md-2" for="CountryID" style="text-align:right">Country</label>
+        <div class="col-md-3">
+            @Html.DropDownList("CountryID", null, "All", new { @class = "form-control" })
+        </div>
+        <button type="submit" class="btn btn-success">Choose</button>
+
+    }
+
+
+
+<table class="table">
+    <tr>
+        <th>
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            Beers count
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Country)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <a href="@Url.Action("Details", new { id = item.BreweryID })">
+            <img alt="@item.Name"
+                 src="@item.ImageUrl" height="50" width="50"/>    
+            </a>
+            </td>
+        <td>
+            <a href="@Url.Action("Details", new { id = item.BreweryID })">
+                @Html.DisplayFor(modelItem => item.Name)
+            </a>
+        </td>
+        <td>
+            @item.BeerBreweries.Where(s => s.isPlace == false).Count()
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Country.Name)
+        </td>
+        <td>
+            @if (item.isLocked != true) {
+            @Html.ActionLink("Edit |", "Edit", new { id = item.BreweryID })
+                                                                        }
+            @Html.ActionLink("Delete", "Delete", new { id=item.BreweryID })
+        </td>
+    </tr>
+}
+
+</table>

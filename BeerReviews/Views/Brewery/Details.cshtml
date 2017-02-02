@@ -1,0 +1,81 @@
+﻿@model BeerReviews.Models.Brewery
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+
+<div>
+    <hr />
+    <img alt="@Model.Name" src="@Model.ImageUrl" height="200" width="200" />
+    <dl class="dl-horizontal">
+        @if (Model.Phone != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+        }
+        @if (Model.Description != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        }
+        @if (Model.Street != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Street)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Street)
+            </dd>
+        }
+        @if (Model.PostalCode != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PostalCode)
+            </dd>
+        }
+        @if (Model.City != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.City)
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.Country.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country.Name)
+        </dd>
+
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BreweryID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<h3>Beers brewed by @Html.DisplayFor(model => model.Name):</h3>
+@{Html.RenderAction("Index", "Beer", new { breweryId = Model.BreweryID, isPlace = false });}
+<h3>Beers brewed in @Html.DisplayFor(model => model.Name):</h3>
+@{Html.RenderAction("Index", "Beer", new { breweryId = Model.BreweryID, isPlace = true });}

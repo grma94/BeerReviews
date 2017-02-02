@@ -1,0 +1,104 @@
+﻿@model BeerReviews.Models.Review
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Review</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Aroma)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aroma)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Taste)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Taste)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Palate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Palate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Apperance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Apperance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Overall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Overall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImageUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BeerID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BeerID)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,117 @@
+﻿@model BeerReviews.Models.Review
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Review</h4>
+    <hr />
+    <img alt="Review photo" src="@Model.ImageUrl" height="200" width="200" />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Beer)
+        </dt>
+
+        <dd>
+            <a href="@Url.Action("Details","Beer", new { id = Model.BeerID })">
+                @Html.DisplayFor(model => model.Beer.Name)
+            </a>
+        </dd>
+        <dt>
+            Brewed by
+        </dt>
+
+        <dd>
+            @foreach (var it in Model.Beer.BeerBreweries.Where(bb => bb.isPlace == false))
+            {
+                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                </a>
+            }
+        </dd>
+
+        <dt>
+            Brewed in
+        </dt>
+
+        <dd>
+            @foreach (var it in Model.Beer.BeerBreweries.Where(bb => bb.isPlace))
+            {
+                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                </a>
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Aroma)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aroma)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Taste)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Taste)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Palate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Palate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Apperance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Apperance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Overall)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Overall)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ReviewID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,175 @@
+﻿@model Tuple<List<BeerReviews.Models.Beer>, List<BeerReviews.Models.Brewery>>
+
+@{
+    ViewBag.Title = "SearchResults";
+}
+
+<h2>SearchResults</h2>
+<div class="tabbable" id="tabs">
+    <ul class="nav nav-tabs" data-tabs="tabs">
+        <li class="active">
+            <a href="#panel-1" data-toggle="tab">Beers</a>
+        </li>
+        <li>
+            <a href="#panel-2" data-toggle="tab">Breweries</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="panel-1">
+            @{ if (!Model.Item1.Any())
+                {
+                    <p>No beers found matching search</p>
+                }
+                else
+                {
+                    <table class="table">
+                        <tr>
+                            <th></th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item1.First().Name)
+                            </th>
+                            <th>
+                                Brewed by
+                            </th>
+                            <th>
+                                Brewed in
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item1.First().Abv)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item1.First().Gravity)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item1.First().Style)
+                            </th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in Model.Item1)
+                {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("Details", new { id = item.BeerID })">
+                                        <img alt="@item.Name" src="@item.ImageUrl" height="50" width="50" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Details", new { id = item.BeerID })">
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </a>
+                                </td>
+                                <td>
+                                    @if (!item.BeerBreweries.Where(bb => !bb.isPlace).Any())
+                                    {
+                                        <span>N/A</span>
+                                    }
+                                    @foreach (var it in item.BeerBreweries.Where(bb => !bb.isPlace))
+                                    {
+                                        <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                                        </a>
+                                    }
+
+                                </td>
+                                <td>
+                                    @if (!item.BeerBreweries.Where(bb => bb.isPlace).Any())
+                                    {
+                                        <span>N/A</span>
+                                    }
+                                    @foreach (var it in item.BeerBreweries.Where(bb => bb.isPlace))
+                                    {
+                                        <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                                        </a>
+                                    }
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Abv)%
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Gravity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Style.Name)
+                                </td>
+                                <td>
+                                    @if (item.isLocked != true)
+                                    {
+                                        @Html.ActionLink("Edit |", "Edit", new { id = item.BeerID })
+                                    }
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+                                </td>
+                            </tr>
+                        }
+
+
+                    </table>
+                } }
+        </div>
+        <div class="tab-pane fade" id="panel-2">
+            @{ if (!Model.Item1.Any())
+                {
+                    <p>No breweries found matching search</p>
+                }
+                else
+                {
+                    <table class="table">
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item2.First().Name)
+                            </th>
+                            <th>
+                                Beers count
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item2.First().City)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Item2.First().Country)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model.Item2)
+                {
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("Details", new { id = item.BreweryID })">
+                                        <img alt="@item.Name"
+                                             src="@item.ImageUrl" height="50" width="50" />
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Details", new { id = item.BreweryID })">
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </a>
+                                </td>
+                                <td>
+                                    @item.BeerBreweries.Where(s => s.isPlace == false).Count()
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.City)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Country)
+                                </td>
+                                <td>
+                                    @if (item.isLocked != true)
+                                    {
+                                        @Html.ActionLink("Edit |", "Edit", new { id = item.BreweryID })
+                                    }
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.BreweryID })
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                }
+            }
+        </div>
+    </div>
+</div>

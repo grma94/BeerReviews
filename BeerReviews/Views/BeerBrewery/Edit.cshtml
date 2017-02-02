@@ -1,0 +1,180 @@
+﻿@model BeerReviews.ViewModels.BeerBreweryViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit beer</h2>
+
+<link href="~/Content/themes/base/jquery-ui.css" rel="Stylesheet">
+
+
+@using (Html.BeginForm("Edit", "BeerBrewery", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.BeerID)
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Abv, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Abv, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Abv, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IBU, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IBU, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IBU, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Gravity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Gravity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Gravity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+
+                <textarea class="form-control text-box single-line" id="Description" name="Description" type="text" value="" rows="5">@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="file" class="col-md-2 control-label">Upload Image:</label>
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" style="width: 100%;" />
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="StyleID">Style</label>
+            <div class="col-md-10">
+                @Html.DropDownList("StyleID", null, String.Empty, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StyleID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @{int a = 0;}
+            @foreach (var name in Model.BreweriesNames)
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2" for="Name">Brewery name</label>
+                <div class="col-md-10">
+                    <input class="form-control text-box single-line Brewery" id="@a" name="BreweriesNames[@a]" type="text" value="@name" />
+                    @Html.ValidationMessageFor(model => model.BreweriesNames, "", new { @class = "text-danger" })
+                </div>
+            </div>
+                a++;
+            }
+        
+        <div id="fields"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-default form-control" id="btnAddField" value="@a">Add another brewery (authors)</button>
+            </div>
+        </div>
+
+@{int aP = 0;}
+@foreach (var name in Model.BreweriesPlacesNames)
+{
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Name">Brewery (place) name</label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line Brewery" id="BreweriesPlacesNames[@aP]" name="BreweriesPlacesNames[@aP]" type="text" value="@name" />
+                @Html.ValidationMessageFor(model => model.BreweriesNames, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    aP++;
+}
+        <div id="Placefields"></div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button class="btn btn-default form-control" id="btnAddPlaceField">Add another place where beer is brewed</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-success form-control">Save edit</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to beer list", "Index", "Beer", null, null)
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script type="text/javascript">
+
+
+                    $(document).ready(function () {
+                        var l = parseInt($('#btnAddField').val());
+                        var next = l;
+                        var next2 = parseInt($('#btnAddPlaceField').val());
+                        var $fields = $('#fields');
+                        var $Placefields = $('#Placefields');
+                        $('#btnAddField').click(function (e) {
+                            e.preventDefault();
+                            $('<div class="form-group"><label class="control-label col-md-2" for="Name">Brewery name</label><div class="col-md-10"><input class="form-control text-box single-line Brewery" id="BreweriesNames[' + next + ']" type="text" name="BreweriesNames[' + next + ']" /></div/></div>').appendTo($fields);
+                            aC();
+                            next = next + 1;
+                        });
+                        $('#btnAddPlaceField').click(function (e) {
+                            next2 = next2 + 1;
+                            e.preventDefault();
+                            $('<div class="form-group"><label class="control-label col-md-2" for="Name">Brewery (place) name</label><div class="col-md-10"><input class="form-control text-box single-line Brewery" id="BreweriesPlacesNames[' + next + ']" type="text" name="BreweriesPlacesNames[' + next + ']" /></div/></div>').appendTo($Placefields);
+                            aC();
+                            next2 = next2 + 1;
+                        });
+                    });
+
+                    function aC() {
+                        $(".Brewery").autocomplete({
+                            source: function (request, response) {
+                                $.ajax({
+                                    url: "/Beer/Create2",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: { Prefix: request.term },
+                                    success: function (data) {
+                                        response($.map(data, function (item) {
+                                            return { label: item.Name, value: item.Name };
+                                        }))
+
+                                    }
+                                })
+                            },
+                            messages: {
+                                noResults: "", results: function (resultsCount) { }
+                            }
+                        });
+                    }
+                    $(document).ready(aC)
+
+
+    </script>
+}

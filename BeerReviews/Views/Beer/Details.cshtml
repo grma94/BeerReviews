@@ -1,0 +1,111 @@
+﻿@model BeerReviews.Models.Beer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <img alt="@Model.Name" src="@Model.ImageUrl" height="200" width="200" />
+    <hr />
+    <dl class="dl-horizontal">
+       <dt>
+            Brewed by
+        </dt>
+
+        <dd>
+            @if (!Model.BeerBreweries.Where(bb => !bb.isPlace).Any())
+            {
+                <span>N/A</span>
+            }
+            @foreach (var it in Model.BeerBreweries.Where(bb => !bb.isPlace))
+            {
+                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                </a>
+            }
+        </dd>
+
+        <dt>
+            Brewed in
+        </dt>
+
+        <dd>
+            @if(!Model.BeerBreweries.Where(bb => bb.isPlace).Any())
+        {
+            <span>N/A</span>
+        }
+            @foreach (var it in Model.BeerBreweries.Where(bb => bb.isPlace))
+            {
+                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                </a>
+                @it.Brewery.City;
+                <span>-</span>
+                @it.Brewery.Country.Name;
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Abv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Abv)%
+        </dd>
+        @if (Model.IBU!=null)
+        {
+        <dt>
+            @Html.DisplayNameFor(model => model.IBU)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IBU)
+        </dd>
+        }
+        @if (Model.Gravity != null)
+        {
+        <dt>
+            @Html.DisplayNameFor(model => model.Gravity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gravity)
+        </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Style)
+        </dt>
+
+        <dd>
+            <a href="@Url.Action("Details","Style", new { id = Model.StyleID })">
+                @Html.DisplayFor(modelItem => Model.Style.Name)
+            </a>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Review",new { BeerID = Model.BeerID })'">
+        Add rewiev
+        <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+
+
+    @Html.ActionLink("Edit", "Edit","BeerBrewery", new { id = Model.BeerID },null) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@{Html.RenderAction("Index", "Review", new { beerId = Model.BeerID });}

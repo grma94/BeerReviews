@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BeerReviews.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Beer Styles</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p> 
+
+<div class="container">
+    <div class="row">
+@foreach (var item in Model)
+{
+    <div class="col-md-6 col-lg-4">
+
+        <h3> @Html.DisplayFor(modelItem => item.Name)</h3>
+
+        <ul class="list-unstyled">
+            @foreach (var it in item.Styles)
+            {
+                <li>
+                    <a href="@Url.Action("Details", new { id = it.StyleID })">
+                        @Html.DisplayFor(modelItem => it.Name)
+                    </a>
+                    
+                </li>
+            }
+        </ul>
+    </div>
+}
+    </div>
+</div>

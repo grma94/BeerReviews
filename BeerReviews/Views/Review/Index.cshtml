@@ -1,0 +1,81 @@
+﻿@model IEnumerable<BeerReviews.Models.Review>
+
+<h4>Reviews</h4>
+<table class="table">
+    <tr>
+        <th>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Aroma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Taste)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Palate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apperance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Overall)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Beer)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <a href="@Url.Action("Details", new { id = item.ReviewID })">
+                <img alt="Review photo"
+                     src="@item.ImageUrl" height="50" width="50" />
+            </a>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Aroma)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Taste)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Palate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Apperance)
+        </td>
+        <td>
+            @item.Overall.ToString("N1")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @item.Date.ToString("d")
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            <a href="@Url.Action("Details","Beer", new { id = item.BeerID })">
+                @Html.DisplayFor(model => item.Beer.Name)
+            </a>
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.ReviewID })
+        </td>
+    </tr>
+}
+
+</table>

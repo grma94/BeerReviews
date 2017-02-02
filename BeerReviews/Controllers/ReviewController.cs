@@ -137,6 +137,12 @@ namespace BeerReviews.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Review review = db.Reviews.Find(id);
+            var path = review.ImageUrl;
+            if (path != "/Content/Images/no_image.png")
+            {
+                var filePath = Server.MapPath(review.ImageUrl);
+                System.IO.File.Delete(filePath);
+            }
             db.Reviews.Remove(review);
             db.SaveChanges();
             return RedirectToAction("Index");

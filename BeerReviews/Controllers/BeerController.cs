@@ -84,6 +84,12 @@ namespace BeerReviews.Controllers
         {
             
             Beer beer = db.Beers.Find(id);
+            var path = beer.ImageUrl;
+            if (path != "/Content/Images/no_image.png")
+            {
+                var filePath = Server.MapPath(beer.ImageUrl);
+                System.IO.File.Delete(filePath);
+            }
             foreach (var bb in beer.BeerBreweries.ToList())
             {
                 db.BeerBreweries.Remove(bb);

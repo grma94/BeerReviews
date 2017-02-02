@@ -129,7 +129,12 @@ namespace BeerReviews.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Brewery brewery = db.Breweries.Find(id);
-
+            var path = brewery.ImageUrl;
+            if (path != "/Content/Images/no_image.png")
+            { 
+            var filePath = Server.MapPath(brewery.ImageUrl);
+                System.IO.File.Delete(filePath);
+            }
             foreach (var bb in brewery.BeerBreweries.ToList())
             {
                 db.BeerBreweries.Remove(bb);

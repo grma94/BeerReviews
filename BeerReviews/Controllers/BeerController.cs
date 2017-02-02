@@ -17,12 +17,13 @@ namespace BeerReviews.Controllers
         private BeerReviewsContext db = new BeerReviewsContext();
 
         // GET: Beer
-        public ActionResult Index(int? breweryId, bool? isPlace, int?styleId, bool? p)
+        public ActionResult Index(string sortOrder, int? breweryId, bool? isPlace, int?styleId, bool? p)
         {
             PopulateStylesDropDownList();
+
             if (breweryId == null && styleId==null)
             {
-                return View(db.Beers.ToList());
+                return View(Sort(sortOrder,db.Beers.ToList()));
             }
             else if (breweryId != null)
             {
@@ -32,7 +33,8 @@ namespace BeerReviews.Controllers
                     r.Add(it.Beer);
                 }
                 if (r.Count == 0) return Content("No beers found");
-                return PartialView(r);
+                
+                return PartialView(Sort(sortOrder,r));
             }
             else {
                 var r = db.Beers.Where(b => b.StyleID == styleId).ToList();
@@ -40,10 +42,10 @@ namespace BeerReviews.Controllers
                 {
                     if (r.Count == 0) return Content("No beers found");
                     {
-                        return PartialView(r);
+                        return PartialView(Sort(sortOrder, r));
                     }
                 }
-                return View(r);
+                return View(Sort(sortOrder, r));
             }
         }
 
@@ -109,6 +111,56 @@ namespace BeerReviews.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        private List<Beer> Sort(string sortOrder, List<Beer> unsorted)
+        {
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
+            ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
+            ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
+            ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
+            ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Name).ToList();
+                    break;
+                case "gravity":
+                    unsorted = unsorted.OrderBy(b => b.Gravity).ToList();
+                    break;
+                case "gravity_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Gravity).ToList();
+                    break;
+                case "ibu":
+                    unsorted = unsorted.OrderBy(b => b.IBU).ToList();
+                    break;
+                case "ibu_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.IBU).ToList();
+                    break;
+                case "abv":
+                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    break;
+                case "abv_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    break;
+                case "rc":
+                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    break;
+                case "rc_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    break;
+                case "avg":
+                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    break;
+                case "avg_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    break;
+                default:
+                    unsorted = unsorted.OrderBy(b => b.Name).ToList();
+                    break;
+            }
+            return unsorted;
         }
 
         private void PopulateStylesDropDownList(object selectedStyle = null)

@@ -17,16 +17,16 @@ namespace BeerReviews.Controllers
         private BeerReviewsContext db = new BeerReviewsContext();
 
         // GET: Brewery
-        public ActionResult Index(int? CountryID)
+        public ActionResult Index(int? CountryID, string sortOrder)
         {
 
             PopulateCountriesDropDownList();
             if (CountryID == null)
             { 
-            return View(db.Breweries.ToList());
+            return View(Sort(sortOrder,db.Breweries.ToList()));
             }
             var results = db.Breweries.Where(b => b.CountryID == CountryID);
-            return View(results);
+            return View(Sort(sortOrder,results.ToList()));
         }
 
         // GET: Brewery/Details/5
@@ -176,6 +176,43 @@ namespace BeerReviews.Controllers
                               orderby s.Name
                               select s;
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", selectedCountry);
+        }
+
+        private List<Brewery> Sort(string sortOrder, List<Brewery> unsorted)
+        {
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.CountrySortParm = sortOrder == "country" ? "country_desc" : "country";
+            ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
+            ViewBag.BeersSortParm = sortOrder == "bc" ? "bc_desc" : "bc";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Name).ToList();
+                    break;
+                case "country":
+                    unsorted = unsorted.OrderBy(b => b.Country.Name).ToList();
+                    break;
+                case "country_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Country.Name).ToList();
+                    break;
+                case "city":
+                    unsorted = unsorted.OrderBy(b => b.City).ToList();
+                    break;
+                case "city_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.City).ToList();
+                    break;
+                case "bc":
+                    unsorted = unsorted.OrderBy(b => b.BeersCount).ToList();
+                    break;
+                case "bc_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.BeersCount).ToList();
+                    break;
+                default:
+                    unsorted = unsorted.OrderBy(b => b.Name).ToList();
+                    break;
+            }
+            return unsorted;
         }
     }
 }

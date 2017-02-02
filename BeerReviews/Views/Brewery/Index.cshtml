@@ -30,16 +30,16 @@
 
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            Beers count
+           @Html.ActionLink("Beers count", "Index", new { sortOrder = ViewBag.BeersSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.ActionLink("City", "Index", new { sortOrder = ViewBag.CitySortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Country)
+            @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm })
         </th>
         <th></th>
     </tr>

@@ -43,10 +43,17 @@
         <th>
             @Html.DisplayNameFor(model => model.Style)
         </th>
+        <th>
+           Reviews count
+        </th>
+        <th>
+            Avg rating
+        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model)
+{
     <tr>
         <td>
             <a href="@Url.Action("Details", new { id = item.BeerID })">
@@ -65,7 +72,7 @@
             }
             @foreach (var it in item.BeerBreweries.Where(bb => !bb.isPlace))
             {
-                    <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
                         @Html.DisplayFor(modelItem => it.Brewery.Name)
                     </a>
             }
@@ -78,7 +85,7 @@
             }
             @foreach (var it in item.BeerBreweries.Where(bb => bb.isPlace))
             {
-                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
                     @Html.DisplayFor(modelItem => it.Brewery.Name)
                 </a>
             }
@@ -92,6 +99,24 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Style.Name)
+        </td>
+        <td>
+            @item.Reviews.Count()
+
+        </td>
+        <td>
+            @{var avg = 0.0;
+            }
+            @if (item.Reviews.Count()>0) { 
+            
+            foreach (var r in item.Reviews)
+            {
+                avg += r.Overall;
+            }
+            avg=avg/item.Reviews.Count();
+                <span>@avg.ToString("N1")</span>
+            }
+
         </td>
         <td>
             @if (item.isLocked != true)

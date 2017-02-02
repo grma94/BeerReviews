@@ -19,7 +19,7 @@ namespace BeerReviews.Models
         public int StyleID { get; set; }
 
         public virtual Style Style { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         public virtual ICollection<BeerBrewery> BeerBreweries { get; set; }
 
     }

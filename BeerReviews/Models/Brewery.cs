@@ -21,7 +21,7 @@ namespace BeerReviews.Models
         public int CountryID { get; set; }
         public bool isLocked { get; set; }
         public string ImageUrl { get; set; }
-
+        public int BeersCount { get; set; }
         public virtual Country Country { get; set; }
         public virtual ICollection<BeerBrewery> BeerBreweries { get; set; }
     }

@@ -54,6 +54,8 @@ namespace BeerReviews.Controllers
                         {
                             db.BeerBreweries.Add(bb2);
                             db.SaveChanges();
+                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
+                            db.SaveChanges();
                         }
                     }
                 }
@@ -170,7 +172,7 @@ namespace BeerReviews.Controllers
 
             db.SaveChanges();
 
-            if (beerBreweryVM.BreweriesPlacesNames != null)
+            if (beerBreweryVM.BreweriesNames != null)
             {
                 foreach (var bb in beerBreweryVM.BreweriesNames)
                 {
@@ -183,6 +185,8 @@ namespace BeerReviews.Controllers
                         if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
                         {
                             db.BeerBreweries.Add(bb2);
+                            db.SaveChanges();
+                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
                             db.SaveChanges();
                         }
                     }
@@ -215,6 +219,8 @@ namespace BeerReviews.Controllers
                     if (!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n => n == bb.Brewery.Name).Any())
                     {
                         db.BeerBreweries.Remove(bb);
+                        db.SaveChanges();
+                        db.Breweries.Find(bb.BreweryID).BeersCount++;
                         db.SaveChanges();
                     }
                 }

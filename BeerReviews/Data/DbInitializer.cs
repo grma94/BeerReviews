@@ -357,8 +357,8 @@ namespace BeerReviews.Data
 
             var breweries = new List<Brewery>
             {
-                new Brewery {Name="Browar Artezan", City="Błonie", CountryID=177, ImageUrl="/Content/Images/no_image.png"},
-                new Brewery {Name="AleBrowar", City="Lębork", CountryID=177, ImageUrl="/Content/Images/no_image.png"}
+                new Brewery {Name="Browar Artezan", City="Błonie", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=1},
+                new Brewery {Name="AleBrowar", City="Lębork", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=2}
             };
             breweries.ForEach(b => context.Breweries.Add(b));
             context.SaveChanges();

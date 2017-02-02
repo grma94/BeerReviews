@@ -50,8 +50,11 @@ namespace BeerReviews.Controllers
                     var bb2 = new BeerBrewery();
                     bb2.BeerID = beer.BeerID;
                     bb2.BreweryID = bId.First().BreweryID;
-                    db.BeerBreweries.Add(bb2);
-                    db.SaveChanges();
+                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                        {
+                            db.BeerBreweries.Add(bb2);
+                            db.SaveChanges();
+                        }
                     }
                 }
                 
@@ -64,14 +67,14 @@ namespace BeerReviews.Controllers
                         bb2.BeerID = beer.BeerID;
                         bb2.isPlace = true;
                         bb2.BreweryID = bId.First().BreweryID;
-                        db.BeerBreweries.Add(bb2);
-                        db.SaveChanges();
+                        if (db.BeerBreweries.Find(bb2.BeerID,bb2.BreweryID,bb2.isPlace)==null)
+                        {
+                            db.BeerBreweries.Add(bb2);
+                            db.SaveChanges();
+                        }
                     }
                 }
-                //     var id = beerBreweryVM.BreweriesNames.First();
-                //     beerBrewery.BreweryID=db.Breweries.Where(b => b.Name == id).First().BreweryID;
 
-                //     db.BeerBreweries.Add(beerBrewery);
 
 
                 PopulateStylesDropDownList(beerBreweryVM.StyleID);
@@ -167,23 +170,26 @@ namespace BeerReviews.Controllers
 
             db.SaveChanges();
 
-
-            foreach (var bb in beerBreweryVM.BreweriesNames)
+            if (beerBreweryVM.BreweriesPlacesNames != null)
             {
-                var bId = db.Breweries.Where(b => b.Name == bb);
-                if (bId.Any())
+                foreach (var bb in beerBreweryVM.BreweriesNames)
                 {
-                    var bb2 = new BeerBrewery();
-                    bb2.BeerID = beer.BeerID;
-                    bb2.BreweryID = bId.First().BreweryID;
-                    if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                    var bId = db.Breweries.Where(b => b.Name == bb);
+                    if (bId.Any())
                     {
-                        db.BeerBreweries.Add(bb2);
-                        db.SaveChanges();
+                        var bb2 = new BeerBrewery();
+                        bb2.BeerID = beer.BeerID;
+                        bb2.BreweryID = bId.First().BreweryID;
+                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                        {
+                            db.BeerBreweries.Add(bb2);
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
 
+            if (beerBreweryVM.BreweriesPlacesNames != null) { 
             foreach (var bb in beerBreweryVM.BreweriesPlacesNames)
             {
                 var bId = db.Breweries.Where(b => b.Name == bb);
@@ -201,17 +207,24 @@ namespace BeerReviews.Controllers
                 }
                 
             }
+            }
             foreach (var bb in db.Beers.Find(beer.BeerID).BeerBreweries.ToList())
             {
-                if(!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n=>n == bb.Brewery.Name).Any())
+                if (beerBreweryVM.BreweriesNames != null)
                 {
-                    db.BeerBreweries.Remove(bb);
-                    db.SaveChanges();
+                    if (!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n => n == bb.Brewery.Name).Any())
+                    {
+                        db.BeerBreweries.Remove(bb);
+                        db.SaveChanges();
+                    }
                 }
-                if (bb.isPlace && !beerBreweryVM.BreweriesPlacesNames.Where(n => n == bb.Brewery.Name).Any())
+                if (beerBreweryVM.BreweriesPlacesNames != null)
                 {
-                    db.BeerBreweries.Remove(bb);
-                    db.SaveChanges();
+                    if (bb.isPlace && !beerBreweryVM.BreweriesPlacesNames.Where(n => n == bb.Brewery.Name).Any())
+                    {
+                        db.BeerBreweries.Remove(bb);
+                        db.SaveChanges();
+                    }
                 }
             }
 

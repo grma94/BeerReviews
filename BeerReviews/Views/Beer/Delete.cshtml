@@ -105,12 +105,18 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+            @Html.AntiForgeryToken()
+                <div class="form-group" style="">
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default form-control" onclick="location.href='@Url.Action("Index")'">Back to list</button>
+                    </div>
+                    <div class="col-md-10">
+                        <input type="submit" value="Delete beer" class="btn btn-danger form-control" />
+                    </div>
+                </div>
+            </div>
+        }
 </div>

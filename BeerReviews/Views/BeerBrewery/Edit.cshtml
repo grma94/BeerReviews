@@ -58,13 +58,12 @@
         </div>
 
         <div class="form-group">
-            <label for="file" class="col-md-2 control-label">Upload Image:</label>
-            <div class="col-md-10">
-                <input type="file" name="file" id="file" style="width: 100%;" />
+            <label for="file" class="col-md-2 control-label">Image:</label>
+            <div class="col-md-3">
+                <input type="file" name="file" id="file" />
             </div>
+            <img src="@Model.ImageUrl" width="50" height="50" />
         </div>
-
-
 
         <div class="form-group">
             <label class="control-label col-md-2" for="StyleID">Style</label>
@@ -100,7 +99,7 @@
             <label class="control-label col-md-2" for="Name">Brewery (place) name</label>
             <div class="col-md-10">
                 <input class="form-control text-box single-line Brewery" id="BreweriesPlacesNames[@aP]" name="BreweriesPlacesNames[@aP]" type="text" value="@name" />
-                @Html.ValidationMessageFor(model => model.BreweriesNames, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.BreweriesPlacesNames, "", new { @class = "text-danger" })
             </div>
         </div>
     aP++;
@@ -108,21 +107,23 @@
         <div id="Placefields"></div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button class="btn btn-default form-control" id="btnAddPlaceField">Add another place where beer is brewed</button>
+                <button class="btn btn-default form-control" id="btnAddPlaceField" value="@aP">Add another place where beer is brewed</button>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger form-control" onclick="location.href='@Url.Action("Index","Beer")'">
+                    Cancel
+                </button>
+            </div>
+            <div class="col-md-10">
                 <button type="submit" class="btn btn-success form-control">Save edit</button>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to beer list", "Index", "Beer", null, null)
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -144,9 +145,8 @@
                             next = next + 1;
                         });
                         $('#btnAddPlaceField').click(function (e) {
-                            next2 = next2 + 1;
                             e.preventDefault();
-                            $('<div class="form-group"><label class="control-label col-md-2" for="Name">Brewery (place) name</label><div class="col-md-10"><input class="form-control text-box single-line Brewery" id="BreweriesPlacesNames[' + next + ']" type="text" name="BreweriesPlacesNames[' + next + ']" /></div/></div>').appendTo($Placefields);
+                            $('<div class="form-group"><label class="control-label col-md-2" for="Name">Brewery (place) name</label><div class="col-md-10"><input class="form-control text-box single-line Brewery" id="BreweriesPlacesNames[' + next2 + ']" type="text" name="BreweriesPlacesNames[' + next2 + ']" /></div/></div>').appendTo($Placefields);
                             aC();
                             next2 = next2 + 1;
                         });

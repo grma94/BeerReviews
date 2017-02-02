@@ -129,6 +129,13 @@ namespace BeerReviews.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Brewery brewery = db.Breweries.Find(id);
+
+            foreach (var bb in brewery.BeerBreweries.ToList())
+            {
+                db.BeerBreweries.Remove(bb);
+                db.SaveChanges();
+            }
+
             db.Breweries.Remove(brewery);
             db.SaveChanges();
             return RedirectToAction("Index");

@@ -156,7 +156,7 @@
                         $(".Brewery").autocomplete({
                             source: function (request, response) {
                                 $.ajax({
-                                    url: "/Beer/Create2",
+                                    url: "/BeerBrewery/Create2",
                                     type: "POST",
                                     dataType: "json",
                                     data: { Prefix: request.term },

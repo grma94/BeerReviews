@@ -13,18 +13,7 @@ namespace BeerReviews.Controllers
     public class BeerBreweryController : Controller
     {
         private BeerReviewsContext db = new BeerReviewsContext();
-        // GET: BeerBrewery
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        // GET: BeerBrewery/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
+     
         // GET: BeerBrewery/Create
         public ActionResult Create()
         {
@@ -244,27 +233,6 @@ namespace BeerReviews.Controllers
             return RedirectToAction("Index", "Beer");
         }
 
-        // GET: BeerBrewery/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: BeerBrewery/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         public string FileUpload(HttpPostedFileBase file)
         {

@@ -1,31 +1,11 @@
-﻿@model BeerReviews.Models.Style
+﻿@model IEnumerable<BeerReviews.Models.Beer>
 
-@{
-    ViewBag.Title = @Html.DisplayFor(model => model.Name) + " details";
-}
-
-<h2>@Html.DisplayFor(model => model.Name)</h2>
-
-
-<h4>@Html.DisplayFor(model => model.Category.Name)</h4>
-<hr />
-<p>
-    @Html.DisplayFor(model => model.Description)
-</p>
-
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.StyleID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-
-<h3>@Html.DisplayFor(model => model.Name) beers:</h3>
 
 <table class="table">
     <tr>
         <th></th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("Name", "BeerList", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
             Brewed by
@@ -40,6 +20,9 @@
             @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm })
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Style)
+        </th>
+        <th>
             @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm })
         </th>
         <th>
@@ -49,7 +32,8 @@
     </tr>
 
 
-    @foreach (var item in Model.Beers)
+
+    @foreach (var item in Model)
     {
         <tr>
             <td>
@@ -95,6 +79,9 @@
                 @Html.DisplayFor(modelItem => item.Gravity)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Style.Name)
+            </td>
+            <td>
                 @item.Reviews.Count()
 
             </td>
@@ -126,6 +113,3 @@
 </table>
 
 
-
-<h3>@Html.DisplayFor(model => model.Name) beers:</h3>
-@{Html.RenderAction("BeerStyleList", "Beer", new { sortOrder = "", beers = Model.Beers });}

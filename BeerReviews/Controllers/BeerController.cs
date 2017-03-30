@@ -23,6 +23,10 @@ namespace BeerReviews.Controllers
 
             if (breweryId == null && styleId==null)
             {
+                if (p != null)
+                {
+                    return PartialView(Sort(sortOrder, db.Beers.ToList()));
+                }
                 return View(Sort(sortOrder,db.Beers.ToList()));
             }
             else if (breweryId != null)
@@ -47,6 +51,20 @@ namespace BeerReviews.Controllers
                 }
                 return View(Sort(sortOrder, r));
             }
+        }
+
+        public ActionResult BeerStyleList(string sortOrder, ICollection<Beer>beers, int?styleId)
+        {
+            List<Beer> b;
+            if (beers == null)
+            {
+               b = db.Beers.Where(c => c.StyleID == styleId).ToList();
+            }
+            else
+            {
+               b = beers.ToList();
+            }
+            return PartialView(Sort(sortOrder,b));
         }
 
         // GET: Beer/Details/5
@@ -102,6 +120,37 @@ namespace BeerReviews.Controllers
                 db.Beers.Remove(beer);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult BeerList(string sortOrder, int? breweryId, bool? isPlace, int? styleId)
+        {
+            PopulateStylesDropDownList();
+
+            if (breweryId == null && styleId == null)
+            {
+
+                return PartialView(Sort(sortOrder, db.Beers.ToList()));
+
+            }
+            else if (breweryId != null)
+            {
+                var r = new List<Beer>();
+                foreach (var it in db.BeerBreweries.Where(bb => bb.BreweryID == breweryId && bb.isPlace == isPlace))
+                {
+                    r.Add(it.Beer);
+                }
+                if (r.Count == 0) return Content("No beers found");
+
+                return PartialView(Sort(sortOrder, r));
+            }
+            else
+            {
+                var r = db.Beers.Where(b => b.StyleID == styleId).ToList();
+                if (r.Count == 0) return Content("No beers found");
+                {
+                    return PartialView(Sort(sortOrder, r));
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)

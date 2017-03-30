@@ -30,7 +30,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Brewery/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, string sortOrder)
         {
             if (id == null)
             {

@@ -61,7 +61,7 @@
             </dd>
         }
         <dt>
-            @Html.DisplayNameFor(model => model.Country.Name)
+            @Html.DisplayNameFor(model => model.Country)
         </dt>
 
         <dd>
@@ -76,6 +76,7 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 <h3>Beers brewed by @Html.DisplayFor(model => model.Name):</h3>
-@{Html.RenderAction("Index", "Beer", new { breweryId = Model.BreweryID, isPlace = false });}
-<h3>Beers brewed in @Html.DisplayFor(model => model.Name):</h3>
-@{Html.RenderAction("Index", "Beer", new { breweryId = Model.BreweryID, isPlace = true });}
+
+    @{Html.RenderAction("BeerList", "Beer", new { breweryId = Model.BreweryID, isPlace = false });} 
+    <h3>Beers brewed in @Html.DisplayFor(model => model.Name):</h3>
+    @{Html.RenderAction("BeerList", "Beer", new { breweryId = Model.BreweryID, isPlace = true });}

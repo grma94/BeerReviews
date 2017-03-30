@@ -14,6 +14,6 @@ namespace BeerReviews.Models
         public int CategoryID { get; set; }
 
         public virtual Category Category { get; set; }
-        public ICollection<Beer> Beers { get; set; }
+        public virtual ICollection<Beer> Beers { get; set; }
     }
 }

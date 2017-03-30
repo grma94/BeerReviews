@@ -1,13 +1,12 @@
 ﻿@model BeerReviews.Models.Beer
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = @Html.DisplayFor(model => model.Name);
 }
 
-<h2>Details</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
 
 <div>
-    <h4>@Html.DisplayFor(model => model.Name)</h4>
     <img alt="@Model.Name" src="@Model.ImageUrl" height="200" width="200" />
     <hr />
     <dl class="dl-horizontal">

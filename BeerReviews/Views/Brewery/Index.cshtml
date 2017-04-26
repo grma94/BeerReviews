@@ -16,7 +16,7 @@
 
         <label class="control-label col-md-2" for="CountryID" style="text-align:right">Country</label>
         <div class="col-md-3">
-            @Html.DropDownList("CountryID", null, "All", new { @class = "form-control" })
+            @Html.DropDownList("CountryID", null, "All", new { @class = "form-control", id="id1" }) 
         </div>
         <button type="submit" class="btn btn-success">Choose</button>
 
@@ -30,16 +30,16 @@
 
         </th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, countryID = @ViewBag.Country })
         </th>
         <th>
-           @Html.ActionLink("Beers count", "Index", new { sortOrder = ViewBag.BeersSortParm })
+           @Html.ActionLink("Beers count", "Index", new { sortOrder = ViewBag.BeersSortParm, countryID = @ViewBag.Country })
         </th>
         <th>
-            @Html.ActionLink("City", "Index", new { sortOrder = ViewBag.CitySortParm })
+            @Html.ActionLink("City", "Index", new { sortOrder = ViewBag.CitySortParm, countryID = @ViewBag.Country })
         </th>
         <th>
-            @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm })
+            @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm, countryID = @ViewBag.Country })
         </th>
         <th></th>
     </tr>

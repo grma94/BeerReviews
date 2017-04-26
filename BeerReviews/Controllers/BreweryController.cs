@@ -26,6 +26,7 @@ namespace BeerReviews.Controllers
             return View(Sort(sortOrder,db.Breweries.ToList()));
             }
             var results = db.Breweries.Where(b => b.CountryID == CountryID);
+            ViewBag.Country = CountryID;
             return View(Sort(sortOrder,results.ToList()));
         }
 

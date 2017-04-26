@@ -108,7 +108,7 @@
                 } }
         </div>
         <div class="tab-pane fade" id="panel-2">
-            @{ if (!Model.Item1.Any())
+            @{ if (!Model.Item2.Any())
                 {
                     <p>No breweries found matching search</p>
                 }
@@ -155,7 +155,7 @@
                                     @Html.DisplayFor(modelItem => item.City)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Country)
+                                    @Html.DisplayFor(modelItem => item.Country.Name)
                                 </td>
                                 <td>
                                     @if (item.isLocked != true)

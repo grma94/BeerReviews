@@ -21,27 +21,30 @@ namespace BeerReviews.Controllers
         {
             PopulateStylesDropDownList();
 
-/*            if (breweryId == null && styleId==null)
+            if (breweryId == null && styleId==null)
             {
-                if (p != null)
+/*                if (p != null)
                 {
                     return PartialView(Sort(sortOrder, db.Beers.ToList()));
                 }
+*/
                 return View(Sort(sortOrder,db.Beers.ToList()));
             }
-            else if (breweryId != null)
-            {
-                var r = new List<Beer>();
-                foreach (var it in db.BeerBreweries.Where(bb => bb.BreweryID == breweryId && bb.isPlace==isPlace))
-                {
-                    r.Add(it.Beer);
-                }
-                if (r.Count == 0) return Content("No beers found");
-                
-                return PartialView(Sort(sortOrder,r));
-            }
-            else {
+/*           else if (breweryId != null)
+                       {
+                           var r = new List<Beer>();
+                           foreach (var it in db.BeerBreweries.Where(bb => bb.BreweryID == breweryId && bb.isPlace==isPlace))
+                           {
+                               r.Add(it.Beer);
+                           }
+                           if (r.Count == 0) return Content("No beers found");
+
+                           return PartialView(Sort(sortOrder,r));
+                       }
 */
+            else
+            {
+
                 var r = db.Beers.Where(b => b.StyleID == styleId).ToList();
 /*                if (p != null)
                 {
@@ -53,7 +56,7 @@ namespace BeerReviews.Controllers
 */
                 ViewBag.Style = styleId;
                 return View(Sort(sortOrder, r));
- //           }
+            }
         }
 
         public ActionResult BeerStyleList(string sortOrder, ICollection<Beer>beers, int?styleId)

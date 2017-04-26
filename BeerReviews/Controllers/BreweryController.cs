@@ -31,7 +31,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Brewery/Details/5
-        public ActionResult Details(int? id, string sortOrder)
+        public ActionResult Details(int? id, string sortOrder, bool? place)
         {
             if (id == null)
             {
@@ -42,6 +42,11 @@ namespace BeerReviews.Controllers
             {
                 return HttpNotFound();
             }
+            if (place != null)
+            { 
+            brewery.BeerBreweries = SortBeers(sortOrder, brewery.BeerBreweries.ToList(), (bool)place);
+            }
+
             return View(brewery);
         }
 
@@ -214,6 +219,62 @@ namespace BeerReviews.Controllers
                     break;
             }
             return unsorted;
+        }
+
+
+        private List<BeerBrewery> SortBeers(string sortOrder, List<BeerBrewery> unsorted, bool place)
+        {
+
+        List<BeerBrewery> unsortedPart=unsorted.Where(bb => bb.isPlace != place).ToList();
+        unsorted = unsorted.Where(bb => bb.isPlace == place).ToList();
+
+        ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
+            ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
+            ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
+            ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
+            ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Name).ToList();
+                    break;
+                case "gravity":
+                    unsorted = unsorted.OrderBy(b => b.Beer.Gravity).ToList();
+                    break;
+                case "gravity_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Gravity).ToList();
+                    break;
+                case "ibu":
+                    unsorted = unsorted.OrderBy(b => b.Beer.IBU).ToList();
+                    break;
+                case "ibu_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.IBU).ToList();
+                    break;
+                case "abv":
+                    unsorted = unsorted.OrderBy(b => b.Beer.Abv).ToList();
+                    break;
+                case "abv_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Abv).ToList();
+                    break;
+                case "rc":
+                    unsorted = unsorted.OrderBy(b => b.Beer.Abv).ToList();
+                    break;
+                case "rc_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Abv).ToList();
+                    break;
+                case "avg":
+                    unsorted = unsorted.OrderBy(b => b.Beer.Abv).ToList();
+                    break;
+                case "avg_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Abv).ToList();
+                    break;
+                default:
+                    unsorted = unsorted.OrderBy(b => b.Beer.Name).ToList();
+                    break;
+            }
+            return unsorted=unsorted.Union(unsortedPart).ToList();
         }
     }
 }

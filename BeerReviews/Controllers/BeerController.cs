@@ -21,7 +21,7 @@ namespace BeerReviews.Controllers
         {
             PopulateStylesDropDownList();
 
-            if (breweryId == null && styleId==null)
+/*            if (breweryId == null && styleId==null)
             {
                 if (p != null)
                 {
@@ -41,17 +41,19 @@ namespace BeerReviews.Controllers
                 return PartialView(Sort(sortOrder,r));
             }
             else {
+*/
                 var r = db.Beers.Where(b => b.StyleID == styleId).ToList();
-                if (p != null)
+/*                if (p != null)
                 {
                     if (r.Count == 0) return Content("No beers found");
                     {
                         return PartialView(Sort(sortOrder, r));
                     }
                 }
+*/
                 ViewBag.Style = styleId;
                 return View(Sort(sortOrder, r));
-            }
+ //           }
         }
 
         public ActionResult BeerStyleList(string sortOrder, ICollection<Beer>beers, int?styleId)
@@ -123,6 +125,7 @@ namespace BeerReviews.Controllers
             return RedirectToAction("Index");
         }
 
+        /*
         public ActionResult BeerList(string sortOrder, int? breweryId, bool? isPlace, int? styleId)
         {
             PopulateStylesDropDownList();
@@ -153,7 +156,7 @@ namespace BeerReviews.Controllers
                 }
             }
         }
-
+*/
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -67,7 +67,7 @@
         <dd>
             @Html.DisplayFor(model => model.Country.Name)
         </dd>
-
+        
 
     </dl>
 </div>
@@ -75,8 +75,209 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.BreweryID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
-<h3>Beers brewed by @Html.DisplayFor(model => model.Name):</h3>
 
-    @{Html.RenderAction("BeerList", "Beer", new { breweryId = Model.BreweryID, isPlace = false });} 
-    <h3>Beers brewed in @Html.DisplayFor(model => model.Name):</h3>
-    @{Html.RenderAction("BeerList", "Beer", new { breweryId = Model.BreweryID, isPlace = true });}
+<h3>Beers brewed by @Html.DisplayFor(model => model.Name):</h3>
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.ActionLink("Name", "Details", new { sortOrder = ViewBag.NameSortParm, place = false })
+        </th>
+        <th>
+            Brewed by
+        </th>
+        <th>
+            Brewed in
+        </th>
+        <th>
+            @Html.ActionLink("Abv", "Details", new { sortOrder = ViewBag.AbvSortParm, place = false })
+        </th>
+        <th>
+            @Html.ActionLink("Gravity", "Details", new { sortOrder = ViewBag.GravitySortParm, place = false })
+        </th>
+        <th>
+            @Html.ActionLink("Reviews count", "Details", new { sortOrder = ViewBag.ReviewsSortParm, place = false })
+        </th>
+        <th>
+            @Html.ActionLink("Avg rating", "Details", new { sortOrder = ViewBag.AvgSortParm, place = false })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.BeerBreweries.Where(bb => !bb.isPlace))
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    <img alt="@item.Beer.Name" src="@item.Beer.ImageUrl" height="50" width="50" />
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    @Html.DisplayFor(modelItem => item.Beer.Name)
+                </a>
+            </td>
+            <td>
+                @if (!item.Beer.BeerBreweries.Where(bb => !bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.Beer.BeerBreweries.Where(bb => !bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @if (!item.Beer.BeerBreweries.Where(bb => bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.Beer.BeerBreweries.Where(bb => bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beer.Abv)%
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beer.Gravity)
+            </td>
+            <td>
+                @item.Beer.Reviews.Count()
+
+            </td>
+            <td>
+                @{var avg = 0.0;
+                }
+                @if (item.Beer.Reviews.Count() > 0)
+                {
+
+                    foreach (var r in item.Beer.Reviews)
+                    {
+                        avg += r.Overall;
+                    }
+                    avg = avg / item.Beer.Reviews.Count();
+                    <span>@avg.ToString("N1")</span>
+                }
+
+            </td>
+            <td>
+                @if (item.Beer.isLocked != true)
+                {
+                    @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
+                }
+                @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+            </td>
+        </tr>
+                    }
+</table>
+
+<h3>Beers brewed in @Html.DisplayFor(model => model.Name):</h3>
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.ActionLink("Name", "Details", new { sortOrder = ViewBag.NameSortParm, place = true })
+        </th>
+        <th>
+            Brewed by
+        </th>
+        <th>
+            Brewed in
+        </th>
+        <th>
+            @Html.ActionLink("Abv", "Details", new { sortOrder = ViewBag.AbvSortParm, place = true })
+        </th>
+        <th>
+            @Html.ActionLink("Gravity", "Details", new { sortOrder = ViewBag.GravitySortParm, place = true })
+        </th>
+        <th>
+            @Html.ActionLink("Reviews count", "Details", new { sortOrder = ViewBag.ReviewsSortParm, place = true })
+        </th>
+        <th>
+            @Html.ActionLink("Avg rating", "Details", new { sortOrder = ViewBag.AvgSortParm, place = true })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.BeerBreweries.Where(bb => bb.isPlace))
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    <img alt="@item.Beer.Name" src="@item.Beer.ImageUrl" height="50" width="50" />
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    @Html.DisplayFor(modelItem => item.Beer.Name)
+                </a>
+            </td>
+            <td>
+                @if (!item.Beer.BeerBreweries.Where(bb => !bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.Beer.BeerBreweries.Where(bb => !bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @if (!item.Beer.BeerBreweries.Where(bb => bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.Beer.BeerBreweries.Where(bb => bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beer.Abv)%
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Beer.Gravity)
+            </td>
+            <td>
+                @item.Beer.Reviews.Count()
+
+            </td>
+            <td>
+                @{var avg = 0.0;
+                }
+                @if (item.Beer.Reviews.Count() > 0)
+                {
+
+                    foreach (var r in item.Beer.Reviews)
+                    {
+                        avg += r.Overall;
+                    }
+                    avg = avg / item.Beer.Reviews.Count();
+                    <span>@avg.ToString("N1")</span>
+                }
+
+            </td>
+            <td>
+                @if (item.Beer.isLocked != true)
+                {
+                    @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
+                }
+                @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+            </td>
+        </tr>
+                    }
+</table>

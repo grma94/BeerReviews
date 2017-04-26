@@ -49,6 +49,7 @@ namespace BeerReviews.Controllers
                         return PartialView(Sort(sortOrder, r));
                     }
                 }
+                ViewBag.Style = styleId;
                 return View(Sort(sortOrder, r));
             }
         }

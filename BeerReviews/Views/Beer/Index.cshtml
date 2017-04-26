@@ -26,7 +26,7 @@
     <tr>
         <th></th>
         <th>
-            @Html.ActionLink("Name","Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("Name","Index", new { sortOrder = ViewBag.NameSortParm, styleID = @ViewBag.Style })
         </th>
         <th>
             Brewed by
@@ -35,19 +35,19 @@
             Brewed in
         </th>
         <th>
-            @Html.ActionLink("Abv","Index", new { sortOrder = ViewBag.AbvSortParm })
+            @Html.ActionLink("Abv","Index", new { sortOrder = ViewBag.AbvSortParm, styleID = @ViewBag.Style })
         </th>
         <th>
-            @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm })
+            @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm, styleID = @ViewBag.Style })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Style)
         </th>
         <th>
-            @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm })
+            @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm, styleID = @ViewBag.Style })
         </th>
         <th>
-            @Html.ActionLink("Avg rating", "Index", new { sortOrder = ViewBag.AvgSortParm })
+            @Html.ActionLink("Avg rating", "Index", new { sortOrder = ViewBag.AvgSortParm, styleID = @ViewBag.Style })
         </th>
         <th></th>
     </tr>

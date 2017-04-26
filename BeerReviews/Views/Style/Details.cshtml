@@ -20,12 +20,15 @@
 </p>
 
 <h3>@Html.DisplayFor(model => model.Name) beers:</h3>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 
 <table class="table">
     <tr>
         <th></th>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+            @Html.ActionLink("Name", "Details", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
             Brewed by
@@ -34,16 +37,16 @@
             Brewed in
         </th>
         <th>
-            @Html.ActionLink("Abv", "Index", new { sortOrder = ViewBag.AbvSortParm })
+            @Html.ActionLink("Abv", "Details", new { sortOrder = ViewBag.AbvSortParm })
         </th>
         <th>
-            @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm })
+            @Html.ActionLink("Gravity", "Details", new { sortOrder = ViewBag.GravitySortParm })
         </th>
         <th>
-            @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm })
+            @Html.ActionLink("Reviews count", "Details", new { sortOrder = ViewBag.ReviewsSortParm })
         </th>
         <th>
-            @Html.ActionLink("Avg rating", "Index", new { sortOrder = ViewBag.AvgSortParm })
+            @Html.ActionLink("Avg rating", "Details", new { sortOrder = ViewBag.AvgSortParm })
         </th>
         <th></th>
     </tr>
@@ -121,11 +124,6 @@
                 @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
             </td>
         </tr>
-                    }
+    }
 
 </table>
-
-
-
-<h3>@Html.DisplayFor(model => model.Name) beers:</h3>
-@{Html.RenderAction("BeerStyleList", "Beer", new { sortOrder = "", beers = Model.Beers });}

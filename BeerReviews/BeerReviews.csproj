@@ -363,7 +363,6 @@
     <Content Include="Views\BeerBrewery\Create.cshtml" />
     <Content Include="Views\BeerBrewery\Edit.cshtml" />
     <Content Include="Views\Beer\BeerList.cshtml" />
-    <Content Include="Views\Beer\BeerStyleList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

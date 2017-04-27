@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", placeholder = "Beer name" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -29,7 +29,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Abv, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Abv, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Abv, new { htmlAttributes = new { @class = "form-control", placeholder = "Alcohol by volume in %" } })
                 @Html.ValidationMessageFor(model => model.Abv, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.IBU, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IBU, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.IBU, new { htmlAttributes = new { @class = "form-control", placeholder = "International Bittering Units" } })
                 @Html.ValidationMessageFor(model => model.IBU, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -45,7 +45,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Gravity, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Gravity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Gravity, new { htmlAttributes = new { @class = "form-control", placeholder = "° BLG or Plato" } })
                 @Html.ValidationMessageFor(model => model.Gravity, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -96,6 +96,9 @@
             @Html.ActionLink("Gravity", "Details", new { sortOrder = ViewBag.GravitySortParm, place = false })
         </th>
         <th>
+            @Html.ActionLink("Style", "Details", new { sortOrder = ViewBag.StyleSortParm, place = false })
+        </th>
+        <th>
             @Html.ActionLink("Reviews count", "Details", new { sortOrder = ViewBag.ReviewsSortParm, place = false })
         </th>
         <th>
@@ -150,6 +153,11 @@
                 @Html.DisplayFor(modelItem => item.Beer.Gravity)
             </td>
             <td>
+                <a href="@Url.Action("Details", "Style", new { id = item.Beer.StyleID })">
+                    @Html.DisplayFor(modelItem => item.Beer.Style.Name)
+                </a>
+            </td>
+            <td>
                 @item.Beer.Reviews.Count()
 
             </td>
@@ -197,6 +205,9 @@
         </th>
         <th>
             @Html.ActionLink("Gravity", "Details", new { sortOrder = ViewBag.GravitySortParm, place = true })
+        </th>
+        <th>
+            @Html.ActionLink("Style", "Details", new { sortOrder = ViewBag.StyleSortParm, place = true })
         </th>
         <th>
             @Html.ActionLink("Reviews count", "Details", new { sortOrder = ViewBag.ReviewsSortParm, place = true })
@@ -251,6 +262,11 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Beer.Gravity)
+            </td>
+            <td>
+                <a href="@Url.Action("Details", "Style", new { id = item.Beer.StyleID })">
+                    @Html.DisplayFor(modelItem => item.Beer.Style.Name)
+                </a>
             </td>
             <td>
                 @item.Beer.Reviews.Count()

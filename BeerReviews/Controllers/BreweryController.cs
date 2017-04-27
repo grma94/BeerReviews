@@ -234,6 +234,7 @@ namespace BeerReviews.Controllers
             ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
             ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
             ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
+            ViewBag.StyleSortParm = sortOrder == "style" ? "style_desc" : "style";
 
             switch (sortOrder)
             {
@@ -269,6 +270,12 @@ namespace BeerReviews.Controllers
                     break;
                 case "avg_desc":
                     unsorted = unsorted.OrderByDescending(b => b.Beer.Abv).ToList();
+                    break;
+                case "style":
+                    unsorted = unsorted.OrderBy(b => b.Beer.Style.Name).ToList();
+                    break;
+                case "style_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Beer.Style.Name).ToList();
                     break;
                 default:
                     unsorted = unsorted.OrderBy(b => b.Beer.Name).ToList();

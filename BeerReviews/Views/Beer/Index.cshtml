@@ -99,7 +99,9 @@
             @Html.DisplayFor(modelItem => item.Gravity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Style.Name)
+            <a href="@Url.Action("Details", "Style", new { id = item.StyleID })">
+                @Html.DisplayFor(modelItem => item.Style.Name)
+            </a>
         </td>
         <td>
             @item.Reviews.Count()

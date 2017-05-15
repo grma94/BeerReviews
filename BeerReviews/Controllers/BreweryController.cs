@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using BeerReviews.Data;
 using BeerReviews.Models;
 using System.IO;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace BeerReviews.Controllers
 {
@@ -17,8 +19,12 @@ namespace BeerReviews.Controllers
         private BeerReviewsContext db = new BeerReviewsContext();
 
         // GET: Brewery
-        public ActionResult Index(int? CountryID, string sortOrder)
+        public async Task<ActionResult> Index(int? CountryID, string sortOrder)
         {
+            using(BeerReviewsContext db = new BeerReviewsContext())
+            {
+
+            }
 
             PopulateCountriesDropDownList();
             if (CountryID == null)
@@ -26,8 +32,14 @@ namespace BeerReviews.Controllers
             return View(Sort(sortOrder,db.Breweries.ToList()));
             }
             var results = db.Breweries.Where(b => b.CountryID == CountryID);
+
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("localhost:9999/breweries/" + CountryID);
+            var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
+
+
             ViewBag.Country = CountryID;
-            return View(Sort(sortOrder,results.ToList()));
+            return View(Sort(sortOrder, breweries.ToList()));
         }
 
         // GET: Brewery/Details/5

@@ -20,6 +20,8 @@ namespace BeerReviews.Models
         [Required]
         public int CountryID { get; set; }
         public bool isLocked { get; set; }
+        public string Url { get; set; }
+        public string FbUrl { get; set; }
         public string ImageUrl { get; set; }
         public int BeersCount { get; set; }
         public virtual Country Country { get; set; }

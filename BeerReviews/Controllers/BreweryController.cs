@@ -111,7 +111,7 @@ namespace BeerReviews.Controllers
             PopulateCountriesDropDownList(brewery.CountryID);
             return View(brewery);
         }
-
+        [HttpGet]
         // GET: Brewery/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -132,7 +132,7 @@ namespace BeerReviews.Controllers
         // POST: Brewery/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
- //       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "BreweryID,Name,Phone,Description,Street,PostalCode,City, CountryID")] Brewery brewery, HttpPostedFileBase file)
         {
@@ -150,7 +150,8 @@ namespace BeerReviews.Controllers
                 {
                     brewery.ImageUrl = FileUpload(file);
                 }
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/{brewery.BreweryID}", brewery);
+                var breweryID = brewery.BreweryID;
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/", brewery);
                 response.EnsureSuccessStatusCode();
      //           db.Entry(brewery).State = EntityState.Modified;
      //           db.SaveChanges();
@@ -200,7 +201,7 @@ namespace BeerReviews.Controllers
                       db.Breweries.Remove(brewery);
                       db.SaveChanges();*/
             var httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.DeleteAsync($"api/products/{id}");
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/breweries/delete/{id}");
      //       return response.StatusCode;
 
             return RedirectToAction("Index");

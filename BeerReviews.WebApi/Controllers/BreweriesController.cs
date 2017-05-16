@@ -60,14 +60,13 @@ namespace BeerReviews.WebApi.Controllers
 
         // PUT api/values/5
         [HttpPut]
-        [Route("breweries/put/{breweryId}")]
-        public void Put(int id, [FromBody]Brewery brewery)
+        [Route("breweries/put/")]
+        public void Put([FromBody]Brewery brewery)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                Brewery existingBrewery=db.Breweries.Find(id);
-       //         modify.
-                db.Entry(existingBrewery).State = EntityState.Modified;
+            //    Brewery existingBrewery=db.Breweries.Find(breweryId);
+                db.Entry(brewery).State = EntityState.Modified;
                 db.SaveChanges();
             }
         }

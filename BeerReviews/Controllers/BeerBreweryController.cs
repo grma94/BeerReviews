@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,18 +15,22 @@ namespace BeerReviews.Controllers
 {
     public class BeerBreweryController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
+     //   private BeerReviewsContext db = new BeerReviewsContext();
      
         // GET: BeerBrewery/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            PopulateStylesDropDownList();
+            var httpClient = new HttpClient();
+            var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+            var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",null);
+            //PopulateStylesDropDownList();
             return View();
         }
 
         // POST: BeerBrewery/Create
         [HttpPost]
-        public ActionResult Create([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
+        public async Task<ActionResult> Create([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
         {
             try
             {
@@ -36,65 +42,85 @@ namespace BeerReviews.Controllers
               //  beer.ImageUrl = beerBreweryVM.ImageUrl;
                 beer.Name = beerBreweryVM.Name;
                 beer.StyleID = beerBreweryVM.StyleID;
-                beer.ImageUrl=FileUpload(file);
+    //            beer.ImageUrl=FileUpload(file);
 
-                    db.Beers.Add(beer);
-                    db.SaveChanges();
+                //     db.Beers.Add(beer);
+                //      db.SaveChanges();
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/post/", beer);
+                response.EnsureSuccessStatusCode();
 
-
-
-                foreach(var bb in beerBreweryVM.BreweriesNames)
+                response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+                var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
+                foreach (var bb in beerBreweryVM.BreweriesNames)
                 {
-                    var bId = db.Breweries.Where(b => b.Name == bb);
+
+                    var bId = breweries.Where(b => b.Name == bb);
+      //              var bId = db.Breweries.Where(b => b.Name == bb);
                     if (bId.Any())
                     { 
                     var bb2 = new BeerBrewery();
                     bb2.BeerID = beer.BeerID;
                     bb2.BreweryID = bId.First().BreweryID;
-                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                        response.EnsureSuccessStatusCode();
+         /*               if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
                         {
                             db.BeerBreweries.Add(bb2);
                             db.SaveChanges();
                             db.Breweries.Find(bb2.BreweryID).BeersCount++;
                             db.SaveChanges();
-                        }
+                        }*/
                     }
                 }
                 
                 foreach (var bb in beerBreweryVM.BreweriesPlacesNames)
                 {
-                    var bId = db.Breweries.Where(b => b.Name == bb);
+                    var bId = breweries.Where(b => b.Name == bb);
+                    //       var bId = db.Breweries.Where(b => b.Name == bb);
                     if (bId.Any())
                     {
                         var bb2 = new BeerBrewery();
                         bb2.BeerID = beer.BeerID;
                         bb2.isPlace = true;
                         bb2.BreweryID = bId.First().BreweryID;
-                        if (db.BeerBreweries.Find(bb2.BeerID,bb2.BreweryID,bb2.isPlace)==null)
+                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb);
+                        response.EnsureSuccessStatusCode();
+          /*              if (db.BeerBreweries.Find(bb2.BeerID,bb2.BreweryID,bb2.isPlace)==null)
                         {
                             db.BeerBreweries.Add(bb2);
                             db.SaveChanges();
                         }
+                        */
                     }
                 }
 
 
-
-                PopulateStylesDropDownList(beerBreweryVM.StyleID);
+                var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+                var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+                ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
+          //      PopulateStylesDropDownList(beerBreweryVM.StyleID);
                 return RedirectToAction("Index", "Beer");
             }
             catch
             {
-                PopulateStylesDropDownList(beerBreweryVM.StyleID);
+                var httpClient = new HttpClient();
+                var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+                var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+                ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
+        //        PopulateStylesDropDownList(beerBreweryVM.StyleID);
                 return View();
             }
         }
 
         [HttpPost]
-        public JsonResult Create2(string Prefix)
+        public async Task<JsonResult> Create2(string Prefix)
         {
             //Note : you can bind same list from database  
-            List<Brewery> ObjList = db.Breweries.ToList();
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+            var ObjList = await response.Content.ReadAsAsync<List<Brewery>>();
+  //          List<Brewery> ObjList = db.Breweries.ToList();
 
             //Searching records from list using LINQ query  
             var BreweryName = (from N in ObjList
@@ -105,7 +131,7 @@ namespace BeerReviews.Controllers
             //                         select new { N.Name });
             return Json(BreweryName, JsonRequestBehavior.AllowGet);
         }
-
+/*
         // GET: BeerBrewery/Edit/5
         public ActionResult Edit(int id)
         {
@@ -249,7 +275,7 @@ namespace BeerReviews.Controllers
                        catch
                        {
                            return View();
-                       }*/
+/////                       }
             return RedirectToAction("Index", "Beer");
         }
 
@@ -276,6 +302,7 @@ namespace BeerReviews.Controllers
                               select s;
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", selectedStyle);
         }
+    */
     }
 
 

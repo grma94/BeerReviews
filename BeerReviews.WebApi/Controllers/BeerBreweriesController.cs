@@ -1,5 +1,8 @@
-﻿using System;
+﻿using BeerReviews.WebApi.Data;
+using BeerReviews.WebApi.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,15 +15,43 @@ namespace BeerReviews.WebApi.Controllers
         // POST api/values
         [HttpPost]
         [Route("beerbreweries/post")]
-        public void Post([FromBody]Brewery brewery)
+        public void Post([FromBody]Beer beer)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                db.Breweries.Add(brewery);
+                db.Beers.Add(beer);
                 db.SaveChanges();
             }
         }
 
+        [HttpPost]
+        [Route("beerbreweries/postbb")]
+        public void AddBeerBrewery([FromBody]BeerBrewery bb2)
+        {
+            using (BeerReviewsContext db = new BeerReviewsContext())
+            {
+                if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                {
+                    db.BeerBreweries.Add(bb2);
+                    db.SaveChanges();
+                    db.Breweries.Find(bb2.BreweryID).BeersCount++;
+                    db.SaveChanges();
+                }
+            }
+        }
+        [HttpPost]
+        [Route("beerbreweries/postbpb")]
+        public void AddBeerPlaceBrewery([FromBody]BeerBrewery bb2)
+        {
+            using (BeerReviewsContext db = new BeerReviewsContext())
+            {
+                if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                {
+                    db.BeerBreweries.Add(bb2);
+                    db.SaveChanges();
+                }
+            }
+        }
         // PUT api/values/5
         [HttpPut]
         [Route("breweries/put/")]

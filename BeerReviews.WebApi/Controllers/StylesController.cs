@@ -40,50 +40,54 @@ namespace BeerReviews.WebApi.Controllers
 
         // POST api/values
         [HttpPost]
-        [Route("breweries/post")]
-        public void Post([FromBody]Brewery brewery)
+        [Route("styles/post")]
+        public void Post([FromBody]Style style)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                db.Breweries.Add(brewery);
+                db.Styles.Add(style);
                 db.SaveChanges();
             }
         }
 
         // PUT api/values/5
         [HttpPut]
-        [Route("breweries/put/")]
-        public void Put([FromBody]Brewery brewery)
+        [Route("styles/put/")]
+        public void Put([FromBody]Style style)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                //    Brewery existingBrewery=db.Breweries.Find(breweryId);
-                db.Entry(brewery).State = EntityState.Modified;
+                db.Entry(style).State = EntityState.Modified;
                 db.SaveChanges();
+
             }
         }
 
         // DELETE api/values/5
         [HttpDelete]
-        [Route("breweries/delete/{breweryId}")]
-        public void Delete(int breweryId)
+        [Route("styles/delete/{styleId}")]
+        public void Delete(int styleId)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                var brewery = db.Breweries.Find(breweryId);
-                var path = brewery.ImageUrl;
-                if (path != "/Content/Images/no_image.png")
-                {
-                    //                  var filePath = Server.MapPath(brewery.ImageUrl);
-                    //                  System.IO.File.Delete(filePath);
-                }
-                /*         foreach (var bb in brewery.BeerBreweries.ToList())
-                         {
-                             db.BeerBreweries.Remove(bb);
-                             db.SaveChanges();
-                         }*/
-                db.Breweries.Remove(brewery);
+                var style = db.Styles.Find(styleId);
+                db.Styles.Remove(style);
                 db.SaveChanges();
+            }
+        }
+
+
+        [HttpGet]
+        [Route("categories")]
+        public IEnumerable<Category> GetCategories()
+        {
+            using (BeerReviewsContext db = new BeerReviewsContext())
+            {
+
+                var categoriesQuery = from s in db.Categories
+                                     orderby s.Name
+                                     select s;
+                return categoriesQuery.ToList();
             }
         }
 

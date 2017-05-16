@@ -33,7 +33,6 @@ namespace BeerReviews.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Style style = db.Styles.Find(id);
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://localhost:64635/styles/single/"+id);
             var style = await response.Content.ReadAsAsync<Style>();
@@ -48,23 +47,30 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Style/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-       //     PopulateCategoriesDropDownList();
+            //PopulateCategoriesDropDownList();
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/categories/");
+            var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
+
+            ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", null);
             return View();
         }
-/*
+
         // POST: Style/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
+        public async Task<ActionResult> Create([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
             if (ModelState.IsValid)
             {
-                db.Styles.Add(style);
-                db.SaveChanges();
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/styles/post/", style);
+                response.EnsureSuccessStatusCode();
+
                 PopulateCategoriesDropDownList(style.CategoryID);
                 return RedirectToAction("Index");
             }
@@ -73,18 +79,27 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Style/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Style style = db.Styles.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/styles/single/" + id);
+            var style = await response.Content.ReadAsAsync<Style>();
             if (style == null)
             {
                 return HttpNotFound();
             }
-            PopulateCategoriesDropDownList(style.CategoryID);
+
+
+            response = await httpClient.GetAsync("http://localhost:64635/categories/");
+            var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
+
+            ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
+
+          //  PopulateCategoriesDropDownList(style.CategoryID);
             return View(style);
         }
 
@@ -93,26 +108,34 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
+        public async Task<ActionResult> Edit([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
             if (ModelState.IsValid)
             {
+                var httpClient = new HttpClient();
+
                 PopulateCategoriesDropDownList(style.CategoryID);
-                db.Entry(style).State = EntityState.Modified;
-                db.SaveChanges();
+
+
+                var styleID = style.StyleID;
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/styles/put/", style);
+                response.EnsureSuccessStatusCode();
+
                 return RedirectToAction("Index");
             }
             return View(style);
         }
 
         // GET: Style/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Style style = db.Styles.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/styles/single/" + id);
+            var style = await response.Content.ReadAsAsync<Style>();
             if (style == null)
             {
                 return HttpNotFound();
@@ -123,28 +146,31 @@ namespace BeerReviews.Controllers
         // POST: Style/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Style style = db.Styles.Find(id);
-            db.Styles.Remove(style);
-            db.SaveChanges();
+            var httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/styles/delete/{id}");
+      //      Style style = db.Styles.Find(id);
+      //      db.Styles.Remove(style);
+      //      db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+  /*      protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
+        }*/
 
-        private void PopulateCategoriesDropDownList(object selectedCategory = null)
+        private async void PopulateCategoriesDropDownList(object selectedCategory = null)
         {
-            var categoriesQuery = from s in db.Categories
-                                 orderby s.Name
-                                 select s;
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/categories/");
+            var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
+
             ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", selectedCategory);
         }
 
@@ -198,6 +224,6 @@ namespace BeerReviews.Controllers
                     break;
             }
             return unsorted;
-        }*/
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Entity;
+//using System.Data.Entity;
 
-namespace BeerReviews.WebApi.Models
+namespace BeerReviews.Database.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

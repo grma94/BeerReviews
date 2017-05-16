@@ -7,49 +7,60 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BeerReviews.Data;
-using BeerReviews.Models;
+using BeerReviews.Database.Models;
 using System.IO;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace BeerReviews.Controllers
 {
     public class BreweryController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
+    //    private BeerReviewsContext db = new BeerReviewsContext();
 
         // GET: Brewery
         public async Task<ActionResult> Index(int? CountryID, string sortOrder)
         {
-            using(BeerReviewsContext db = new BeerReviewsContext())
-            {
-
-            }
 
             PopulateCountriesDropDownList();
-            if (CountryID == null)
-            { 
-            return View(Sort(sortOrder,db.Breweries.ToList()));
-            }
-            var results = db.Breweries.Where(b => b.CountryID == CountryID);
 
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("localhost:9999/breweries/" + CountryID);
-            var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
+    //        httpClient.DefaultRequestHeaders.Accept.Clear();
+   //         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if (CountryID == null)
+            {
+                var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "all");
+                var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
+                ViewBag.Country = CountryID;
+                return View(Sort(sortOrder, breweries.ToList()));
+            }
+            else
+            {
+                var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + CountryID);
+                var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
+                ViewBag.Country = CountryID;
+                return View(Sort(sortOrder, breweries.ToList()));
+            }
+            //      var data = JsonConvert.DeserializeObject<Root>(response.Content.ReadAsStringAsync().ToString()).Data;
+            
+         //   var brew=breweries.ToList();
 
-
-            ViewBag.Country = CountryID;
-            return View(Sort(sortOrder, breweries.ToList()));
         }
 
         // GET: Brewery/Details/5
-        public ActionResult Details(int? id, string sortOrder, bool? place)
+        public async Task<ActionResult> Details(int? id, string sortOrder, bool? place)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Brewery brewery = db.Breweries.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single" + id);
+            var brewery = await response.Content.ReadAsAsync<Brewery>();
+
+        //    Brewery brewery = db.Breweries.Find(id);
             if (brewery == null)
             {
                 return HttpNotFound();
@@ -65,7 +76,7 @@ namespace BeerReviews.Controllers
         // GET: Brewery/Create
         public ActionResult Create()
         {
-            PopulateCountriesDropDownList();
+ //           PopulateCountriesDropDownList();
             return View();
         }
 
@@ -74,28 +85,33 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Phone,Description,Street,PostalCode,City,CountryID")] Brewery brewery, HttpPostedFileBase file)
+        public async Task<ActionResult> Create([Bind(Include = "Name,Phone,Description,Street,PostalCode,City,CountryID")] Brewery brewery, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 brewery.ImageUrl = FileUpload(file);
-                db.Breweries.Add(brewery);
-                db.SaveChanges();
-                PopulateCountriesDropDownList(brewery.CountryID);
+
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsJsonAsync("localhost:64635/breweries/post",brewery);
+                response.EnsureSuccessStatusCode();
+
+    //            PopulateCountriesDropDownList(brewery.CountryID);
                 return RedirectToAction("Index");
             }
-            PopulateCountriesDropDownList(brewery.CountryID);
+  //          PopulateCountriesDropDownList(brewery.CountryID);
             return View(brewery);
         }
 
         // GET: Brewery/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Brewery brewery = db.Breweries.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
+            var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
                 return HttpNotFound();
@@ -106,34 +122,43 @@ namespace BeerReviews.Controllers
         // POST: Brewery/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+ //       [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "BreweryID,Name,Phone,Description,Street,PostalCode,City, CountryID")] Brewery brewery, HttpPostedFileBase file)
+        public async Task<ActionResult> Edit([Bind(Include = "BreweryID,Name,Phone,Description,Street,PostalCode,City, CountryID")] Brewery brewery, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                var httpClient = new HttpClient();
                 if (file == null)
-                {
-                    brewery.ImageUrl = db.Breweries.AsNoTracking().Where(b=>b.BreweryID==brewery.BreweryID).First().ImageUrl;
-                }else
+                {   
+                    var response1 = await httpClient.GetAsync("localhost:64635/breweries/single" + brewery.BreweryID);
+                    var breweryI = await response1.Content.ReadAsAsync<Brewery>();
+                    brewery.ImageUrl = breweryI.ImageUrl;
+   //                 brewery.ImageUrl = db.Breweries.AsNoTracking().Where(b=>b.BreweryID==brewery.BreweryID).First().ImageUrl;
+                }
+                else
                 {
                     brewery.ImageUrl = FileUpload(file);
                 }
-                db.Entry(brewery).State = EntityState.Modified;
-                db.SaveChanges();
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"localhost:64635/breweries/put/{brewery.BreweryID}", brewery);
+                response.EnsureSuccessStatusCode();
+     //           db.Entry(brewery).State = EntityState.Modified;
+     //           db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(brewery);
         }
 
         // GET: Brewery/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Brewery brewery = db.Breweries.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
+            var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
                 return HttpNotFound();
@@ -144,27 +169,34 @@ namespace BeerReviews.Controllers
         // POST: Brewery/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Brewery brewery = db.Breweries.Find(id);
-            var path = brewery.ImageUrl;
-            if (path != "/Content/Images/no_image.png")
-            { 
-            var filePath = Server.MapPath(brewery.ImageUrl);
-                System.IO.File.Delete(filePath);
-            }
-            foreach (var bb in brewery.BeerBreweries.ToList())
-            {
-                db.BeerBreweries.Remove(bb);
-                db.SaveChanges();
-            }
+            //           var httpClient = new HttpClient();
+            //           var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
+            //           var brewery = await response.Content.ReadAsAsync<Brewery>();
+            /*          Brewery brewery = db.Breweries.Find(id);
+                      var path = brewery.ImageUrl;
+                      if (path != "/Content/Images/no_image.png")
+                      { 
+                      var filePath = Server.MapPath(brewery.ImageUrl);
+                          System.IO.File.Delete(filePath);
+                      }
+                      foreach (var bb in brewery.BeerBreweries.ToList())
+                      {
+                          db.BeerBreweries.Remove(bb);
+                          db.SaveChanges();
+                      }
 
-            db.Breweries.Remove(brewery);
-            db.SaveChanges();
+                      db.Breweries.Remove(brewery);
+                      db.SaveChanges();*/
+            var httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.DeleteAsync($"api/products/{id}");
+     //       return response.StatusCode;
+
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
+ /*       protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
@@ -172,7 +204,7 @@ namespace BeerReviews.Controllers
             }
             base.Dispose(disposing);
         }
-
+*/
         public string FileUpload(HttpPostedFileBase file)
         {
             if (file != null)
@@ -188,11 +220,14 @@ namespace BeerReviews.Controllers
             else return "/Content/Images/no_image.png";
         }
 
-        private void PopulateCountriesDropDownList(object selectedCountry = null)
+        private async void PopulateCountriesDropDownList(object selectedCountry = null)
         {
-            var countriesQuery = from s in db.Countries
-                              orderby s.Name
-                              select s;
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
+   //         var countriesQuery = from s in db.Countries
+  //                            orderby s.Name
+  //                            select s;
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", selectedCountry);
         }
 

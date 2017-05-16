@@ -381,6 +381,15 @@
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeerReviews.Database\BeerReviews.Database.csproj">
+      <Project>{1ecedf73-b2f7-43de-86f0-51174edf4463}</Project>
+      <Name>BeerReviews.Database</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

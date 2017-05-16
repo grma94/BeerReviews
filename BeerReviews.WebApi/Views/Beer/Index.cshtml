@@ -1,0 +1,135 @@
+﻿@model IEnumerable<BeerReviews.WebApi.Models.Beer>
+
+@{
+    ViewBag.Title = "Beers";
+}
+
+<div style="margin-top:10pt; margin-bottom:10pt">
+    <button type="button" class="btn btn-success pull-right" onclick="location.href='@Url.Action("Create","BeerBrewery",null)'">
+        Add new beer
+        <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+
+    @using (Html.BeginForm("Index", "Beer", FormMethod.Get))
+    {
+
+        <label class="control-label col-md-2" for="StyleID" style="text-align:right">Style</label>
+        <div class="col-md-3">
+            @Html.DropDownList("StyleID", null, "All", new { @class = "form-control" })
+        </div>
+        <button type="submit" class="btn btn-success">Choose</button>
+
+    }
+</div>
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, styleID = @ViewBag.Style })
+        </th>
+        <th>
+            Brewed by
+        </th>
+        <th>
+            Brewed in
+        </th>
+        <th>
+            @Html.ActionLink("Abv", "Index", new { sortOrder = ViewBag.AbvSortParm, styleID = @ViewBag.Style })
+        </th>
+        <th>
+            @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm, styleID = @ViewBag.Style })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Style)
+        </th>
+        <th>
+            @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm, styleID = @ViewBag.Style })
+        </th>
+        <th>
+            @Html.ActionLink("Avg rating", "Index", new { sortOrder = ViewBag.AvgSortParm, styleID = @ViewBag.Style })
+        </th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    <img alt="@item.Name" src="@item.ImageUrl" height="50" width="50" />
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.BeerID })">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </a>
+            </td>
+            <td>
+                @if (!item.BeerBreweries.Where(bb => !bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.BeerBreweries.Where(bb => !bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @if (!item.BeerBreweries.Where(bb => bb.isPlace).Any())
+                {
+                    <span>N/A</span>
+                }
+                @foreach (var it in item.BeerBreweries.Where(bb => bb.isPlace))
+                {
+                    <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
+                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    </a>
+                }
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abv)%
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gravity)
+            </td>
+            <td>
+                <a href="@Url.Action("Details", "Style", new { id = item.StyleID })">
+                    @Html.DisplayFor(modelItem => item.Style.Name)
+                </a>
+            </td>
+            <td>
+                @item.Reviews.Count()
+
+            </td>
+            <td>
+                @{var avg = 0.0;
+                }
+                @if (item.Reviews.Count() > 0)
+                {
+
+                    foreach (var r in item.Reviews)
+                    {
+                        avg += r.Overall;
+                    }
+                    avg = avg / item.Reviews.Count();
+                    <span>@avg.ToString("N1")</span>
+                }
+
+            </td>
+            <td>
+                @if (item.isLocked != true)
+                {
+                    @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
+                }
+                @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+            </td>
+        </tr>
+                    }
+
+</table>

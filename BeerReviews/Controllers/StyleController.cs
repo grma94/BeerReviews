@@ -7,7 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using BeerReviews.Data;
-using BeerReviews.Models;
+using BeerReviews.Database.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace BeerReviews.Controllers
 {
@@ -16,25 +18,31 @@ namespace BeerReviews.Controllers
         private BeerReviewsContext db = new BeerReviewsContext();
 
         // GET: Style
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(db.Categories.ToList());
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/styles/many/");
+            var styles = await response.Content.ReadAsAsync<IEnumerable<Category>>();
+            return View(styles.ToList());
         }
 
         // GET: Style/Details/5
-        public ActionResult Details(int? id, string sortOrder)
+        public async Task<ActionResult> Details(int? id, string sortOrder)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Style style = db.Styles.Find(id);
+            //Style style = db.Styles.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/styles/single/"+id);
+            var style = await response.Content.ReadAsAsync<Style>();
             if (style == null)
             {
                 return HttpNotFound();
             }
- 
-            style.Beers=Sort(sortOrder,style.Beers.ToList());
+
+//            style.Beers=Sort(sortOrder,style.Beers.ToList());
 
             return View(style);
         }
@@ -42,10 +50,10 @@ namespace BeerReviews.Controllers
         // GET: Style/Create
         public ActionResult Create()
         {
-            PopulateCategoriesDropDownList();
+       //     PopulateCategoriesDropDownList();
             return View();
         }
-
+/*
         // POST: Style/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -190,6 +198,6 @@ namespace BeerReviews.Controllers
                     break;
             }
             return unsorted;
-        }
+        }*/
     }
 }

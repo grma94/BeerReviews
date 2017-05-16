@@ -236,6 +236,7 @@
     <Compile Include="Controllers\BeerController.cs" />
     <Compile Include="Controllers\BreweriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StylesController.cs" />
     <Compile Include="Data\BeerReviewsContext.cs" />
     <Compile Include="Data\DbInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -318,6 +319,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Providers\" />
+    <Folder Include="Views\Styles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

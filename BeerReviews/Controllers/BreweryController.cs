@@ -24,9 +24,12 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Index(int? CountryID, string sortOrder)
         {
 
-            PopulateCountriesDropDownList();
-
+    //        PopulateCountriesDropDownList();
             var httpClient = new HttpClient();
+            var response1 = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var countriesQuery = await response1.Content.ReadAsAsync<IEnumerable<Country>>();
+            ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
+    //        var httpClient = new HttpClient();
     //        httpClient.DefaultRequestHeaders.Accept.Clear();
    //         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (CountryID == null)
@@ -76,9 +79,14 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Brewery/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
- //           PopulateCountriesDropDownList();
+            //      PopulateCountriesDropDownList();
+
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
+            ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
             return View();
         }
 
@@ -94,13 +102,13 @@ namespace BeerReviews.Controllers
                 brewery.ImageUrl = FileUpload(file);
 
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("localhost:64635/breweries/post",brewery);
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/breweries/post/", brewery);
                 response.EnsureSuccessStatusCode();
 
-    //            PopulateCountriesDropDownList(brewery.CountryID);
+             //   PopulateCountriesDropDownList(brewery.CountryID);
                 return RedirectToAction("Index");
             }
-  //          PopulateCountriesDropDownList(brewery.CountryID);
+            PopulateCountriesDropDownList(brewery.CountryID);
             return View(brewery);
         }
 
@@ -112,7 +120,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
+            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
@@ -133,7 +141,7 @@ namespace BeerReviews.Controllers
                 var httpClient = new HttpClient();
                 if (file == null)
                 {   
-                    var response1 = await httpClient.GetAsync("localhost:64635/breweries/single" + brewery.BreweryID);
+                    var response1 = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + brewery.BreweryID);
                     var breweryI = await response1.Content.ReadAsAsync<Brewery>();
                     brewery.ImageUrl = breweryI.ImageUrl;
    //                 brewery.ImageUrl = db.Breweries.AsNoTracking().Where(b=>b.BreweryID==brewery.BreweryID).First().ImageUrl;
@@ -142,7 +150,7 @@ namespace BeerReviews.Controllers
                 {
                     brewery.ImageUrl = FileUpload(file);
                 }
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"localhost:64635/breweries/put/{brewery.BreweryID}", brewery);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/{brewery.BreweryID}", brewery);
                 response.EnsureSuccessStatusCode();
      //           db.Entry(brewery).State = EntityState.Modified;
      //           db.SaveChanges();
@@ -159,7 +167,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
+            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {

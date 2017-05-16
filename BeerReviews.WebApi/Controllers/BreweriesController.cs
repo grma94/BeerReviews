@@ -54,6 +54,7 @@ namespace BeerReviews.WebApi.Controllers
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
                db.Breweries.Add(brewery);
+               db.SaveChanges();
             }
         }
 
@@ -67,7 +68,7 @@ namespace BeerReviews.WebApi.Controllers
                 Brewery existingBrewery=db.Breweries.Find(id);
        //         modify.
                 db.Entry(existingBrewery).State = EntityState.Modified;
-                db.SaveChangesAsync();
+                db.SaveChanges();
             }
         }
 
@@ -91,6 +92,7 @@ namespace BeerReviews.WebApi.Controllers
                     db.SaveChanges();
                 }*/
                 db.Breweries.Remove(brewery);
+                db.SaveChanges();
             }
         }
 

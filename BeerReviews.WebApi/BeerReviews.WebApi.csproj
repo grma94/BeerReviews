@@ -233,7 +233,9 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\BeerBreweriesController.cs" />
     <Compile Include="Controllers\BeerController.cs" />
+    <Compile Include="Controllers\BeersController.cs" />
     <Compile Include="Controllers\BreweriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StylesController.cs" />

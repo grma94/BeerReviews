@@ -57,7 +57,9 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single" + id);
+                    httpClient.DefaultRequestHeaders.Accept.Clear();
+                     httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
 
         //    Brewery brewery = db.Breweries.Find(id);
@@ -67,7 +69,7 @@ namespace BeerReviews.Controllers
             }
             if (place != null)
             { 
-            brewery.BeerBreweries = SortBeers(sortOrder, brewery.BeerBreweries.ToList(), (bool)place);
+      //      brewery.BeerBreweries = SortBeers(sortOrder, brewery.BeerBreweries.ToList(), (bool)place);
             }
 
             return View(brewery);

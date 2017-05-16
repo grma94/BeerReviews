@@ -35,8 +35,13 @@ namespace BeerReviews.WebApi.Controllers
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                var brewery = db.Breweries.Find(breweryId);
-               
+                var brewery = db.Breweries
+                    .Include(b=>b.Country)
+                    .Include(bb=>bb.BeerBreweries.Select(b=>b.Beer)
+                    .Select(r=> r.Reviews))
+                    .Include(bb => bb.BeerBreweries.Select(b => b.Beer.Style))
+                    .Include(bb => bb.BeerBreweries.Select(b => b.Beer.BeerBreweries))
+                    .SingleOrDefault(x=>x.BreweryID==breweryId);
                 return brewery;
             }
         }

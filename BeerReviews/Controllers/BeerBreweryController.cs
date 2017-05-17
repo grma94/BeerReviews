@@ -132,11 +132,13 @@ namespace BeerReviews.Controllers
             //                         select new { N.Name });
             return Json(BreweryName, JsonRequestBehavior.AllowGet);
         }
-/*
+
         // GET: BeerBrewery/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var beer=db.Beers.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + id);
+            var beer = await response.Content.ReadAsAsync<Beer>();
             var bbvm = new BeerBreweryViewModel();
             bbvm.Abv = beer.Abv;
             bbvm.BeerID = beer.BeerID;
@@ -158,125 +160,161 @@ namespace BeerReviews.Controllers
             bbvm.ImageUrl = beer.ImageUrl;
             bbvm.Name = beer.Name;
             bbvm.StyleID = beer.StyleID;
-            PopulateStylesDropDownList(beer.StyleID);
+            var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+            var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
+    //        PopulateStylesDropDownList(beer.StyleID);
             return View(bbvm);
         }
 
         // POST: BeerBrewery/Edit/5
         [HttpPost]
-        public ActionResult Edit([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
+        public async Task<ActionResult> Edit([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
         {
-            Beer beer = db.Beers.Find(beerBreweryVM.BeerID);
-            if(beer.Abv != beerBreweryVM.Abv)
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + beerBreweryVM.BeerID);
+            var beer = await response.Content.ReadAsAsync<Beer>();
+            //      Beer beer = db.Beers.Find(beerBreweryVM.BeerID);
+            Beer tempBeer = new Beer();
+            tempBeer.BeerID = beerBreweryVM.BeerID;
+            tempBeer.Abv = beerBreweryVM.Abv;
+            tempBeer.Description = beerBreweryVM.Description;
+            tempBeer.Gravity = beerBreweryVM.Gravity;
+            tempBeer.IBU = beerBreweryVM.IBU;
+            tempBeer.ImageUrl = beerBreweryVM.ImageUrl;
+            tempBeer.Name = beerBreweryVM.Name;
+            tempBeer.StyleID = beerBreweryVM.StyleID;
+         /*   if (beer.Abv != beerBreweryVM.Abv)
             {
                 beer.Abv = beerBreweryVM.Abv;
             }
-            if(beer.Description != beerBreweryVM.Description)
+            if (beer.Description != beerBreweryVM.Description)
             {
                 beer.Description = beerBreweryVM.Description;
             }
-            if(beer.Gravity != beerBreweryVM.Gravity)
+            if (beer.Gravity != beerBreweryVM.Gravity)
             {
                 beer.Gravity = beerBreweryVM.Gravity;
             }
-            if(beer.IBU != beerBreweryVM.IBU)
+            if (beer.IBU != beerBreweryVM.IBU)
             {
                 beer.IBU = beerBreweryVM.IBU;
             }
-           if(beer.Name != beerBreweryVM.Name)
+            if (beer.Name != beerBreweryVM.Name)
             {
                 beer.Name = beerBreweryVM.Name;
             }
-            if(beer.StyleID != beerBreweryVM.StyleID)
+            if (beer.StyleID != beerBreweryVM.StyleID)
             {
                 beer.StyleID = beerBreweryVM.StyleID;
             }
             if (file != null)
             {
                 beer.ImageUrl = FileUpload(file);
-            }
+            }*/
+            var beerId = beer.BeerID;
+            response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beers/put/", tempBeer);
+            response.EnsureSuccessStatusCode();
 
-            //         db.Beers.Add(beer);
+            //        db.SaveChanges();
 
-            db.SaveChanges();
+            response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+            var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
 
             if (beerBreweryVM.BreweriesNames != null)
             {
                 foreach (var bb in beerBreweryVM.BreweriesNames)
                 {
-                    var bId = db.Breweries.Where(b => b.Name == bb);
+                    var bId = breweries.Where(b => b.Name == bb);
                     if (bId.Any())
                     {
                         var bb2 = new BeerBrewery();
-                        bb2.BeerID = beer.BeerID;
+                        bb2.BeerID = beerId;
                         bb2.BreweryID = bId.First().BreweryID;
-                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                        response.EnsureSuccessStatusCode();
+                        /*                bb2.BeerID = beer.BeerID;
+                                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                                        {
+                                            db.BeerBreweries.Add(bb2);
+                                            db.SaveChanges();
+                                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
+                                            db.SaveChanges();
+                                        }
+                                    }
+                                    */
+                    }
+                }
+
+                if (beerBreweryVM.BreweriesPlacesNames != null) {
+                    foreach (var bb in beerBreweryVM.BreweriesPlacesNames)
+                    {
+                        var bId = breweries.Where(b => b.Name == bb);
+                        if (bId.Any())
+                        {
+                            var bb2 = new BeerBrewery();
+                            bb2.BeerID = beerId;
+                            bb2.isPlace = true;
+                            bb2.BreweryID = bId.First().BreweryID;
+                            response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                            response.EnsureSuccessStatusCode();
+                            /*
+                            if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
                         {
                             db.BeerBreweries.Add(bb2);
                             db.SaveChanges();
-                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
-                            db.SaveChanges();
+                        }
+                        */
+                        }
+
+                    }
+                }
+                response = await httpClient.GetAsync("http://localhost:64635/beerbreweries/get/" + beerId);
+                var beerbreweries = await response.Content.ReadAsAsync<IEnumerable<BeerBrewery>>();
+                if (beerbreweries != null)
+                { 
+                    foreach (var bb in beerbreweries)
+                    {
+                        if (beerBreweryVM.BreweriesNames != null)
+                        {
+                            if (!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n => n == bb.Brewery.Name).Any())
+                            {
+                                response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
+                                response.EnsureSuccessStatusCode();
+                                /*         db.BeerBreweries.Remove(bb);
+                                     db.SaveChanges();
+                                     db.Breweries.Find(bb.BreweryID).BeersCount--;
+                                     db.SaveChanges();*/
+                            }
+                        }
+                        if (beerBreweryVM.BreweriesPlacesNames != null)
+                        {
+                            if (bb.isPlace && !beerBreweryVM.BreweriesPlacesNames.Where(n => n == bb.Brewery.Name).Any())
+                            {
+                                response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
+                                response.EnsureSuccessStatusCode();
+                                //           db.BeerBreweries.Remove(bb);
+                                //       db.SaveChanges();
+                            }
                         }
                     }
                 }
+
+
+                /*
+
+                           try
+                           {
+                               // TODO: Add update logic here
+                               db.Entry(brewery).State = EntityState.Modified;
+                               db.SaveChanges();
+                               return RedirectToAction("Index","Beer");
+                           }
+                           catch
+                           {
+                               return View();
+                           } */
             }
-
-            if (beerBreweryVM.BreweriesPlacesNames != null) { 
-            foreach (var bb in beerBreweryVM.BreweriesPlacesNames)
-            {
-                var bId = db.Breweries.Where(b => b.Name == bb);
-                if (bId.Any())
-                {
-                    var bb2 = new BeerBrewery();
-                    bb2.BeerID = beer.BeerID;
-                    bb2.isPlace = true;
-                    bb2.BreweryID = bId.First().BreweryID;
-                    if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
-                    {
-                        db.BeerBreweries.Add(bb2);
-                        db.SaveChanges();
-                    }
-                }
-                
-            }
-            }
-            foreach (var bb in db.Beers.Find(beer.BeerID).BeerBreweries.ToList())
-            {
-                if (beerBreweryVM.BreweriesNames != null)
-                {
-                    if (!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n => n == bb.Brewery.Name).Any())
-                    {
-                        db.BeerBreweries.Remove(bb);
-                        db.SaveChanges();
-                        db.Breweries.Find(bb.BreweryID).BeersCount++;
-                        db.SaveChanges();
-                    }
-                }
-                if (beerBreweryVM.BreweriesPlacesNames != null)
-                {
-                    if (bb.isPlace && !beerBreweryVM.BreweriesPlacesNames.Where(n => n == bb.Brewery.Name).Any())
-                    {
-                        db.BeerBreweries.Remove(bb);
-                        db.SaveChanges();
-                    }
-                }
-            }
-
-
-
-            /*
-
-                       try
-                       {
-                           // TODO: Add update logic here
-                           db.Entry(brewery).State = EntityState.Modified;
-                           db.SaveChanges();
-                           return RedirectToAction("Index","Beer");
-                       }
-                       catch
-                       {
-                           return View();
-/////                       }
             return RedirectToAction("Index", "Beer");
         }
 
@@ -295,7 +333,7 @@ namespace BeerReviews.Controllers
             }
             else return "/Content/Images/no_image.png";
         }
-
+        /*
         private void PopulateStylesDropDownList(object selectedStyle = null)
         {
             var stylesQuery = from s in db.Styles

@@ -12,6 +12,20 @@ namespace BeerReviews.WebApi.Controllers
 {
     public class BeerBreweriesController : ApiController
     {
+        [HttpGet]
+        [Route("beerbreweries/get/{beerId}")]
+        public IEnumerable<BeerBrewery> GetBBs(int beerId)
+        {
+            using (BeerReviewsContext db = new BeerReviewsContext())
+            {
+                List < BeerBrewery > beerbreweries= null;
+                if (db.BeerBreweries.Where(bb => bb.BeerID == beerId) != null)
+                { 
+                beerbreweries = db.BeerBreweries.Where(bb=>bb.BeerID==beerId).Include(bb=>bb.Brewery).ToList();
+                }
+                return beerbreweries;
+            }
+        }
         // POST api/values
         [HttpPost]
         [Route("beerbreweries/post")]
@@ -62,14 +76,60 @@ namespace BeerReviews.WebApi.Controllers
         }
         // PUT api/values/5
         [HttpPut]
-        [Route("breweries/put/")]
-        public void Put([FromBody]Brewery brewery)
+        [Route("beers/put/")]
+        public void Put([FromBody]Beer beerBreweryVM)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                //    Brewery existingBrewery=db.Breweries.Find(breweryId);
-                db.Entry(brewery).State = EntityState.Modified;
+                var beer=db.Beers.Find(beerBreweryVM.BeerID);
+                if (beer.Abv != beerBreweryVM.Abv)
+                {
+                    beer.Abv = beerBreweryVM.Abv;
+                }
+                if (beer.Description != beerBreweryVM.Description)
+                {
+                    beer.Description = beerBreweryVM.Description;
+                }
+                if (beer.Gravity != beerBreweryVM.Gravity)
+                {
+                    beer.Gravity = beerBreweryVM.Gravity;
+                }
+                if (beer.IBU != beerBreweryVM.IBU)
+                {
+                    beer.IBU = beerBreweryVM.IBU;
+                }
+                if (beer.Name != beerBreweryVM.Name)
+                {
+                    beer.Name = beerBreweryVM.Name;
+                }
+                if (beer.StyleID != beerBreweryVM.StyleID)
+                {
+                    beer.StyleID = beerBreweryVM.StyleID;
+                }
+
+
+
+  //              db.Entry(beer).State = EntityState.Modified;
                 db.SaveChanges();
+            }
+        }
+
+        // DELETE beerBrewery/bb
+        [HttpPut]
+        [Route("beerbreweries/delete/")]
+        public void Delete([FromBody]BeerBrewery beerBrewery)
+        {
+            using (BeerReviewsContext db = new BeerReviewsContext())
+            {
+                if (!beerBrewery.isPlace)
+                { 
+                db.Breweries.Find(beerBrewery.BreweryID).BeersCount--;
+                db.SaveChanges();
+                }
+                var bbd=db.BeerBreweries.SingleOrDefault(x => x.BeerID == beerBrewery.BeerID && x.BreweryID == beerBrewery.BreweryID && x.isPlace == beerBrewery.isPlace);
+                db.BeerBreweries.Remove(bbd);
+                db.SaveChanges();
+
             }
         }
     }

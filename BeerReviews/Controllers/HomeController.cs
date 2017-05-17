@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using BeerReviews.Data;
-using BeerReviews.Models;
+using BeerReviews.Database.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace BeerReviews.Controllers
 {
     public class HomeController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
         public ActionResult Index()
         {
             return View();
@@ -30,12 +30,19 @@ namespace BeerReviews.Controllers
             return View();
         }
 
-        public ActionResult SearchResults(string searchString)
+        public async Task<ActionResult> SearchResults(string searchString)
         {
-            var rBeers = db.Beers.Where(b => b.Name.Contains(searchString)).ToList();
-            var rBreweries= db.Breweries.Where(b => b.Name.Contains(searchString)).ToList();
-            var results = new Tuple<List<Beer>, List<Brewery>>(rBeers, rBreweries);
-            return View(results);
+            if (searchString != "")
+            {
+                var httpClient = new HttpClient();
+                var response1 = await httpClient.GetAsync("http://localhost:64635/searchbe/" + searchString);
+                var beers = await response1.Content.ReadAsAsync<List<Beer>>();
+                response1 = await httpClient.GetAsync("http://localhost:64635/searchbr/" + searchString);
+                var breweries = await response1.Content.ReadAsAsync<List<Brewery>>();
+                var results = new Tuple<List<Beer>, List<Brewery>>(beers, breweries);
+                return View(results);
+            }
+            return View();
         }
     }
 }

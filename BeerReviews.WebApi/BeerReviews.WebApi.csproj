@@ -238,6 +238,8 @@
     <Compile Include="Controllers\BeersController.cs" />
     <Compile Include="Controllers\BreweriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReviewsController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\StylesController.cs" />
     <Compile Include="Data\BeerReviewsContext.cs" />
     <Compile Include="Data\DbInitializer.cs" />

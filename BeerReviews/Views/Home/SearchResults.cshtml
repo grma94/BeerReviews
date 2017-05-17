@@ -1,4 +1,4 @@
-﻿@model Tuple<List<BeerReviews.Models.Beer>, List<BeerReviews.Models.Brewery>>
+﻿@model Tuple<List<BeerReviews.Database.Models.Beer>, List<BeerReviews.Database.Models.Brewery>>
 
 @{
     ViewBag.Title = "SearchResults";
@@ -16,7 +16,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane fade in active" id="panel-1">
-            @{ if (!Model.Item1.Any())
+            @{ if (Model==null || !Model.Item1.Any())
                 {
                     <p>No beers found matching search</p>
                 }
@@ -91,7 +91,9 @@
                                     @Html.DisplayFor(modelItem => item.Gravity)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Style.Name)
+                                    <a href="@Url.Action("Details", "Style", new { id = item.StyleID })">
+                                        @Html.DisplayFor(modelItem => item.Style.Name)
+                                    </a>
                                 </td>
                                 <td>
                                     @if (item.isLocked != true)
@@ -108,7 +110,7 @@
                 } }
         </div>
         <div class="tab-pane fade" id="panel-2">
-            @{ if (!Model.Item2.Any())
+            @{ if (Model == null || !Model.Item2.Any())
                 {
                     <p>No breweries found matching search</p>
                 }
@@ -149,7 +151,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    @item.BeerBreweries.Where(s => s.isPlace == false).Count()
+                                    @item.BeersCount
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.City)

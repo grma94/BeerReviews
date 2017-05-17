@@ -1,50 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using BeerReviews.Data;
-using BeerReviews.Models;
+using BeerReviews.Database.Models;
 using Microsoft.AspNet.Identity;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace BeerReviews.Controllers
 {
     public class ReviewController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
-
         // GET: Review
-        public ActionResult Index(int? beerId, string userId)
+        public async Task<ActionResult> Index(int? beerId, string userId)
         {
+            var httpClient = new HttpClient();
             if (beerId == null && userId == null)
             {
-                return View(db.Reviews.ToList());
+                var response = await httpClient.GetAsync("http://localhost:64635/reviews/many/" + "all");
+                var reviews = await response.Content.ReadAsAsync<List<Review>>();
+                return View(reviews);
             }
-            else if (beerId != 0)
+            else 
+            //if (beerId != 0)
             {
-                var results = db.Reviews.Where(r => r.BeerID == beerId);
-                if (results.Count() == 0) return Content("No reviews of this beer found");
-                return PartialView(results);
+                var response = await httpClient.GetAsync("http://localhost:64635/reviews/many/" + beerId);
+                var reviews = await response.Content.ReadAsAsync<List<Review>>();
+                if (reviews.Count() == 0) return Content("No reviews of this beer found");
+                return PartialView(reviews);
             }
-            else
+     /*       else
             {
                 var results = db.Reviews.Where(r => r.UserName == userId);
                 if (results.Count() == 0) return Content("No reviews written by this user");
                 return PartialView(results);
-            }
+            }*/
         }
 
         // GET: Review/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Review review = db.Reviews.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
                 return HttpNotFound();
@@ -59,8 +63,8 @@ namespace BeerReviews.Controllers
             Review r = new Review();
             r.BeerID = BeerID;
 
-            string userName = User.Identity.GetUserName();
-            r.UserName = userName;
+   //         string userName = User.Identity.GetUserName();
+   //         r.UserName = userName;
             return View(r);
             
         }
@@ -70,15 +74,17 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
+        public async Task<ActionResult> Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
                 review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste))/7;
-                review.ImageUrl = FileUpload(file);
-                db.Reviews.Add(review);
-                db.SaveChanges();
+                //        review.ImageUrl = FileUpload(file);
+
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/reviews/post/", review);
+                response.EnsureSuccessStatusCode();
                 return RedirectToAction("Details", "Beer",new { id = review.BeerID });
             }
 
@@ -86,13 +92,15 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Review/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Review review = db.Reviews.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
                 return HttpNotFound();
@@ -105,25 +113,28 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Overall,Description,ImageUrl,Date,UserID,BeerID")] Review review)
+        public async Task<ActionResult> Edit([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Overall,Description,ImageUrl,Date,UserID,BeerID")] Review review)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(review).State = EntityState.Modified;
-                db.SaveChanges();
+                var httpClient = new HttpClient();
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/", review);
+                response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index");
             }
             return View(review);
         }
 
         // GET: Review/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Review review = db.Reviews.Find(id);
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
                 return HttpNotFound();
@@ -131,30 +142,15 @@ namespace BeerReviews.Controllers
             return View(review);
         }
 
-        // POST: Review/Delete/5
+        // DELETE: Review/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Review review = db.Reviews.Find(id);
-            var path = review.ImageUrl;
-            if (path != "/Content/Images/no_image.png")
-            {
-                var filePath = Server.MapPath(review.ImageUrl);
-                System.IO.File.Delete(filePath);
-            }
-            db.Reviews.Remove(review);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            var httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/breweries/delete/{id}");
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            return RedirectToAction("Index");
         }
 
         public string FileUpload(HttpPostedFileBase file)

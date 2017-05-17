@@ -37,10 +37,10 @@ namespace BeerReviews.WebApi.Controllers
             {
                 var brewery = db.Breweries
                     .Include(b=>b.Country)
-                    .Include(bb=>bb.BeerBreweries.Select(b=>b.Beer)
-                    .Select(r=> r.Reviews))
+                    .Include(bb=>bb.BeerBreweries.Select(b=>b.Beer.Reviews))
+      //              .Select(r=> r.Reviews))
                     .Include(bb => bb.BeerBreweries.Select(b => b.Beer.Style))
-                    .Include(bb => bb.BeerBreweries.Select(b => b.Beer.BeerBreweries))
+      //              .Include(bb => bb.BeerBreweries.Select(b => b.Beer.BeerBreweries))
                     .Include(bb => bb.BeerBreweries.Select(b => b.Beer.BeerBreweries.Select(c=>c.Brewery)))
                     .SingleOrDefault(x=>x.BreweryID==breweryId);
                 return brewery;

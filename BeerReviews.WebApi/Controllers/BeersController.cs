@@ -22,7 +22,7 @@ namespace BeerReviews.WebApi.Controllers
                 var beers =
                 styleId.HasValue
                 ? db.Beers.Where(b => b.StyleID == styleId).Include(b => b.Style).Include(b => b.BeerBreweries).Include(b=>b.Reviews).ToList()
-                : db.Beers.Include(b => b.Style).Include(b=>b.BeerBreweries).Include(b => b.Reviews).ToList();
+                : db.Beers.Include(b => b.Style).Include(b=>b.BeerBreweries.Select(bbb=>bbb.Brewery)).Include(b => b.Reviews).ToList();
                 return beers;
             }
         }

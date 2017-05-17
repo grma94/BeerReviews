@@ -15,12 +15,14 @@ namespace BeerReviews.WebApi.Controllers
         // POST api/values
         [HttpPost]
         [Route("beerbreweries/post")]
-        public void Post([FromBody]Beer beer)
+        public int Post([FromBody]Beer beer)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
                 db.Beers.Add(beer);
                 db.SaveChanges();
+                int a = beer.BeerID;
+                return beer.BeerID;
             }
         }
 
@@ -30,12 +32,15 @@ namespace BeerReviews.WebApi.Controllers
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
-                {
-                    db.BeerBreweries.Add(bb2);
-                    db.SaveChanges();
-                    db.Breweries.Find(bb2.BreweryID).BeersCount++;
-                    db.SaveChanges();
+
+                if (bb2 != null) { 
+                    if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                    {
+                        db.BeerBreweries.Add(bb2);
+                        db.SaveChanges();
+                        db.Breweries.Find(bb2.BreweryID).BeersCount++;
+                        db.SaveChanges();
+                    }
                 }
             }
         }
@@ -45,10 +50,13 @@ namespace BeerReviews.WebApi.Controllers
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
-                if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                if (bb2 != null)
                 {
-                    db.BeerBreweries.Add(bb2);
-                    db.SaveChanges();
+                    if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
+                    {
+                        db.BeerBreweries.Add(bb2);
+                        db.SaveChanges();
+                    }
                 }
             }
         }

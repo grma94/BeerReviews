@@ -42,13 +42,14 @@ namespace BeerReviews.Controllers
               //  beer.ImageUrl = beerBreweryVM.ImageUrl;
                 beer.Name = beerBreweryVM.Name;
                 beer.StyleID = beerBreweryVM.StyleID;
-    //            beer.ImageUrl=FileUpload(file);
-
+                //            beer.ImageUrl=FileUpload(file);
+                beer.ImageUrl = "/Content/Images/no_image.png";
                 //     db.Beers.Add(beer);
                 //      db.SaveChanges();
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/post/", beer);
-                response.EnsureSuccessStatusCode();
+                var id = await response.Content.ReadAsAsync<int>();
+               // response.EnsureSuccessStatusCode();
 
                 response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
@@ -60,7 +61,7 @@ namespace BeerReviews.Controllers
                     if (bId.Any())
                     { 
                     var bb2 = new BeerBrewery();
-                    bb2.BeerID = beer.BeerID;
+                    bb2.BeerID = id;
                     bb2.BreweryID = bId.First().BreweryID;
                         response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
@@ -81,10 +82,10 @@ namespace BeerReviews.Controllers
                     if (bId.Any())
                     {
                         var bb2 = new BeerBrewery();
-                        bb2.BeerID = beer.BeerID;
+                        bb2.BeerID = id;
                         bb2.isPlace = true;
                         bb2.BreweryID = bId.First().BreweryID;
-                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb);
+                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
           /*              if (db.BeerBreweries.Find(bb2.BeerID,bb2.BreweryID,bb2.isPlace)==null)
                         {

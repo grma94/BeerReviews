@@ -76,17 +76,19 @@ namespace BeerReviews.WebApi.Controllers
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
                 var beer = db.Beers.Find(beerId);
-         //       var path = brewery.ImageUrl;
-         //       if (path != "/Content/Images/no_image.png")
-        //        {
-                    //                  var filePath = Server.MapPath(brewery.ImageUrl);
-                    //                  System.IO.File.Delete(filePath);
-       //         }
-                foreach (var bb in beer.BeerBreweries.ToList())
-                {
-                    db.BeerBreweries.Remove(bb);
-                    db.SaveChanges();
-                }          
+                //       var path = brewery.ImageUrl;
+                //       if (path != "/Content/Images/no_image.png")
+                //        {
+                //                  var filePath = Server.MapPath(brewery.ImageUrl);
+                //                  System.IO.File.Delete(filePath);
+                //         }
+                if (beer.BeerBreweries != null) { 
+                    foreach (var bb in beer.BeerBreweries.ToList())
+                    {
+                        db.BeerBreweries.Remove(bb);
+                        db.SaveChanges();
+                    }
+                }
                 db.Beers.Remove(beer);
                 db.SaveChanges();
             }

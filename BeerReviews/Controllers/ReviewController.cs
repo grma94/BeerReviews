@@ -14,7 +14,7 @@ namespace BeerReviews.Controllers
     public class ReviewController : Controller
     {
         // GET: Review
-        public async Task<ActionResult> Index(int? beerId, string userId)
+        public async Task<ActionResult> Index(int? beerId, string userId, string sortParam)
         {
             var httpClient = new HttpClient();
             if (beerId == null && userId == null)
@@ -29,7 +29,7 @@ namespace BeerReviews.Controllers
                 var response = await httpClient.GetAsync("http://localhost:64635/reviews/many/" + beerId);
                 var reviews = await response.Content.ReadAsAsync<List<Review>>();
                 if (reviews.Count() == 0) return Content("No reviews of this beer found");
-                return PartialView(reviews);
+                return View(reviews);
             }
      /*       else
             {

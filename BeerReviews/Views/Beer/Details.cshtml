@@ -21,7 +21,7 @@
             }
             @foreach (var it in Model.BeerBreweries.Where(bb => !bb.isPlace))
             {
-                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
                     @Html.DisplayFor(modelItem => it.Brewery.Name)
                 </a>
             }
@@ -32,13 +32,13 @@
         </dt>
 
         <dd>
-            @if(!Model.BeerBreweries.Where(bb => bb.isPlace).Any())
-        {
+            @if (!Model.BeerBreweries.Where(bb => bb.isPlace).Any())
+            {
             <span>N/A</span>
-        }
+            }
             @foreach (var it in Model.BeerBreweries.Where(bb => bb.isPlace))
             {
-                <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
+                <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
                     @Html.DisplayFor(modelItem => it.Brewery.Name)
                 </a>
                 @it.Brewery.City;
@@ -54,7 +54,7 @@
         <dd>
             @Html.DisplayFor(model => model.Abv)%
         </dd>
-        @if (Model.IBU!=null)
+        @if (Model.IBU != null)
         {
         <dt>
             @Html.DisplayNameFor(model => model.IBU)
@@ -89,7 +89,7 @@
         </dt>
 
         <dd>
-            <a href="@Url.Action("Details","Style", new { id = Model.StyleID })">
+            <a href="@Url.Action("Details", "Style", new { id = Model.StyleID })">
                 @Html.DisplayFor(modelItem => Model.Style.Name)
             </a>
         </dd>
@@ -97,14 +97,94 @@
     </dl>
 </div>
 <p>
-    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Review",new { BeerID = Model.BeerID })'">
+    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review", new { BeerID = Model.BeerID })'">
         Add rewiev
         <span class="glyphicon glyphicon-plus-sign"></span>
     </button>
 
 
-    @Html.ActionLink("Edit", "Edit","BeerBrewery", new { id = Model.BeerID },null) |
+    @Html.ActionLink("Edit", "Edit", "BeerBrewery", new { id = Model.BeerID }, null) |
     @Html.ActionLink("Back to List", "Index")
 </p>
 
-@{Html.RenderAction("Index", "Review", new { beerId = Model.BeerID });}
+<!--{Html.RenderAction("Index", "Review", new { beerId = Model.BeerID });}-->
+
+
+<h4>Reviews</h4>
+@if (!Model.Reviews.Any())
+{
+<span>No Reviews for this beer yet!</span>
+} 
+@if (Model.Reviews.Any()) { 
+<table class="table">
+    <tr>
+        <th>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Aroma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Taste)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Palate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Apperance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Overall)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reviews.First().UserName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Reviews)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Details", new { id = item.ReviewID })">
+                    <img alt="Review photo"
+                         src="@item.ImageUrl" height="50" width="50" />
+                </a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aroma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Taste)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Palate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apperance)
+            </td>
+            <td>
+                @item.Overall.ToString("N1")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @item.Date.ToString("d")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ReviewID })
+            </td>
+        </tr>
+    }
+
+</table>
+}

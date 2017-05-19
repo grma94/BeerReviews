@@ -41,7 +41,7 @@ namespace BeerReviews.Controllers
                 return HttpNotFound();
             }
 
-//            style.Beers=Sort(sortOrder,style.Beers.ToList());
+            style.Beers=Sort(sortOrder,style.Beers.ToList());
 
             return View(style);
         }

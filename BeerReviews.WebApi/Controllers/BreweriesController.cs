@@ -50,12 +50,14 @@ namespace BeerReviews.WebApi.Controllers
         // POST api/values
         [HttpPost]
         [Route("breweries/post")]
-        public void Post([FromBody]Brewery brewery)
+        public string Post([FromBody]Brewery brewery)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
                db.Breweries.Add(brewery);
                db.SaveChanges();
+                string bID = brewery.BreweryID.ToString();
+               return bID;
             }
         }
 

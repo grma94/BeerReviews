@@ -21,7 +21,7 @@
 
 <h3>@Html.DisplayFor(model => model.Name) beers:</h3>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", "BeerBrewery", new { styleID = Model.StyleID},null)
 </p>
 
 <table class="table">

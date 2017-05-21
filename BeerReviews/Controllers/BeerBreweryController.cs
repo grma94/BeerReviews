@@ -18,12 +18,12 @@ namespace BeerReviews.Controllers
      //   private BeerReviewsContext db = new BeerReviewsContext();
      
         // GET: BeerBrewery/Create
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int? styleID)
         {
             var httpClient = new HttpClient();
             var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",null);
+            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",styleID);
             //PopulateStylesDropDownList();
             return View();
         }

@@ -15,16 +15,21 @@
 
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.StyleID }) |
-    @Html.ActionLink("Delete", "Delete", new { id = Model.StyleID }) |
+@if (User.Identity.IsAuthenticated)
+            {
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StyleID }) <span>|</span>
+    @Html.ActionLink("Delete", "Delete", new { id = Model.StyleID }) <span>|</span>
+    }
     @Html.ActionLink("Back to List", "Index")
 </p>
 
 <h3>@Html.DisplayFor(model => model.Name) beers:</h3>
+@if (User.Identity.IsAuthenticated)
+{
 <p>
-    @Html.ActionLink("Create New", "Create","BeerBrewery", new { styleID = Model.StyleID },null)
+    @Html.ActionLink("Create New", "Create", "BeerBrewery", new { styleID = Model.StyleID }, null)
 </p>
-
+}
 <table class="table">
     <tr>
         <th></th>
@@ -118,11 +123,12 @@
 
             </td>
             <td>
-                @if (item.isLocked != true)
+                @if (item.isLocked != true && User.Identity.IsAuthenticated)
                 {
                     @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
-                }
+
                 @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+                }
             </td>
         </tr>
     }

@@ -55,14 +55,17 @@ namespace BeerReviews.Controllers
         // GET: Review/Create
         public ActionResult Create(int BeerID)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Review r = new Review();
+                r.BeerID = BeerID;
 
-            Review r = new Review();
-            r.BeerID = BeerID;
+                string userName = User.Identity.GetUserName();
+                r.UserName = userName;
+                return View(r);
 
-            string userName = User.Identity.GetUserName();
-            r.UserName = userName;
-            return View(r);
-            
+            }
+            return RedirectToAction("Details", "Beer", new { beerID = BeerID});
         }
 
         // POST: Review/Create
@@ -75,6 +78,8 @@ namespace BeerReviews.Controllers
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
+                review.UserName=User.Identity.Name;
+                review.UserID = User.Identity.GetUserId();
                 review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste))/7;
                 review.ImageUrl = FileUpload(file);
                 db.Reviews.Add(review);
@@ -88,17 +93,25 @@ namespace BeerReviews.Controllers
         // GET: Review/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Review review = db.Reviews.Find(id);
+                if (review == null)
+                {
+                    return HttpNotFound();
+                }
+                if (review.UserName != User.Identity.Name)
+                {
+                    return RedirectToAction("Index","Beer",new { beerID = review.BeerID });
+                }
+                return View(review);
             }
-            Review review = db.Reviews.Find(id);
-            if (review == null)
-            {
-                return HttpNotFound();
+            return RedirectToAction("Index");
             }
-            return View(review);
-        }
 
         // POST: Review/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -119,16 +132,20 @@ namespace BeerReviews.Controllers
         // GET: Review/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Review review = db.Reviews.Find(id);
-            if (review == null)
-            {
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Review review = db.Reviews.Find(id);
+                if (review == null)
+                {
                 return HttpNotFound();
+                }
+                return View(review);
             }
-            return View(review);
+            return RedirectToAction("Index");
         }
 
         // POST: Review/Delete/5

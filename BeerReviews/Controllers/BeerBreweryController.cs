@@ -17,9 +17,13 @@ namespace BeerReviews.Controllers
         // GET: BeerBrewery/Create
         public ActionResult Create(int? styleID)
         {
-      //      var style=db.Styles.Find(styleID);
-            PopulateStylesDropDownList(styleID);
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                //      var style=db.Styles.Find(styleID);
+                PopulateStylesDropDownList(styleID);
+                return View();
+            }
+            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Create
@@ -109,30 +113,34 @@ namespace BeerReviews.Controllers
         // GET: BeerBrewery/Edit/5
         public ActionResult Edit(int id)
         {
-            var beer=db.Beers.Find(id);
-            var bbvm = new BeerBreweryViewModel();
-            bbvm.Abv = beer.Abv;
-            bbvm.BeerID = beer.BeerID;
-            List<String> listS = new List<string>();
-            foreach (var b in beer.BeerBreweries.Where(z=>!z.isPlace))
+            if (User.Identity.IsAuthenticated)
             {
-                listS.Add(b.Brewery.Name);
+                var beer = db.Beers.Find(id);
+                var bbvm = new BeerBreweryViewModel();
+                bbvm.Abv = beer.Abv;
+                bbvm.BeerID = beer.BeerID;
+                List<String> listS = new List<string>();
+                foreach (var b in beer.BeerBreweries.Where(z => !z.isPlace))
+                {
+                    listS.Add(b.Brewery.Name);
+                }
+                bbvm.BreweriesNames = listS;
+                List<String> listPS = new List<string>();
+                foreach (var b in beer.BeerBreweries.Where(z => z.isPlace))
+                {
+                    listPS.Add(b.Brewery.Name);
+                }
+                bbvm.BreweriesPlacesNames = listPS;
+                bbvm.Description = beer.Description;
+                bbvm.Gravity = beer.Gravity;
+                bbvm.IBU = beer.IBU;
+                bbvm.ImageUrl = beer.ImageUrl;
+                bbvm.Name = beer.Name;
+                bbvm.StyleID = beer.StyleID;
+                PopulateStylesDropDownList(beer.StyleID);
+                return View(bbvm);
             }
-            bbvm.BreweriesNames = listS;
-            List<String> listPS = new List<string>();
-            foreach (var b in beer.BeerBreweries.Where(z => z.isPlace))
-            {
-                listPS.Add(b.Brewery.Name);
-            }
-            bbvm.BreweriesPlacesNames = listPS;
-            bbvm.Description = beer.Description;
-            bbvm.Gravity = beer.Gravity;
-            bbvm.IBU = beer.IBU;
-            bbvm.ImageUrl = beer.ImageUrl;
-            bbvm.Name = beer.Name;
-            bbvm.StyleID = beer.StyleID;
-            PopulateStylesDropDownList(beer.StyleID);
-            return View(bbvm);
+            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Edit/5

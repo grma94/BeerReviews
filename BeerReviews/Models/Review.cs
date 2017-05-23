@@ -24,9 +24,10 @@ namespace BeerReviews.Models
         public string ImageUrl { get; set; }
         public DateTime Date { get; set; }
         public string UserName { get; set; }
+        public string UserID { get; set; }
         public int BeerID { get; set; }
 
         public virtual Beer Beer { get; set; }
-     //   public virtual ApplicationUser User { get; set; }
+    //    public virtual ApplicationUser User { get; set; }
     }
 }

@@ -53,8 +53,12 @@ namespace BeerReviews.Controllers
         // GET: Brewery/Create
         public ActionResult Create()
         {
-            PopulateCountriesDropDownList();
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                PopulateCountriesDropDownList();
+                return View();
+            }
+            return RedirectToAction("Index");
         }
 
         // POST: Brewery/Create
@@ -79,16 +83,20 @@ namespace BeerReviews.Controllers
         // GET: Brewery/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Brewery brewery = db.Breweries.Find(id);
+                if (brewery == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(brewery);
             }
-            Brewery brewery = db.Breweries.Find(id);
-            if (brewery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(brewery);
+                return RedirectToAction("Index");
         }
 
         // POST: Brewery/Edit/5
@@ -117,16 +125,20 @@ namespace BeerReviews.Controllers
         // GET: Brewery/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Brewery brewery = db.Breweries.Find(id);
+                if (brewery == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(brewery);
             }
-            Brewery brewery = db.Breweries.Find(id);
-            if (brewery == null)
-            {
-                return HttpNotFound();
-            }
-            return View(brewery);
+            return RedirectToAction("Index");
         }
 
         // POST: Brewery/Delete/5

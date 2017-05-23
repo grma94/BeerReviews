@@ -112,6 +112,9 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ReviewID }) |
+@if (User.Identity.IsAuthenticated&&User.Identity.Name==Model.UserName)
+{
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ReviewID })    <span>|</span>
+}
     @Html.ActionLink("Back to List", "Index")
 </p>

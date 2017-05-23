@@ -5,11 +5,12 @@
 }
 
 <h2>Beer Styles</h2>
-
+@if (User.Identity.IsAuthenticated)
+{
 <p>
     @Html.ActionLink("Add new style", "Create")
 </p> 
-
+}
 <div class="container">
     <div class="row">
 @foreach (var item in Model)

@@ -10,8 +10,8 @@ namespace BeerReviews.Models
     {
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool TwoFactor { get; set; }
+  //      public string PhoneNumber { get; set; }
+  //      public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
     }
 
@@ -58,7 +58,7 @@ namespace BeerReviews.Models
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-
+    /*
     public class AddPhoneNumberViewModel
     {
         [Required]
@@ -84,4 +84,5 @@ namespace BeerReviews.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+    */
 }

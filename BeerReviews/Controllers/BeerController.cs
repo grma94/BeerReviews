@@ -91,16 +91,20 @@ namespace BeerReviews.Controllers
         // GET: Beer/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Beer beer = db.Beers.Find(id);
+                if (beer == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(beer);
             }
-            Beer beer = db.Beers.Find(id);
-            if (beer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(beer);
+            return RedirectToAction("Index");
         }
 
         // POST: Beer/Delete/5

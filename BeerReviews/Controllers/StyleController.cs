@@ -42,9 +42,13 @@ namespace BeerReviews.Controllers
         // GET: Style/Create
         public ActionResult Create()
         {
-            PopulateCategoriesDropDownList();
-            return View();
-        }
+            if (User.Identity.IsAuthenticated)
+            {
+                PopulateCategoriesDropDownList();
+                return View();
+            }
+            return RedirectToAction("Index");
+            }
 
         // POST: Style/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -53,32 +57,36 @@ namespace BeerReviews.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
-            if (ModelState.IsValid)
-            {
-                db.Styles.Add(style);
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    db.Styles.Add(style);
+                    db.SaveChanges();
+                    PopulateCategoriesDropDownList(style.CategoryID);
+                    return RedirectToAction("Index");
+                }
                 PopulateCategoriesDropDownList(style.CategoryID);
-                return RedirectToAction("Index");
-            }
-            PopulateCategoriesDropDownList(style.CategoryID);
-            return View(style);
+                return View(style);
         }
 
         // GET: Style/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Style style = db.Styles.Find(id);
+                if (style == null)
+                {
+                    return HttpNotFound();
+                }
+                PopulateCategoriesDropDownList(style.CategoryID);
+                return View(style);
             }
-            Style style = db.Styles.Find(id);
-            if (style == null)
-            {
-                return HttpNotFound();
+            return RedirectToAction("Index");
             }
-            PopulateCategoriesDropDownList(style.CategoryID);
-            return View(style);
-        }
 
         // POST: Style/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -100,17 +108,21 @@ namespace BeerReviews.Controllers
         // GET: Style/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Style style = db.Styles.Find(id);
+                if (style == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(style);
             }
-            Style style = db.Styles.Find(id);
-            if (style == null)
-            {
-                return HttpNotFound();
+            return RedirectToAction("Index");
             }
-            return View(style);
-        }
 
         // POST: Style/Delete/5
         [HttpPost, ActionName("Delete")]

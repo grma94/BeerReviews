@@ -90,7 +90,7 @@ namespace BeerReviews.Controllers
                     return View(model);
             }
         }
-
+/*
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -133,7 +133,7 @@ namespace BeerReviews.Controllers
                     return View(model);
             }
         }
-
+*/
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -271,7 +271,7 @@ namespace BeerReviews.Controllers
             return View();
         }
 
-        //
+     /*   //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
@@ -384,7 +384,7 @@ namespace BeerReviews.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
-
+        */
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -397,11 +397,11 @@ namespace BeerReviews.Controllers
 
         //
         // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
+     /*   [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
             return View();
-        }
+        }*/
 
         protected override void Dispose(bool disposing)
         {

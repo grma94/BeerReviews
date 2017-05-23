@@ -5,11 +5,13 @@
 }
 
 <div style="margin-top:10pt; margin-bottom:10pt">
-<button type="button" class="btn btn-success pull-right" onclick="location.href='@Url.Action("Create","BeerBrewery",null)'">
+@if (User.Identity.IsAuthenticated)
+{
+<button type="button" class="btn btn-success pull-right" onclick="location.href='@Url.Action("Create", "BeerBrewery", null)'">
     Add new beer
     <span class="glyphicon glyphicon-plus-sign"></span>
 </button>
-
+}
 @using (Html.BeginForm("Index", "Beer", FormMethod.Get))
 {
 
@@ -122,11 +124,12 @@
 
         </td>
         <td>
-            @if (item.isLocked != true)
+            @if (item.isLocked != true && User.Identity.IsAuthenticated)
             {
-            @Html.ActionLink("Edit |","Edit","BeerBrewery",new { id = item.BeerID },null) 
+            @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null) 
+
+            @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
             }
-            @Html.ActionLink("Delete", "Delete", new { id=item.BeerID })
         </td>
     </tr>
 }

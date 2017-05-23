@@ -97,13 +97,16 @@
     </dl>
 </div>
 <p>
-    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create","Review",new { BeerID = Model.BeerID })'">
+@if (User.Identity.IsAuthenticated)
+{
+    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Create", "Review", new { BeerID = Model.BeerID })'">
         Add rewiev
         <span class="glyphicon glyphicon-plus-sign"></span>
     </button>
 
 
-    @Html.ActionLink("Edit", "Edit","BeerBrewery", new { id = Model.BeerID },null) |
+    @Html.ActionLink("Edit", "Edit", "BeerBrewery", new { id = Model.BeerID }, null) <span>|</span>
+                                                                                   }
     @Html.ActionLink("Back to List", "Index")
 </p>
 

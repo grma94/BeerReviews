@@ -96,7 +96,7 @@ namespace BeerReviews.WebApi.Controllers
                 //                  System.IO.File.Delete(filePath);
                 //         }
                 if (beer.BeerBreweries != null) { 
-                    foreach (var bb in beer.BeerBreweries.ToList())
+                    foreach (var bb in beer.BeerBreweries)
                     {
                         db.BeerBreweries.Remove(bb);
                         db.SaveChanges();

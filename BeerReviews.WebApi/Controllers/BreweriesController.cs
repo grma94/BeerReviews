@@ -164,11 +164,19 @@ namespace BeerReviews.WebApi.Controllers
   //                  var filePath = Server.MapPath(brewery.ImageUrl);
   //                  System.IO.File.Delete(filePath);
                 }
-       /*         foreach (var bb in brewery.BeerBreweries.ToList())
+                /*         foreach (var bb in brewery.BeerBreweries.ToList())
+                         {
+                             db.BeerBreweries.Remove(bb);
+                             db.SaveChanges();
+                         }*/
+                if (brewery.BeerBreweries != null)
                 {
-                    db.BeerBreweries.Remove(bb);
-                    db.SaveChanges();
-                }*/
+                    foreach (var bb in brewery.BeerBreweries)
+                    {
+                        db.BeerBreweries.Remove(bb);
+                        db.SaveChanges();
+                    }
+                }
                 db.Breweries.Remove(brewery);
                 db.SaveChanges();
             }

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using BeerReviews.Data;
 using BeerReviews.Database.Models;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,8 +17,6 @@ namespace BeerReviews.Controllers
 {
     public class BreweryController : Controller
     {
-    //    private BeerReviewsContext db = new BeerReviewsContext();
-
         // GET: Brewery
         public async Task<ActionResult> Index(int? CountryID, string sortOrder)
         {

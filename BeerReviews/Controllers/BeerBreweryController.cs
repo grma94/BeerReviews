@@ -1,6 +1,5 @@
 ﻿//using BeerReviews.WebApi.Data;
-using BeerReviews.Data;
-using BeerReviews.Models;
+using BeerReviews.Database.Models;
 using BeerReviews.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -299,21 +298,6 @@ namespace BeerReviews.Controllers
                         }
                     }
                 }
-
-
-                /*
-
-                           try
-                           {
-                               // TODO: Add update logic here
-                               db.Entry(brewery).State = EntityState.Modified;
-                               db.SaveChanges();
-                               return RedirectToAction("Index","Beer");
-                           }
-                           catch
-                           {
-                               return View();
-                           } */
             }
             return RedirectToAction("Index", "Beer");
         }

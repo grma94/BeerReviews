@@ -208,21 +208,12 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\StyleController.cs" />
-    <Compile Include="Data\BeerReviewsContext.cs" />
-    <Compile Include="Data\DbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Beer.cs" />
-    <Compile Include="Models\BeerBrewery.cs" />
-    <Compile Include="Models\Brewery.cs" />
-    <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Country.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Review.cs" />
-    <Compile Include="Models\Style.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BeerBreweryViewModel.cs" />

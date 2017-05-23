@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using BeerReviews.Data;
 using BeerReviews.Database.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -15,8 +14,6 @@ namespace BeerReviews.Controllers
 {
     public class StyleController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
-
         // GET: Style
         public async Task<ActionResult> Index()
         {

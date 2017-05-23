@@ -23,10 +23,9 @@ namespace BeerReviews.ViewModels
         public string ImageUrl { get; set; }
         [Required]
         public int StyleID { get; set; }
-
         public int BeerID { get; set; }
         [Required]
-          public List<string> BreweriesNames { get; set; }
+        public List<string> BreweriesNames { get; set; }
         public List<string> BreweriesPlacesNames { get; set; }
     }
 }

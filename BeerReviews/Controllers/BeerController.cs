@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-//using BeerReviews.Data;
 using BeerReviews.Database.Models;
 using System.Data.Entity.Infrastructure;
 using System.Threading.Tasks;
@@ -17,9 +15,8 @@ namespace BeerReviews.Controllers
     public class BeerController : Controller
     {
         // GET: Beer
-        public async Task<ActionResult> Index(string sortOrder, int? breweryId, bool? isPlace, int?styleId, bool? p)
+        public async Task<ActionResult> Index(string sortOrder, int? breweryId, bool? isPlace, int? styleId, bool? p)
         {
-            // PopulateStylesDropDownList();
             var httpClient = new HttpClient();
             var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
@@ -31,13 +28,13 @@ namespace BeerReviews.Controllers
             ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
             ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
             if (sortOrder == null) { sortOrder = "name"; }
-            if (breweryId == null && styleId==null)
+            if (breweryId == null && styleId == null)
             {
-                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + "all/"+sortOrder);
+                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + "all/" + sortOrder);
                 var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
 
                 return View(beers);
-          //      return View(Sort(sortOrder, beers));
+                //      return View(Sort(sortOrder, beers));
             }
             else
             {
@@ -48,21 +45,6 @@ namespace BeerReviews.Controllers
                 // return View(Sort(sortOrder, beers.ToList()));
             }
         }
-
-     /*   public ActionResult BeerStyleList(string sortOrder, ICollection<Beer>beers, int?styleId)
-        {
-            List<Beer> b;
-            if (beers == null)
-            {
-               b = db.Beers.Where(c => c.StyleID == styleId).ToList();
-            }
-            else
-            {
-               b = beers.ToList();
-            }
-            return PartialView(Sort(sortOrder,b));
-        }
-        */
 
         // GET: Beer/Details/5
         public async Task<ActionResult> Details(int? id)
@@ -117,47 +99,6 @@ namespace BeerReviews.Controllers
             return RedirectToAction("Index");
         }
 
-        /*
-        public ActionResult BeerList(string sortOrder, int? breweryId, bool? isPlace, int? styleId)
-        {
-            PopulateStylesDropDownList();
-
-            if (breweryId == null && styleId == null)
-            {
-
-                return PartialView(Sort(sortOrder, db.Beers.ToList()));
-
-            }
-            else if (breweryId != null)
-            {
-                var r = new List<Beer>();
-                foreach (var it in db.BeerBreweries.Where(bb => bb.BreweryID == breweryId && bb.isPlace == isPlace))
-                {
-                    r.Add(it.Beer);
-                }
-                if (r.Count == 0) return Content("No beers found");
-
-                return PartialView(Sort(sortOrder, r));
-            }
-            else
-            {
-                var r = db.Beers.Where(b => b.StyleID == styleId).ToList();
-                if (r.Count == 0) return Content("No beers found");
-                {
-                    return PartialView(Sort(sortOrder, r));
-                }
-            }
-        }
-*/
-     /*   protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
-
         private List<Beer> Sort(string sortOrder, List<Beer> unsorted)
         {
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -208,13 +149,5 @@ namespace BeerReviews.Controllers
             }
             return unsorted;
         }
-
- /*       private void PopulateStylesDropDownList(object selectedStyle = null)
-        {
-            var stylesQuery = from s in db.Styles
-                              orderby s.Name
-                              select s;
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", selectedStyle);
-        }*/
     }
 }

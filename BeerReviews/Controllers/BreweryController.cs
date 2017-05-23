@@ -21,14 +21,10 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Index(int? CountryID, string sortOrder)
         {
 
-    //        PopulateCountriesDropDownList();
             var httpClient = new HttpClient();
             var response1 = await httpClient.GetAsync("http://localhost:64635/countries/");
             var countriesQuery = await response1.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
-    //        var httpClient = new HttpClient();
-    //        httpClient.DefaultRequestHeaders.Accept.Clear();
-   //         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (CountryID == null)
             {
                 var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "all");
@@ -43,10 +39,6 @@ namespace BeerReviews.Controllers
                 ViewBag.Country = CountryID;
                 return View(Sort(sortOrder, breweries.ToList()));
             }
-            //      var data = JsonConvert.DeserializeObject<Root>(response.Content.ReadAsStringAsync().ToString()).Data;
-            
-         //   var brew=breweries.ToList();
-
         }
 
         // GET: Brewery/Details/5
@@ -62,7 +54,6 @@ namespace BeerReviews.Controllers
             var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
 
-        //    Brewery brewery = db.Breweries.Find(id);
             if (brewery == null)
             {
                 return HttpNotFound();
@@ -78,8 +69,6 @@ namespace BeerReviews.Controllers
         // GET: Brewery/Create
         public async Task<ActionResult> Create()
         {
-            //      PopulateCountriesDropDownList();
-
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://localhost:64635/countries/");
             var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
@@ -103,8 +92,6 @@ namespace BeerReviews.Controllers
         //        string bID=await response.Content.ReadAsStringAsync();
         //        int beID = Convert.ToInt32(bID);
          //       response.EnsureSuccessStatusCode();
-
-             //   PopulateCountriesDropDownList(brewery.CountryID);
              //   return RedirectToAction("Details", new { breweryID = beID });
                 return RedirectToAction("Index");
             }
@@ -153,8 +140,6 @@ namespace BeerReviews.Controllers
                 var breweryID = brewery.BreweryID;
                 HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/", brewery);
                 response.EnsureSuccessStatusCode();
-     //           db.Entry(brewery).State = EntityState.Modified;
-     //           db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(brewery);
@@ -182,40 +167,12 @@ namespace BeerReviews.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            //           var httpClient = new HttpClient();
-            //           var response = await httpClient.GetAsync("localhost:64635/breweries/single" + id);
-            //           var brewery = await response.Content.ReadAsAsync<Brewery>();
-            /*          Brewery brewery = db.Breweries.Find(id);
-                      var path = brewery.ImageUrl;
-                      if (path != "/Content/Images/no_image.png")
-                      { 
-                      var filePath = Server.MapPath(brewery.ImageUrl);
-                          System.IO.File.Delete(filePath);
-                      }
-                      foreach (var bb in brewery.BeerBreweries.ToList())
-                      {
-                          db.BeerBreweries.Remove(bb);
-                          db.SaveChanges();
-                      }
-
-                      db.Breweries.Remove(brewery);
-                      db.SaveChanges();*/
             var httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/breweries/delete/{id}");
      //       return response.StatusCode;
-
             return RedirectToAction("Index");
         }
 
- /*       protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-*/
         public string FileUpload(HttpPostedFileBase file)
         {
             if (file != null)
@@ -236,9 +193,6 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://localhost:64635/countries/");
             var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
-   //         var countriesQuery = from s in db.Countries
-  //                            orderby s.Name
-  //                            select s;
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", selectedCountry);
         }
 
@@ -280,7 +234,7 @@ namespace BeerReviews.Controllers
         }
 
 
-        private List<BeerBrewery> SortBeers(string sortOrder, List<BeerBrewery> unsorted, bool place)
+  /*      private List<BeerBrewery> SortBeers(string sortOrder, List<BeerBrewery> unsorted, bool place)
         {
 
         List<BeerBrewery> unsortedPart=unsorted.Where(bb => bb.isPlace != place).ToList();
@@ -340,6 +294,6 @@ namespace BeerReviews.Controllers
                     break;
             }
             return unsorted=unsorted.Union(unsortedPart).ToList();
-        }
+        }*/
     }
 }

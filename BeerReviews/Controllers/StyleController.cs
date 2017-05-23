@@ -71,15 +71,8 @@ namespace BeerReviews.Controllers
             {
                 response = await httpClient.PostAsJsonAsync("http://localhost:64635/styles/post/", style);
                 response.EnsureSuccessStatusCode();
-
-                //            PopulateCategoriesDropDownList(style.CategoryID);
-          //      response = await httpClient.GetAsync("http://localhost:64635/categories/");
-         //       var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
-
-       //         ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
                 return RedirectToAction("Index");
             }
-          //  PopulateCategoriesDropDownList(style.CategoryID);
             return View(style);
         }
 
@@ -103,8 +96,6 @@ namespace BeerReviews.Controllers
             var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
 
             ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
-
-          //  PopulateCategoriesDropDownList(style.CategoryID);
             return View(style);
         }
 
@@ -158,30 +149,8 @@ namespace BeerReviews.Controllers
         {
             var httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/styles/delete/{id}");
-      //      Style style = db.Styles.Find(id);
-      //      db.Styles.Remove(style);
-      //      db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-  /*      protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
-
-  /*      private async void PopulateCategoriesDropDownList(object selectedCategory = null)
-        {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/categories/");
-            var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
-
-            ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", selectedCategory);
-        }*/
-
 
         private List<Beer> Sort(string sortOrder, List<Beer> unsorted)
         {

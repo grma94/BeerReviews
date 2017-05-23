@@ -1,5 +1,4 @@
-﻿//using BeerReviews.WebApi.Data;
-using BeerReviews.Database.Models;
+﻿using BeerReviews.Database.Models;
 using BeerReviews.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,9 +12,7 @@ using System.Web.Mvc;
 namespace BeerReviews.Controllers
 {
     public class BeerBreweryController : Controller
-    {
-     //   private BeerReviewsContext db = new BeerReviewsContext();
-     
+    {   
         // GET: BeerBrewery/Create
         public async Task<ActionResult> Create(int? styleID)
         {
@@ -23,7 +20,6 @@ namespace BeerReviews.Controllers
             var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",styleID);
-            //PopulateStylesDropDownList();
             return View();
         }
 
@@ -43,8 +39,6 @@ namespace BeerReviews.Controllers
                 beer.StyleID = beerBreweryVM.StyleID;
                 //            beer.ImageUrl=FileUpload(file);
                 beer.ImageUrl = "/Content/Images/no_image.png";
-                //     db.Beers.Add(beer);
-                //      db.SaveChanges();
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/post/", beer);
                 var id = await response.Content.ReadAsAsync<int>();
@@ -56,7 +50,6 @@ namespace BeerReviews.Controllers
                 {
 
                     var bId = breweries.Where(b => b.Name == bb);
-      //              var bId = db.Breweries.Where(b => b.Name == bb);
                     if (bId.Any())
                     { 
                     var bb2 = new BeerBrewery();
@@ -64,20 +57,12 @@ namespace BeerReviews.Controllers
                     bb2.BreweryID = bId.First().BreweryID;
                         response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
-         /*               if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
-                        {
-                            db.BeerBreweries.Add(bb2);
-                            db.SaveChanges();
-                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
-                            db.SaveChanges();
-                        }*/
                     }
                 }
                 
                 foreach (var bb in beerBreweryVM.BreweriesPlacesNames)
                 {
                     var bId = breweries.Where(b => b.Name == bb);
-                    //       var bId = db.Breweries.Where(b => b.Name == bb);
                     if (bId.Any())
                     {
                         var bb2 = new BeerBrewery();
@@ -86,12 +71,6 @@ namespace BeerReviews.Controllers
                         bb2.BreweryID = bId.First().BreweryID;
                         response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
-          /*              if (db.BeerBreweries.Find(bb2.BeerID,bb2.BreweryID,bb2.isPlace)==null)
-                        {
-                            db.BeerBreweries.Add(bb2);
-                            db.SaveChanges();
-                        }
-                        */
                     }
                 }
 
@@ -99,7 +78,6 @@ namespace BeerReviews.Controllers
                 var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
-          //      PopulateStylesDropDownList(beerBreweryVM.StyleID);
                 return RedirectToAction("Index", "Beer");
             }
             catch
@@ -108,7 +86,6 @@ namespace BeerReviews.Controllers
                 var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
-        //        PopulateStylesDropDownList(beerBreweryVM.StyleID);
                 return View();
             }
         }
@@ -116,19 +93,14 @@ namespace BeerReviews.Controllers
         [HttpPost]
         public async Task<JsonResult> Create2(string Prefix)
         {
-            //Note : you can bind same list from database  
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
             var ObjList = await response.Content.ReadAsAsync<List<Brewery>>();
-  //          List<Brewery> ObjList = db.Breweries.ToList();
 
             //Searching records from list using LINQ query  
             var BreweryName = (from N in ObjList
                                where N.Name.ToLower().Contains(Prefix.ToLower())
                                select new { N.Name });
-            //     var BreweryName = db.Beers.Where(b => b.Name.StartsWith(Prefix)).ToList();
-            //                        where N.Name.StartsWith(Prefix)
-            //                         select new { N.Name });
             return Json(BreweryName, JsonRequestBehavior.AllowGet);
         }
 
@@ -162,7 +134,6 @@ namespace BeerReviews.Controllers
             var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
-    //        PopulateStylesDropDownList(beer.StyleID);
             return View(bbvm);
         }
 
@@ -173,7 +144,6 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + beerBreweryVM.BeerID);
             var beer = await response.Content.ReadAsAsync<Beer>();
-            //      Beer beer = db.Beers.Find(beerBreweryVM.BeerID);
             Beer tempBeer = new Beer();
             tempBeer.BeerID = beerBreweryVM.BeerID;
             tempBeer.Abv = beerBreweryVM.Abv;
@@ -215,8 +185,6 @@ namespace BeerReviews.Controllers
             response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beers/put/", tempBeer);
             response.EnsureSuccessStatusCode();
 
-            //        db.SaveChanges();
-
             response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
             var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
 
@@ -232,16 +200,6 @@ namespace BeerReviews.Controllers
                         bb2.BreweryID = bId.First().BreweryID;
                         response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
-                        /*                bb2.BeerID = beer.BeerID;
-                                        if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
-                                        {
-                                            db.BeerBreweries.Add(bb2);
-                                            db.SaveChanges();
-                                            db.Breweries.Find(bb2.BreweryID).BeersCount++;
-                                            db.SaveChanges();
-                                        }
-                                    }
-                                    */
                     }
                 }
 
@@ -257,13 +215,6 @@ namespace BeerReviews.Controllers
                             bb2.BreweryID = bId.First().BreweryID;
                             response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
                             response.EnsureSuccessStatusCode();
-                            /*
-                            if (db.BeerBreweries.Find(bb2.BeerID, bb2.BreweryID, bb2.isPlace) == null)
-                        {
-                            db.BeerBreweries.Add(bb2);
-                            db.SaveChanges();
-                        }
-                        */
                         }
 
                     }
@@ -280,10 +231,6 @@ namespace BeerReviews.Controllers
                             {
                                 response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
                                 response.EnsureSuccessStatusCode();
-                                /*         db.BeerBreweries.Remove(bb);
-                                     db.SaveChanges();
-                                     db.Breweries.Find(bb.BreweryID).BeersCount--;
-                                     db.SaveChanges();*/
                             }
                         }
                         if (beerBreweryVM.BreweriesPlacesNames != null)
@@ -292,8 +239,6 @@ namespace BeerReviews.Controllers
                             {
                                 response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
                                 response.EnsureSuccessStatusCode();
-                                //           db.BeerBreweries.Remove(bb);
-                                //       db.SaveChanges();
                             }
                         }
                     }
@@ -317,15 +262,6 @@ namespace BeerReviews.Controllers
             }
             else return "/Content/Images/no_image.png";
         }
-        /*
-        private void PopulateStylesDropDownList(object selectedStyle = null)
-        {
-            var stylesQuery = from s in db.Styles
-                              orderby s.Name
-                              select s;
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", selectedStyle);
-        }
-    */
     }
 
 

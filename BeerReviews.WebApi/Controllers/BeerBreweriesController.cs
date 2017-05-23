@@ -106,9 +106,6 @@ namespace BeerReviews.WebApi.Controllers
                 {
                     beer.StyleID = beerBreweryVM.StyleID;
                 }
-
-
-
   //              db.Entry(beer).State = EntityState.Modified;
                 db.SaveChanges();
             }

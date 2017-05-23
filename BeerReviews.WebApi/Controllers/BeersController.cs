@@ -80,32 +80,7 @@ namespace BeerReviews.WebApi.Controllers
                 return beer;
             }
         }
-/*
-        // POST api/values
-        [HttpPost]
-        [Route("breweries/post")]
-        public void Post([FromBody]Brewery brewery)
-        {
-            using (BeerReviewsContext db = new BeerReviewsContext())
-            {
-                db.Breweries.Add(brewery);
-                db.SaveChanges();
-            }
-        }
 
-        // PUT api/values/5
-        [HttpPut]
-        [Route("breweries/put/")]
-        public void Put([FromBody]Brewery brewery)
-        {
-            using (BeerReviewsContext db = new BeerReviewsContext())
-            {
-                //    Brewery existingBrewery=db.Breweries.Find(breweryId);
-                db.Entry(brewery).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-        }
-        */
         // DELETE api/values/5
         [HttpDelete]
         [Route("beers/delete/{beerId}")]
@@ -146,13 +121,6 @@ namespace BeerReviews.WebApi.Controllers
         }
         private List<BeerWithAvg> Sort(string sortOrder, List<BeerWithAvg> unsorted)
         {
-     /*       ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
-            ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
-            ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
-            ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
-            ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
-*/
             switch (sortOrder)
             {
                 case "name_desc":

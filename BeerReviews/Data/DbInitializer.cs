@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace BeerReviews.Data
 {
-    public class DbInitializer : DropCreateDatabaseAlways<BeerReviewsContext>
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<BeerReviewsContext>
     {
         protected override void Seed(BeerReviewsContext context)
         {

@@ -271,7 +271,7 @@ namespace BeerReviews.Controllers
             return View();
         }
 
-     /*   //
+        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
@@ -281,7 +281,7 @@ namespace BeerReviews.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
-
+        /*
         //
         // GET: /Account/SendCode
         [AllowAnonymous]

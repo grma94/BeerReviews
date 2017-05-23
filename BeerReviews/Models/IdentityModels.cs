@@ -18,7 +18,7 @@ namespace BeerReviews.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+   /* public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("BeerReviewsContext")
@@ -29,5 +29,5 @@ namespace BeerReviews.Models
         {
             return new ApplicationDbContext();
         }
-    }
+    }*/
 }

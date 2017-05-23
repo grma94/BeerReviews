@@ -70,7 +70,7 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="StyleID">Style</label>
             <div class="col-md-10">
-                @Html.DropDownList("StyleID", null, String.Empty, new { @class = "form-control" })
+                @Html.DropDownList("StyleID", null, String.Empty, new { @class = "form-control", required="required" })
                 @Html.ValidationMessageFor(model => model.StyleID, "", new { @class = "text-danger" })
             </div>
         </div>

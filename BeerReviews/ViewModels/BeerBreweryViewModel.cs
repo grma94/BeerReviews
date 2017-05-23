@@ -15,6 +15,7 @@ namespace BeerReviews.ViewModels
         [Range(0,100)]
         public double Abv { get; set; }
         [Range(0, 10000)]
+        [RegularExpression("([0-9]+)", ErrorMessage = "Please enter valid Number")]
         public int? IBU { get; set; }
         [Range(0,100)]
         public double? Gravity { get; set; }

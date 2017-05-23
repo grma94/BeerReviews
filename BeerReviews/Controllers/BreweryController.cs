@@ -141,7 +141,7 @@ namespace BeerReviews.Controllers
             var filePath = Server.MapPath(brewery.ImageUrl);
                 System.IO.File.Delete(filePath);
             }
-            foreach (var bb in brewery.BeerBreweries.ToList())
+            foreach (var bb in brewery.BeerBreweries)
             {
                 db.BeerBreweries.Remove(bb);
                 db.SaveChanges();

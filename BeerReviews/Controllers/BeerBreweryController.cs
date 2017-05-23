@@ -15,9 +15,10 @@ namespace BeerReviews.Controllers
         private BeerReviewsContext db = new BeerReviewsContext();
      
         // GET: BeerBrewery/Create
-        public ActionResult Create()
+        public ActionResult Create(int? styleID)
         {
-            PopulateStylesDropDownList();
+      //      var style=db.Styles.Find(styleID);
+            PopulateStylesDropDownList(styleID);
             return View();
         }
 

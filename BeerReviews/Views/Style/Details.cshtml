@@ -16,12 +16,13 @@
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.StyleID }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.StyleID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
 
 <h3>@Html.DisplayFor(model => model.Name) beers:</h3>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create","BeerBrewery", new { styleID = Model.StyleID },null)
 </p>
 
 <table class="table">

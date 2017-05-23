@@ -23,6 +23,7 @@ namespace BeerReviews.Data
         public DbSet<IdentityUserLogin> UserLogins { get; set; }
         public DbSet<IdentityUserClaim> UserClaims { get; set; }
         public DbSet<IdentityUserRole> UserRoles { get; set; }
+
         public static BeerReviewsContext Create()
         {
             return new BeerReviewsContext();
@@ -38,7 +39,7 @@ namespace BeerReviews.Data
             modelBuilder.Entity<IdentityUser>().ToTable("User");
             modelBuilder.Entity<IdentityUser>().Property(u => u.PasswordHash).HasMaxLength(500);
             modelBuilder.Entity<IdentityUser>().Property(u => u.SecurityStamp).HasMaxLength(500);
-            modelBuilder.Entity<IdentityUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
+         //   modelBuilder.Entity<IdentityUser>().Property(u => u.PhoneNumber).HasMaxLength(50);
 
             modelBuilder.Entity<IdentityRole>().ToTable("Role");
             modelBuilder.Entity<IdentityUserRole>().ToTable("UserRole");

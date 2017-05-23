@@ -103,12 +103,13 @@ namespace BeerReviews.Controllers
 
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsJsonAsync("http://localhost:64635/breweries/post/", brewery);
-                string bID=await response.Content.ReadAsStringAsync();
-                int beID = Convert.ToInt32(bID);
+        //        string bID=await response.Content.ReadAsStringAsync();
+        //        int beID = Convert.ToInt32(bID);
          //       response.EnsureSuccessStatusCode();
 
              //   PopulateCountriesDropDownList(brewery.CountryID);
-                return RedirectToAction("Details", new { breweryID = beID });
+             //   return RedirectToAction("Details", new { breweryID = beID });
+                return RedirectToAction("Index");
             }
             PopulateCountriesDropDownList(brewery.CountryID);
             return View(brewery);

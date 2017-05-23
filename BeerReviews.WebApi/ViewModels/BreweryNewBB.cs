@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-//using System.Data.Entity;
-using System.ComponentModel.DataAnnotations;
 
-namespace BeerReviews.Database.Models
+namespace BeerReviews.WebApi.ViewModels
 {
-    public class Brewery
+    public class BreweryNewBB
     {
         public int BreweryID { get; set; }
-        [Required]
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Description { get; set; }
         public string Street { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
-        [Required]
         public int CountryID { get; set; }
         public bool isLocked { get; set; }
         public string Url { get; set; }

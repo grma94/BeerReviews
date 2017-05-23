@@ -24,19 +24,28 @@ namespace BeerReviews.Controllers
             var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
-
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
+            ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
+            ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
+            ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
+            ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
+            if (sortOrder == null) { sortOrder = "name"; }
             if (breweryId == null && styleId==null)
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/beers/many/" + "all");
-                var beers = await response.Content.ReadAsAsync<IEnumerable<Beer>>();
-                return View(Sort(sortOrder, beers.ToList()));
+                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + "all/"+sortOrder);
+                var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
+
+                return View(beers);
+          //      return View(Sort(sortOrder, beers));
             }
             else
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/beers/many/" + styleId);
-                var beers = await response.Content.ReadAsAsync<IEnumerable<Beer>>();
+                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + styleId + "/" + sortOrder);
+                var beers = await response1.Content.ReadAsAsync<IEnumerable<BeerWithAvg>>();
                 ViewBag.Style = styleId;
-                return View(Sort(sortOrder, beers.ToList()));
+                return View(beers);
+                // return View(Sort(sortOrder, beers.ToList()));
             }
         }
 

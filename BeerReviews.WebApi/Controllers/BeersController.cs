@@ -1,4 +1,5 @@
 ﻿using BeerReviews.WebApi.Data;
+using BeerReviews.WebApi.ViewModels;
 using BeerReviews.WebApi.Models;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace BeerReviews.WebApi.Controllers
     {
         // GET api/values
         [HttpGet]
-        [Route("beers/many/{styleId?}")]
-        public IEnumerable<Beer> GetBeers(int? styleId)
+        [Route("beers/many/{styleId?}/{sortOrder}")]
+        public List<BeerWithAvg> GetBeers(int? styleId, string sortOrder)
         {
             using (BeerReviewsContext db = new BeerReviewsContext())
             {
@@ -23,7 +24,44 @@ namespace BeerReviews.WebApi.Controllers
                 styleId.HasValue
                 ? db.Beers.Where(b => b.StyleID == styleId).Include(b => b.Style).Include(b => b.BeerBreweries).Include(b=>b.Reviews).ToList()
                 : db.Beers.Include(b => b.Style).Include(b=>b.BeerBreweries.Select(bbb=>bbb.Brewery)).Include(b => b.Reviews).ToList();
-                return beers;
+                List<BeerWithAvg> bwa=new List<BeerWithAvg>();
+                foreach (var b in beers)
+                {
+                    var a = new BeerWithAvg();
+                    a.Abv = b.Abv;
+                    var bbwn = new List<BeerBreweryWName>();
+                    foreach (var bb in b.BeerBreweries)
+                    {
+                        var bbwn1 = new BeerBreweryWName();
+                        bbwn1.BreweryID = bb.BreweryID;
+                        bbwn1.BreweryName = bb.Brewery.Name;
+                        bbwn1.isPlace = bb.isPlace;
+                        bbwn.Add(bbwn1);
+                    }
+                    a.BeerBreweries = bbwn;
+                    a.BeerID = b.BeerID;
+                    a.Gravity = b.Gravity;
+                    a.IBU = b.IBU;
+                    a.ImageUrl = b.ImageUrl;
+                    a.isLocked = b.isLocked;
+                    a.Name = b.Name;
+                    a.StyleID = b.StyleID;
+                    a.StyleName = b.Style.Name;
+                    var avg = 0.0;
+                    var count =b.Reviews.Count();
+                    a.ReviewsCount = count;
+                    if (count>0) {
+                        foreach (var r in b.Reviews)
+                        {
+                            avg += r.Overall;
+                        }
+                        avg = avg / count;
+                     }
+                    a.ReviewsAvg = avg;
+                    bwa.Add(a);
+                }
+                var bwaS = Sort(sortOrder,bwa);
+                return bwaS;
             }
         }
 
@@ -105,6 +143,56 @@ namespace BeerReviews.WebApi.Controllers
                                      select s;
                 return stylesQuery.ToList();
             }
+        }
+        private List<BeerWithAvg> Sort(string sortOrder, List<BeerWithAvg> unsorted)
+        {
+     /*       ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
+            ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
+            ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
+            ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
+            ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
+*/
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Name).ToList();
+                    break;
+                case "gravity":
+                    unsorted = unsorted.OrderBy(b => b.Gravity).ToList();
+                    break;
+                case "gravity_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Gravity).ToList();
+                    break;
+                case "ibu":
+                    unsorted = unsorted.OrderBy(b => b.IBU).ToList();
+                    break;
+                case "ibu_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.IBU).ToList();
+                    break;
+                case "abv":
+                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    break;
+                case "abv_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    break;
+                case "rc":
+                    unsorted = unsorted.OrderBy(b => b.ReviewsCount).ToList();
+                    break;
+                case "rc_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.ReviewsCount).ToList();
+                    break;
+                case "avg":
+                    unsorted = unsorted.OrderBy(b => b.ReviewsAvg).ToList();
+                    break;
+                case "avg_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.ReviewsAvg).ToList();
+                    break;
+                default:
+                    unsorted = unsorted.OrderBy(b => b.Name).ToList();
+                    break;
+            }
+            return unsorted;
         }
     }
 }

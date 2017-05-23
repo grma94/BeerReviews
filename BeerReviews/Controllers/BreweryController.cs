@@ -258,10 +258,10 @@ namespace BeerReviews.Controllers
                     unsorted = unsorted.OrderByDescending(b => b.Name).ToList();
                     break;
                 case "country":
-                    unsorted = unsorted.OrderBy(b => b.Country.Name).ToList();
+                    unsorted = unsorted.OrderBy(b => b.CountryName).ToList();
                     break;
                 case "country_desc":
-                    unsorted = unsorted.OrderByDescending(b => b.Country.Name).ToList();
+                    unsorted = unsorted.OrderByDescending(b => b.CountryName).ToList();
                     break;
                 case "city":
                     unsorted = unsorted.OrderBy(b => b.City).ToList();

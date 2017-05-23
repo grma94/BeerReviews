@@ -61,11 +61,11 @@
             </dd>
         }
         <dt>
-            @Html.DisplayNameFor(model => model.Country)
+            Country
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Country.Name)
+            @Html.DisplayFor(model => model.CountryName)
         </dd>
         
 
@@ -112,12 +112,12 @@
         <tr>
             <td>
                 <a href="@Url.Action("Details", new { id = item.BeerID })">
-                    <img alt="@item.Beer.Name" src="@item.Beer.ImageUrl" height="50" width="50" />
+                    <img alt="@item.BeerName" src="@item.Beer.ImageUrl" height="50" width="50" />
                 </a>
             </td>
             <td>
                 <a href="@Url.Action("Details", "Beer", new { id = item.BeerID })">
-                    @Html.DisplayFor(modelItem => item.Beer.Name)
+                    @Html.DisplayFor(modelItem => item.BeerName)
                 </a>
             </td>
             <td>
@@ -134,7 +134,7 @@
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                            @Html.DisplayFor(modelItem => it.BreweryName)
                         }
                     </a>
                 }
@@ -154,7 +154,7 @@
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                            @Html.DisplayFor(modelItem => it.BreweryName)
                         }
                     </a>
                 }
@@ -168,27 +168,18 @@
             </td>
             <td>
                 <a href="@Url.Action("Details", "Style", new { id = item.Beer.StyleID })">
-                    @Html.DisplayFor(modelItem => item.Beer.Style.Name)
+                    @Html.DisplayFor(modelItem => item.Beer.StyleName)
                 </a>
             </td>
             <td>
-                @item.Beer.Reviews.Count()
+                @item.Beer.ReviewsCount
 
             </td>
             <td>
-                @{var avg = 0.0;
-                }
-                @if (item.Beer.Reviews.Count() > 0)
+                @if (item.Beer.ReviewsCount > 0)
                 {
-
-                    foreach (var r in item.Beer.Reviews)
-                    {
-                        avg += r.Overall;
-                    }
-                    avg = avg / item.Beer.Reviews.Count();
-                    <span>@avg.ToString("N1")</span>
+                    <span>@item.Beer.ReviewsAvg.ToString("N1")</span>
                 }
-
             </td>
             <td>
                 @if (item.Beer.isLocked != true)
@@ -260,7 +251,7 @@
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                            @Html.DisplayFor(modelItem => it.BreweryName)
                         }
                     </a>
                 }
@@ -280,7 +271,7 @@
                         }
                         else
                         {
-                            @Html.DisplayFor(modelItem => it.Brewery.Name)
+                            @Html.DisplayFor(modelItem => it.BreweryName)
                         }
                     </a>
                 }
@@ -294,27 +285,18 @@
             </td>
             <td>
                 <a href="@Url.Action("Details", "Style", new { id = item.Beer.StyleID })">
-                    @Html.DisplayFor(modelItem => item.Beer.Style.Name)
+                    @Html.DisplayFor(modelItem => item.Beer.StyleName)
                 </a>
             </td>
             <td>
-                @item.Beer.Reviews.Count()
+                @item.Beer.ReviewsCount
 
             </td>
             <td>
-                @{var avg = 0.0;
-                }
-                @if (item.Beer.Reviews.Count() > 0)
+                @if (item.Beer.ReviewsCount > 0)
                 {
-
-                    foreach (var r in item.Beer.Reviews)
-                    {
-                        avg += r.Overall;
-                    }
-                    avg = avg / item.Beer.Reviews.Count();
-                    <span>@avg.ToString("N1")</span>
+                    <span>@item.Beer.ReviewsAvg.ToString("N1")</span>
                 }
-
             </td>
             <td>
                 @if (item.Beer.isLocked != true)

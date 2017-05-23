@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BeerReviews.Database.Models.Beer>
+﻿@model IEnumerable<BeerReviews.Database.Models.BeerWithAvg>
 
 @{
     ViewBag.Title = "Beers";
@@ -41,7 +41,7 @@
             @Html.ActionLink("Gravity", "Index", new { sortOrder = ViewBag.GravitySortParm, styleID = @ViewBag.Style })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Style)
+            Style
         </th>
         <th>
             @Html.ActionLink("Reviews count", "Index", new { sortOrder = ViewBag.ReviewsSortParm, styleID = @ViewBag.Style })
@@ -74,7 +74,7 @@
             @foreach (var it in item.BeerBreweries.Where(bb => !bb.isPlace))
             {
                     <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
-                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                        @Html.DisplayFor(modelItem => it.BreweryName)
                     </a>
             }
 
@@ -87,7 +87,7 @@
             @foreach (var it in item.BeerBreweries.Where(bb => bb.isPlace))
             {
                 <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
-                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    @Html.DisplayFor(modelItem => it.BreweryName)
                 </a>
             }
 
@@ -100,26 +100,17 @@
         </td>
         <td>
             <a href="@Url.Action("Details", "Style", new { id = item.StyleID })">
-                @Html.DisplayFor(modelItem => item.Style.Name)
+                @Html.DisplayFor(modelItem => item.StyleName)
             </a>
         </td>
         <td>
-            @item.Reviews.Count()
+            @item.ReviewsCount
 
         </td>
         <td>
-            @{var avg = 0.0;
+            @if (item.ReviewsCount > 0) { 
+                <span>@item.ReviewsAvg.ToString("N1")</span>
             }
-            @if (item.Reviews.Count()>0) { 
-            
-            foreach (var r in item.Reviews)
-            {
-                avg += r.Overall;
-            }
-            avg=avg/item.Reviews.Count();
-                <span>@avg.ToString("N1")</span>
-            }
-
         </td>
         <td>
             @if (item.isLocked != true)

@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Models\Beer.cs" />
     <Compile Include="Models\BeerBrewery.cs" />
+    <Compile Include="Models\BeerBreweryWName.cs" />
+    <Compile Include="Models\BeerWithAvg.cs" />
     <Compile Include="Models\Brewery.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Country.cs" />

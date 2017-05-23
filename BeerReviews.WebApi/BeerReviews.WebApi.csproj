@@ -260,6 +260,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BeerBreweryWName.cs" />
+    <Compile Include="ViewModels\BeerWithAvg.cs" />
+    <Compile Include="ViewModels\BreweryNewBB.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

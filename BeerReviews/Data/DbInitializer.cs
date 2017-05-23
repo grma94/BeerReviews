@@ -86,7 +86,8 @@ namespace BeerReviews.Data
                 new Style {Name="American Pale Lager",CategoryID=10 },
                 new Style {Name="Dry Beer",CategoryID=10 },
                 new Style {Name="Light Beer",CategoryID=10 },
-                new Style {Name="Baltic Porter",CategoryID=11 }
+                new Style {Name="Baltic Porter",CategoryID=11 },
+                new Style {Name="American Pale Ale",CategoryID=1 }
 
             };
             styles.ForEach(s => context.Styles.Add(s));

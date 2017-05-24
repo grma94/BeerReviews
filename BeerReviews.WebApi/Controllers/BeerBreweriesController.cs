@@ -16,7 +16,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beerbreweries/get/{beerId}")]
         public IEnumerable<BeerBrewery> GetBBs(int beerId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 List < BeerBrewery > beerbreweries= null;
                 if (db.BeerBreweries.Where(bb => bb.BeerID == beerId) != null)
@@ -31,7 +31,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beerbreweries/post")]
         public int Post([FromBody]Beer beer)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 db.Beers.Add(beer);
                 db.SaveChanges();
@@ -44,7 +44,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beerbreweries/postbb")]
         public void AddBeerBrewery([FromBody]BeerBrewery bb2)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
 
                 if (bb2 != null) { 
@@ -62,7 +62,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beerbreweries/postbpb")]
         public void AddBeerPlaceBrewery([FromBody]BeerBrewery bb2)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 if (bb2 != null)
                 {
@@ -79,7 +79,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beers/put/")]
         public void Put([FromBody]Beer beerBreweryVM)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var beer=db.Beers.Find(beerBreweryVM.BeerID);
                 if (beer.Abv != beerBreweryVM.Abv)
@@ -116,7 +116,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beerbreweries/delete/")]
         public void Delete([FromBody]BeerBrewery beerBrewery)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 if (!beerBrewery.isPlace)
                 { 

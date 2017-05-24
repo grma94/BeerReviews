@@ -21,7 +21,7 @@ namespace BeerReviews.WebApi.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("BeerReviewsContext")
+            : base("BeerReviewsContext2")
         {
         }
 

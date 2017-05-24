@@ -16,7 +16,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("reviews/many/{beerId?}")]
         public IEnumerable<Review> GetReviews(int? beerId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var reviews =
                  beerId.HasValue
@@ -31,7 +31,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("reviews/single/{reviewId}")]
         public Review GetReview(int reviewId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 Review review = db.Reviews
                     .Include(z => z.Beer.Style)
@@ -46,7 +46,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("reviews/post")]
         public void Post([FromBody]Review review)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 db.Reviews.Add(review);
                 db.SaveChanges();
@@ -58,7 +58,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("reviews/put/")]
         public void Put([FromBody]Review review)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 db.Entry(review).State = EntityState.Modified;
                 db.SaveChanges();
@@ -71,7 +71,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("reviews/delete/{styleId}")]
         public void Delete(int reviewId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var review = db.Reviews.Find(reviewId);
                 db.Reviews.Remove(review);

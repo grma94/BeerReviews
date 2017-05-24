@@ -13,7 +13,7 @@ namespace BeerReviews.WebApi.Controllers
         // GET: Home
         public ActionResult Index()
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var breweries = db.Breweries;
 

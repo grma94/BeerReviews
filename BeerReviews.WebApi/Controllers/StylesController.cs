@@ -15,7 +15,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles/many/")]
         public IEnumerable<Category> GetStyles()
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var categories = db.Categories.Include(c=>c.Styles).ToList();
                 return categories;
@@ -27,7 +27,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles/single/{styleId}")]
         public Style GetStyle(int styleId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 Style style = db.Styles
                     .Include(z=>z.Category)
@@ -43,7 +43,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles/post")]
         public void Post([FromBody]Style style)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 db.Styles.Add(style);
                 db.SaveChanges();
@@ -55,7 +55,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles/put/")]
         public void Put([FromBody]Style style)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 db.Entry(style).State = EntityState.Modified;
                 db.SaveChanges();
@@ -68,7 +68,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles/delete/{styleId}")]
         public void Delete(int styleId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var style = db.Styles.Find(styleId);
                 db.Styles.Remove(style);
@@ -81,7 +81,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("categories")]
         public IEnumerable<Category> GetCategories()
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
 
                 var categoriesQuery = from s in db.Categories

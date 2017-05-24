@@ -14,7 +14,7 @@ namespace BeerReviews.WebApi.Controllers
 {
     public class BeerController : Controller
     {
-        private BeerReviewsContext db = new BeerReviewsContext();
+        private BeerReviewsContext2 db = new BeerReviewsContext2();
 
         // GET: Beer
         public ActionResult Index(string sortOrder, int? breweryId, bool? isPlace, int?styleId, bool? p)

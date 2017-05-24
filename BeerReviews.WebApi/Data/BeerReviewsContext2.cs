@@ -8,9 +8,9 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace BeerReviews.WebApi.Data
 {
-    public class BeerReviewsContext : DbContext
+    public class BeerReviewsContext2 : DbContext
     {
-        public BeerReviewsContext() : base("BeerReviewsContext")
+        public BeerReviewsContext2() : base("BeerReviewsContext2")
         {
             this.Configuration.LazyLoadingEnabled = false;
   //          this.Configuration.ProxyCreationEnabled = false;

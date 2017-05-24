@@ -7,9 +7,9 @@ using System.Data.Entity;
 
 namespace BeerReviews.WebApi.Data
 {
-    public class DbInitializer : DropCreateDatabaseIfModelChanges<BeerReviewsContext>
+    public class DbInitializer : DropCreateDatabaseAlways<BeerReviewsContext2>
     {
-        protected override void Seed(BeerReviewsContext context)
+        protected override void Seed(BeerReviewsContext2 context)
         {
             var categories = new List<Category>
             {

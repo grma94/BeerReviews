@@ -16,7 +16,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("searchbe/{searchString}")]
         public List<Beer> SearchResults(string searchString)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var rBeers = db.Beers
                     .Include(bb=>bb.Style)
@@ -30,7 +30,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("searchbr/{searchString}")]
         public List<Brewery> SearchResultsBrewery(string searchString)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var rBreweries = db.Breweries
                     .Include(bb=>bb.Country)

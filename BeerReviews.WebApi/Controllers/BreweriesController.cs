@@ -18,7 +18,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("breweries/many/{countryID?}")]
         public IEnumerable<BreweryNewBB> GetBreweries(int? countryID)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                          var breweries =
                          countryID.HasValue
@@ -45,7 +45,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("breweries/single/{breweryId}")]
         public BreweryNewBB GetBrewery(int breweryId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var brewery = db.Breweries
                     .Include(b => b.Country)
@@ -128,7 +128,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("breweries/post")]
         public string Post([FromBody]Brewery brewery)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                db.Breweries.Add(brewery);
                db.SaveChanges();
@@ -142,7 +142,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("breweries/put/")]
         public void Put([FromBody]Brewery brewery)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
             //    Brewery existingBrewery=db.Breweries.Find(breweryId);
                 db.Entry(brewery).State = EntityState.Modified;
@@ -155,7 +155,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("breweries/delete/{breweryId}")]
         public void Delete(int breweryId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var brewery = db.Breweries.Find(breweryId);
                 var path = brewery.ImageUrl;
@@ -186,7 +186,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("countries")]
         public IEnumerable<Country> GetCountries()
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
 
                 var countriesQuery = from s in db.Countries

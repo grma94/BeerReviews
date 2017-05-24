@@ -18,7 +18,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beers/many/{styleId?}/{sortOrder}")]
         public List<BeerWithAvg> GetBeers(int? styleId, string sortOrder)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var beers =
                 styleId.HasValue
@@ -70,7 +70,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beers/single/{beerId}")]
         public Beer GetBeer(int beerId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var beer = db.Beers
                     .Include(b => b.Style)
@@ -86,7 +86,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beers/delete/{beerId}")]
         public void Delete(int beerId)
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
                 var beer = db.Beers.Find(beerId);
                 //       var path = brewery.ImageUrl;
@@ -110,7 +110,7 @@ namespace BeerReviews.WebApi.Controllers
         [Route("styles")]
         public IEnumerable<Style> GetStyles()
         {
-            using (BeerReviewsContext db = new BeerReviewsContext())
+            using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
 
                 var stylesQuery = from s in db.Styles

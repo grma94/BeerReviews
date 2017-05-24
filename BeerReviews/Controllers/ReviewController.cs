@@ -74,12 +74,19 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
+        public async Task<ActionResult> Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,Overall,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
-                review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste))/7;
+                if (review.Overall == 0.0)
+                {
+                    review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste)) / 7;
+                }
+                else
+                {
+                    review.Overall = review.Overall / 7;
+                }
                 //        review.ImageUrl = FileUpload(file);
 
                 var httpClient = new HttpClient();

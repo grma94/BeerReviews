@@ -44,10 +44,10 @@ namespace BeerReviews.Migrations
                 c => new
                     {
                         ReviewID = c.Int(nullable: false, identity: true),
-                        Aroma = c.Int(nullable: false),
-                        Taste = c.Int(nullable: false),
-                        Palate = c.Int(nullable: false),
-                        Apperance = c.Int(nullable: false),
+                        Aroma = c.Int(),
+                        Taste = c.Int(),
+                        Palate = c.Int(),
+                        Apperance = c.Int(),
                         Overall = c.Double(nullable: false),
                         Description = c.String(),
                         ImageUrl = c.String(),

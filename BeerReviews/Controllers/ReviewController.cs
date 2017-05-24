@@ -65,7 +65,7 @@ namespace BeerReviews.Controllers
                 return View(r);
 
             }
-            return RedirectToAction("Details", "Beer", new { beerID = BeerID});
+            return RedirectToAction("Details", "Beer", new { id = BeerID});
         }
 
         // POST: Review/Create
@@ -73,14 +73,20 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,Overall,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
                 review.UserName=User.Identity.Name;
                 review.UserID = User.Identity.GetUserId();
+                if (review.Overall == 0.0) { 
                 review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste))/7;
+                }
+                else
+                {
+                    review.Overall = review.Overall / 7;
+                }
                 review.ImageUrl = FileUpload(file);
                 db.Reviews.Add(review);
                 db.SaveChanges();

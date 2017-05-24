@@ -10,15 +10,14 @@ namespace BeerReviews.Models
     public class Review
     {
         public int ReviewID { get; set; }
-        [Required]
         [Range(0,10)]
-        public int Aroma { get; set; }
+        public int? Aroma { get; set; }
         [Range(0, 15)]
-        public int Taste { get; set; }
+        public int? Taste { get; set; }
         [Range(0, 5)]
-        public int Palate { get; set; }
+        public int? Palate { get; set; }
         [Range(0, 5)]
-        public int Apperance { get; set; }
+        public int? Apperance { get; set; }
         public double Overall { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }

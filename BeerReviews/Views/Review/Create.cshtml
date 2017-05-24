@@ -6,48 +6,71 @@
 
 <h2>Add review</h2>
 
+<p>You can give review either with one, overall scoring in integer number, range from  1 to 30 or give detailed scoring about Taste (0-15), Apperance (0-5), Plate (0-5) and Aroma (0-10).</p>
 
-@using (Html.BeginForm("Create", "Review", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" })) 
+@using (Html.BeginForm("Create", "Review", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.UserName)
-        @Html.HiddenFor(model => model.BeerID)
-        <div class="form-group">
-            @Html.LabelFor(model => model.Aroma, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Aroma, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Aroma, "", new { @class = "text-danger" })
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.UserName)
+    @Html.HiddenFor(model => model.BeerID)
+    <div class="tabbable" id="tabs">
+        <ul class="nav nav-tabs" data-tabs="tabs">
+            <li>
+                <a href="#Detailed" data-toggle="tab">Detailed</a>
+            </li>
+            <li>
+                <a href="#Simplified" data-toggle="tab">Only Overall</a>
+            </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="Detailed">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Aroma, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Aroma, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Aroma, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Taste, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Taste, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Taste, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Palate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Palate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Palate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Apperance, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Apperance, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Apperance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="Simplified">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Overall, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Overall, new { htmlAttributes = new { @class = "form-control", value="" } })
+                        @Html.ValidationMessageFor(model => model.Overall, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Taste, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Taste, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Taste, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Palate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Palate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Palate, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Apperance, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Apperance, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Apperance, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -65,16 +88,39 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-success form-control">Add review</button>
+                <button type="submit" class="btn btn-success form-control" onclick="javasript: return checkform()">Add review</button>
             </div>
         </div>
+        <span id="Validation"></span>
     </div>
+</div>
 }
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+
+
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-}
+<script type="text/javascript">
+    function checkform()
+{
+var o= $('#Overall').val();
+var taste = $('#Taste').val();
+var palate = $('#Palate').val();
+var apperance = $('#Apperance').val();
+var aroma = $('#Aroma').val();
+if((o==""||o=="0") && (taste==""||palate==""||apperance==""||aroma==""))
+{
+    document.getElementById("Validation").textContent = 'Enter either overall or aroma, palate, apperance and taste';
+   // alert("Enter either first name or last name") ;
+    return false;
+  }
+    }
+</script>
+    }
+    

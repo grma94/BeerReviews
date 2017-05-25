@@ -1,5 +1,6 @@
 ﻿using BeerReviews.WebApi.Data;
 using BeerReviews.WebApi.Models;
+using BeerReviews.WebApi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -25,7 +26,7 @@ namespace BeerReviews.WebApi.Controllers
         // GET api/values/5
         [HttpGet]
         [Route("styles/single/{styleId}")]
-        public Style GetStyle(int styleId)
+        public StyleNewBB GetStyle(int styleId)
         {
             using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
@@ -34,7 +35,55 @@ namespace BeerReviews.WebApi.Controllers
                     .Include(z=>z.Beers.Select(bb=>bb.BeerBreweries))
                     .Include(z => z.Beers.Select(bb => bb.Reviews))
                     .SingleOrDefault(x => x.StyleID == styleId);
-                return style;
+                var ba = style.Beers;
+                var nStyle = new StyleNewBB();
+                nStyle.CategoryID = style.CategoryID;
+                nStyle.CategoryName = style.Category.Name;
+                nStyle.StyleID = style.StyleID;
+                nStyle.Name = style.Name;
+                nStyle.Description = style.Description;
+                var beers = new List<BeerWithAvg>();
+                foreach(var beer in style.Beers)
+                {
+                    var onebeer = new BeerWithAvg();
+                    var bbb = new List<BeerBreweryWName>();
+                    foreach(var beerBrewery in beer.BeerBreweries)
+                    {
+                        var oneBB = new BeerBreweryWName();
+                        oneBB.BreweryID = beerBrewery.BreweryID;
+                      //  oneBB.BreweryName = beerBrewery.Brewery.Name;
+                        oneBB.BreweryName=db.Breweries.Find(oneBB.BreweryID).Name;
+                        oneBB.isPlace = beerBrewery.isPlace;
+                        bbb.Add(oneBB);
+                    }
+                    onebeer.BeerBreweries = bbb;
+                    onebeer.Abv = beer.Abv;
+                    onebeer.BeerID = beer.BeerID;
+                    onebeer.Gravity = beer.Gravity;
+                    onebeer.ImageUrl = beer.ImageUrl;
+                    onebeer.isLocked = beer.isLocked;
+                    onebeer.Name = beer.Name;
+                    var avg = 0.0;
+                    var count = beer.Reviews.Count();
+                    onebeer.ReviewsCount = count;
+                    if (count > 0)
+                    {
+                        foreach (var r in beer.Reviews)
+                        {
+                            avg += r.Overall;
+                        }
+                        avg = avg / count;
+                    }
+                    onebeer.ReviewsAvg = avg;
+                    beers.Add(onebeer);
+                }
+                nStyle.Beers = beers;
+            /*    foreach (var b in style.Beers)
+                {
+                    List<BeerBrewery> bbb = db.BeerBreweries.Where(x => x.BeerID == b.BeerID).ToList();
+                    b.BeerBreweries = bbb;
+                }*/
+                return nStyle;
             }
         }
 

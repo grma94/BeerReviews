@@ -1,4 +1,4 @@
-﻿@model BeerReviews.Database.Models.Style
+﻿@model BeerReviews.Database.Models.StyleNewBB
 
 @{
     ViewBag.Title = @Html.DisplayFor(model => model.Name) + " details";
@@ -7,7 +7,7 @@
 <h2>@Html.DisplayFor(model => model.Name)</h2>
 
 
-<h4>@Html.DisplayFor(model => model.Category.Name)</h4>
+<h4>@Html.DisplayFor(model => model.CategoryName)</h4>
 <hr />
 <p>
     @Html.DisplayFor(model => model.Description)
@@ -74,7 +74,7 @@
                 @foreach (var it in item.BeerBreweries.Where(bb => !bb.isPlace))
                 {
                     <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
-                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                        @Html.DisplayFor(modelItem => it.BreweryName)
                     </a>
                 }
 
@@ -87,7 +87,7 @@
                 @foreach (var it in item.BeerBreweries.Where(bb => bb.isPlace))
                 {
                     <a href="@Url.Action("Details", "Brewery", new { id = it.BreweryID })">
-                        @Html.DisplayFor(modelItem => it.Brewery.Name)
+                        @Html.DisplayFor(modelItem => it.BreweryName)
                     </a>
                 }
 
@@ -99,21 +99,13 @@
                 @Html.DisplayFor(modelItem => item.Gravity)
             </td>
             <td>
-                @item.Reviews.Count()
+                @item.ReviewsCount
 
             </td>
             <td>
-                @{var avg = 0.0;
-                }
-                @if (item.Reviews.Count() > 0)
+                @if (item.ReviewsCount > 0)
                 {
-
-                    foreach (var r in item.Reviews)
-                    {
-                        avg += r.Overall;
-                    }
-                    avg = avg / item.Reviews.Count();
-                    <span>@avg.ToString("N1")</span>
+                    <span>@item.ReviewsAvg.ToString("N1")</span>
                 }
 
             </td>

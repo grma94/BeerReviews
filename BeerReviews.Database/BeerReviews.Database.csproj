@@ -54,6 +54,7 @@
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\ReviewWName.cs" />
     <Compile Include="Models\Style.cs" />
+    <Compile Include="Models\StyleNewBB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

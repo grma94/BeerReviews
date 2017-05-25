@@ -32,7 +32,7 @@ namespace BeerReviews.Controllers
             }
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/single/"+id);
-            var style = await response.Content.ReadAsAsync<Style>();
+            var style = await response.Content.ReadAsAsync<StyleNewBB>();
             if (style == null)
             {
                 return HttpNotFound();
@@ -152,7 +152,7 @@ namespace BeerReviews.Controllers
             return RedirectToAction("Index");
         }
 
-        private List<Beer> Sort(string sortOrder, List<Beer> unsorted)
+        private List<BeerWithAvg> Sort(string sortOrder, List<BeerWithAvg> unsorted)
         {
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
@@ -185,16 +185,16 @@ namespace BeerReviews.Controllers
                     unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
                     break;
                 case "rc":
-                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    unsorted = unsorted.OrderBy(b => b.ReviewsCount).ToList();
                     break;
                 case "rc_desc":
-                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    unsorted = unsorted.OrderByDescending(b => b.ReviewsCount).ToList();
                     break;
                 case "avg":
-                    unsorted = unsorted.OrderBy(b => b.Abv).ToList();
+                    unsorted = unsorted.OrderBy(b => b.ReviewsAvg).ToList();
                     break;
                 case "avg_desc":
-                    unsorted = unsorted.OrderByDescending(b => b.Abv).ToList();
+                    unsorted = unsorted.OrderByDescending(b => b.ReviewsAvg).ToList();
                     break;
                 default:
                     unsorted = unsorted.OrderBy(b => b.Name).ToList();

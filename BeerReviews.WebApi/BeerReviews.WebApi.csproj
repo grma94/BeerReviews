@@ -271,6 +271,7 @@
     <Compile Include="ViewModels\BeerWithAvg.cs" />
     <Compile Include="ViewModels\BreweryNewBB.cs" />
     <Compile Include="ViewModels\ReviewWName.cs" />
+    <Compile Include="ViewModels\StyleNewBB.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

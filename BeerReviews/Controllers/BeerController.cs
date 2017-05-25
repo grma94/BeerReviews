@@ -18,7 +18,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Index(string sortOrder, int? breweryId, bool? isPlace, int? styleId, bool? p)
         {
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -30,7 +30,7 @@ namespace BeerReviews.Controllers
             if (sortOrder == null) { sortOrder = "name"; }
             if (breweryId == null && styleId == null)
             {
-                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + "all/" + sortOrder);
+                response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/many/" + "all/" + sortOrder);
                 var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
 
                 return View(beers);
@@ -38,7 +38,7 @@ namespace BeerReviews.Controllers
             }
             else
             {
-                response1 = await httpClient.GetAsync("http://localhost:64635/beers/many/" + styleId + "/" + sortOrder);
+                response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/many/" + styleId + "/" + sortOrder);
                 var beers = await response1.Content.ReadAsAsync<IEnumerable<BeerWithAvg>>();
                 ViewBag.Style = styleId;
                 return View(beers);
@@ -55,7 +55,7 @@ namespace BeerReviews.Controllers
             }
 
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
             var beer = await response.Content.ReadAsAsync<Beer>();
 
             if (beer == null)
@@ -73,7 +73,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
             var beer = await response.Content.ReadAsAsync<Beer>();
             if (beer == null)
             {
@@ -95,7 +95,7 @@ namespace BeerReviews.Controllers
                         }
                         */
             var httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/beers/delete/{id}");
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/beers/delete/{id}");
             return RedirectToAction("Index");
         }
 

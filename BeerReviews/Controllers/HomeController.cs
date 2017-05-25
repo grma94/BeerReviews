@@ -26,9 +26,9 @@ namespace BeerReviews.Controllers
             if (searchString != "")
             {
                 var httpClient = new HttpClient();
-                var response1 = await httpClient.GetAsync("http://localhost:64635/searchbe/" + searchString);
+                var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/searchbe/" + searchString);
                 var beers = await response1.Content.ReadAsAsync<List<Beer>>();
-                response1 = await httpClient.GetAsync("http://localhost:64635/searchbr/" + searchString);
+                response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/searchbr/" + searchString);
                 var breweries = await response1.Content.ReadAsAsync<List<Brewery>>();
                 var results = new Tuple<List<Beer>, List<Brewery>>(beers, breweries);
                 return View(results);

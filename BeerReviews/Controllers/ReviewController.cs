@@ -19,14 +19,14 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
             if (beerId == null && userId == null)
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/reviews/many/" + "all");
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/many/" + "all");
                 var reviews = await response.Content.ReadAsAsync<List<Review>>();
                 return View(reviews);
             }
             else 
             //if (beerId != 0)
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/reviews/many/" + beerId);
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/many/" + beerId);
                 var reviews = await response.Content.ReadAsAsync<List<Review>>();
                 if (reviews.Count() == 0) return Content("No reviews of this beer found");
                 return View(reviews);
@@ -47,7 +47,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
@@ -90,7 +90,7 @@ namespace BeerReviews.Controllers
                 //        review.ImageUrl = FileUpload(file);
 
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/reviews/post/", review);
+                var response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/post/", review);
                 response.EnsureSuccessStatusCode();
                 return RedirectToAction("Details", "Beer",new { id = review.BeerID });
             }
@@ -106,7 +106,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
@@ -125,7 +125,7 @@ namespace BeerReviews.Controllers
             if (ModelState.IsValid)
             {
                 var httpClient = new HttpClient();
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/", review);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/put/", review);
                 response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index");
             }
@@ -140,7 +140,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
@@ -155,7 +155,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             var httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/breweries/delete/{id}");
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/delete/{id}");
 
             return RedirectToAction("Index");
         }

@@ -17,7 +17,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Create(int? styleID)
         {
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",styleID);
             return View();
@@ -40,11 +40,11 @@ namespace BeerReviews.Controllers
                 //            beer.ImageUrl=FileUpload(file);
                 beer.ImageUrl = "/Content/Images/no_image.png";
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/post/", beer);
+                var response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/post/", beer);
                 var id = await response.Content.ReadAsAsync<int>();
                // response.EnsureSuccessStatusCode();
 
-                response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+                response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + "nil");
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
                 foreach (var bb in beerBreweryVM.BreweriesNames)
                 {
@@ -55,7 +55,7 @@ namespace BeerReviews.Controllers
                     var bb2 = new BeerBrewery();
                     bb2.BeerID = id;
                     bb2.BreweryID = bId.First().BreweryID;
-                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                        response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
                     }
                 }
@@ -69,13 +69,13 @@ namespace BeerReviews.Controllers
                         bb2.BeerID = id;
                         bb2.isPlace = true;
                         bb2.BreweryID = bId.First().BreweryID;
-                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                        response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
                     }
                 }
 
 
-                var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+                var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
                 return RedirectToAction("Index", "Beer");
@@ -83,7 +83,7 @@ namespace BeerReviews.Controllers
             catch
             {
                 var httpClient = new HttpClient();
-                var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+                var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beerBreweryVM.StyleID);
                 return View();
@@ -94,7 +94,7 @@ namespace BeerReviews.Controllers
         public async Task<JsonResult> Create2(string Prefix)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + "nil");
             var ObjList = await response.Content.ReadAsAsync<List<Brewery>>();
 
             //Searching records from list using LINQ query  
@@ -108,7 +108,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
             var beer = await response.Content.ReadAsAsync<Beer>();
             var bbvm = new BeerBreweryViewModel();
             bbvm.Abv = beer.Abv;
@@ -131,7 +131,7 @@ namespace BeerReviews.Controllers
             bbvm.ImageUrl = beer.ImageUrl;
             bbvm.Name = beer.Name;
             bbvm.StyleID = beer.StyleID;
-            var response1 = await httpClient.GetAsync("http://localhost:64635/styles/");
+            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
             return View(bbvm);
@@ -142,7 +142,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Edit([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/beers/single/" + beerBreweryVM.BeerID);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + beerBreweryVM.BeerID);
             var beer = await response.Content.ReadAsAsync<Beer>();
             Beer tempBeer = new Beer();
             tempBeer.BeerID = beerBreweryVM.BeerID;
@@ -182,10 +182,10 @@ namespace BeerReviews.Controllers
                 beer.ImageUrl = FileUpload(file);
             }*/
             var beerId = beer.BeerID;
-            response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beers/put/", tempBeer);
+            response = await httpClient.PutAsJsonAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/beers/put/", tempBeer);
             response.EnsureSuccessStatusCode();
 
-            response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "nil");
+            response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + "nil");
             var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
 
             if (beerBreweryVM.BreweriesNames != null)
@@ -198,7 +198,7 @@ namespace BeerReviews.Controllers
                         var bb2 = new BeerBrewery();
                         bb2.BeerID = beerId;
                         bb2.BreweryID = bId.First().BreweryID;
-                        response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                        response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/postbb/", bb2);
                         response.EnsureSuccessStatusCode();
                     }
                 }
@@ -213,13 +213,13 @@ namespace BeerReviews.Controllers
                             bb2.BeerID = beerId;
                             bb2.isPlace = true;
                             bb2.BreweryID = bId.First().BreweryID;
-                            response = await httpClient.PostAsJsonAsync("http://localhost:64635/beerbreweries/postbb/", bb2);
+                            response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/postbb/", bb2);
                             response.EnsureSuccessStatusCode();
                         }
 
                     }
                 }
-                response = await httpClient.GetAsync("http://localhost:64635/beerbreweries/get/" + beerId);
+                response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/get/" + beerId);
                 var beerbreweries = await response.Content.ReadAsAsync<IEnumerable<BeerBrewery>>();
                 if (beerbreweries != null)
                 { 
@@ -229,7 +229,7 @@ namespace BeerReviews.Controllers
                         {
                             if (!bb.isPlace && !beerBreweryVM.BreweriesNames.Where(n => n == bb.Brewery.Name).Any())
                             {
-                                response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
+                                response = await httpClient.PutAsJsonAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/delete/", bb);
                                 response.EnsureSuccessStatusCode();
                             }
                         }
@@ -237,7 +237,7 @@ namespace BeerReviews.Controllers
                         {
                             if (bb.isPlace && !beerBreweryVM.BreweriesPlacesNames.Where(n => n == bb.Brewery.Name).Any())
                             {
-                                response = await httpClient.PutAsJsonAsync($"http://localhost:64635/beerbreweries/delete/", bb);
+                                response = await httpClient.PutAsJsonAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/beerbreweries/delete/", bb);
                                 response.EnsureSuccessStatusCode();
                             }
                         }

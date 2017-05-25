@@ -22,19 +22,19 @@ namespace BeerReviews.Controllers
         {
 
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
             var countriesQuery = await response1.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
             if (CountryID == null)
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + "all");
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + "all");
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
                 ViewBag.Country = CountryID;
                 return View(Sort(sortOrder, breweries.ToList()));
             }
             else
             {
-                var response = await httpClient.GetAsync("http://localhost:64635/breweries/many/" + CountryID);
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + CountryID);
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
                 ViewBag.Country = CountryID;
                 return View(Sort(sortOrder, breweries.ToList()));
@@ -51,7 +51,7 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
                     httpClient.DefaultRequestHeaders.Accept.Clear();
                      httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
 
             if (brewery == null)
@@ -70,7 +70,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Create()
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
             var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
             return View();
@@ -88,7 +88,7 @@ namespace BeerReviews.Controllers
                 brewery.ImageUrl = FileUpload(file);
 
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/breweries/post/", brewery);
+                var response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/post/", brewery);
         //        string bID=await response.Content.ReadAsStringAsync();
         //        int beID = Convert.ToInt32(bID);
          //       response.EnsureSuccessStatusCode();
@@ -107,7 +107,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
@@ -128,7 +128,7 @@ namespace BeerReviews.Controllers
                 var httpClient = new HttpClient();
                 if (file == null)
                 {   
-                    var response1 = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + brewery.BreweryID);
+                    var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + brewery.BreweryID);
                     var breweryI = await response1.Content.ReadAsAsync<Brewery>();
                     brewery.ImageUrl = breweryI.ImageUrl;
    //                 brewery.ImageUrl = db.Breweries.AsNoTracking().Where(b=>b.BreweryID==brewery.BreweryID).First().ImageUrl;
@@ -138,7 +138,7 @@ namespace BeerReviews.Controllers
                     brewery.ImageUrl = FileUpload(file);
                 }
                 var breweryID = brewery.BreweryID;
-                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://localhost:64635/breweries/put/", brewery);
+                HttpResponseMessage response = await httpClient.PutAsJsonAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/put/", brewery);
                 response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index");
             }
@@ -153,7 +153,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
@@ -168,7 +168,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             var httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.DeleteAsync($"http://localhost:64635/breweries/delete/{id}");
+            HttpResponseMessage response = await httpClient.DeleteAsync($"http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/delete/{id}");
      //       return response.StatusCode;
             return RedirectToAction("Index");
         }
@@ -191,7 +191,7 @@ namespace BeerReviews.Controllers
         private async void PopulateCountriesDropDownList(object selectedCountry = null)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://localhost:64635/countries/");
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
             var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", selectedCountry);
         }

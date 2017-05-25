@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace BeerReviews.WebApi.Data
 {
-    public class DbInitializer : DropCreateDatabaseAlways<BeerReviewsContext2>
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<BeerReviewsContext2>
     {
         protected override void Seed(BeerReviewsContext2 context)
         {

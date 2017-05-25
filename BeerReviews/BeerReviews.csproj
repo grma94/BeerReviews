@@ -212,8 +212,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Beer.cs" />
+    <Compile Include="Models\BeerBrewery.cs" />
+    <Compile Include="Models\BeerBreweryWName.cs" />
+    <Compile Include="Models\BeerWithAvg.cs" />
+    <Compile Include="Models\Brewery.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Country.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\Style.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BeerBreweryViewModel.cs" />
@@ -280,6 +289,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\BeerReviews20170524030003 - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviews20170524030003 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

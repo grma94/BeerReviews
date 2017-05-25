@@ -68,7 +68,7 @@ namespace BeerReviews.WebApi.Controllers
         // GET api/values/5
         [HttpGet]
         [Route("beers/single/{beerId}")]
-        public Beer GetBeer(int beerId)
+        public BeerFDetails GetBeer(int beerId)
         {
             using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
@@ -77,7 +77,49 @@ namespace BeerReviews.WebApi.Controllers
                     .Include(b=>b.Reviews)
                     .Include(bb => bb.BeerBreweries.Select(b => b.Brewery).Select(c=>c.Country))
                     .SingleOrDefault(x => x.BeerID == beerId);
-                return beer;
+
+                var beerFDetails = new BeerFDetails();
+                beerFDetails.Abv = beer.Abv;
+                beerFDetails.BeerID = beer.BeerID;
+                beerFDetails.Description = beer.Description;
+                beerFDetails.Gravity = beer.Gravity;
+                beerFDetails.IBU = beer.IBU;
+                beerFDetails.ImageUrl = beer.ImageUrl;
+                beerFDetails.isLocked = beer.isLocked;
+                beerFDetails.Name = beer.Name;
+                var revs = new List<Review>();
+                foreach(var r in beer.Reviews)
+                {
+                    var rev1 = new Review();
+                    rev1.Apperance = r.Apperance;
+                    rev1.Aroma = r.Aroma;
+                    rev1.Date = r.Date;
+                    rev1.Description = r.Description;
+                    rev1.ImageUrl = r.ImageUrl;
+                    rev1.Overall = r.Overall;
+                    rev1.Palate = r.Palate;
+                    rev1.ReviewID = r.ReviewID;
+                    rev1.Taste = r.Taste;
+                    rev1.UserName = r.UserName;
+                    revs.Add(rev1);
+                }
+                beerFDetails.Reviews = revs;
+                beerFDetails.StyleID = beer.StyleID;
+                beerFDetails.StyleName = beer.Style.Name;
+                var BBs = new List<BeerBreweryWPlace>();
+                foreach(var bb in beer.BeerBreweries)
+                {
+                    var bbwp = new BeerBreweryWPlace();
+                    bbwp.BreweryID = bb.BreweryID;
+                    bbwp.BreweryName = bb.Brewery.Name;
+                    bbwp.City = bb.Brewery.City;
+                    bbwp.CountryName = bb.Brewery.Country.Name;
+                    bbwp.isPlace = bb.isPlace;
+                    BBs.Add(bbwp);
+                }
+                beerFDetails.BeerBreweries = BBs;
+
+                return beerFDetails;
             }
         }
 

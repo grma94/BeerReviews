@@ -266,8 +266,11 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BeerBreweryWName.cs" />
+    <Compile Include="ViewModels\BeerBreweryWPlace.cs" />
+    <Compile Include="ViewModels\BeerFDetails.cs" />
     <Compile Include="ViewModels\BeerWithAvg.cs" />
     <Compile Include="ViewModels\BreweryNewBB.cs" />
+    <Compile Include="ViewModels\ReviewWName.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

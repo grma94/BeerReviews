@@ -45,11 +45,14 @@
     <Compile Include="Models\Beer.cs" />
     <Compile Include="Models\BeerBrewery.cs" />
     <Compile Include="Models\BeerBreweryWName.cs" />
+    <Compile Include="Models\BeerBreweryWPlace.cs" />
+    <Compile Include="Models\BeerFDetails.cs" />
     <Compile Include="Models\BeerWithAvg.cs" />
     <Compile Include="Models\Brewery.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\ReviewWName.cs" />
     <Compile Include="Models\Style.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

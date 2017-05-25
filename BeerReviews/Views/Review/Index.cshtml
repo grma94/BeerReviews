@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BeerReviews.Database.Models.Review>
+﻿@model IEnumerable<BeerReviews.Database.Models.ReviewWName>
 
 <h4>Reviews</h4>
 <table class="table">
@@ -30,7 +30,7 @@
             @Html.DisplayNameFor(model => model.UserName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Beer)
+            Beer
         </th>
         <th></th>
     </tr>
@@ -69,7 +69,7 @@
         </td>
         <td>
             <a href="@Url.Action("Details","Beer", new { id = item.BeerID })">
-                @Html.DisplayFor(model => item.Beer.Name)
+                @Html.DisplayFor(model => item.BeerName)
             </a>
         </td>
         <td>

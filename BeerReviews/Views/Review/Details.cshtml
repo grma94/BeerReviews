@@ -1,4 +1,4 @@
-﻿@model BeerReviews.Database.Models.Review
+﻿@model BeerReviews.Database.Models.ReviewWName
 
 @{
     ViewBag.Title = "Details";
@@ -12,12 +12,12 @@
     <img alt="Review photo" src="@Model.ImageUrl" height="200" width="200" />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Beer)
+            Beer
         </dt>
 
         <dd>
             <a href="@Url.Action("Details","Beer", new { id = Model.BeerID })">
-                @Html.DisplayFor(model => model.Beer.Name)
+                @Html.DisplayFor(model => model.BeerName)
             </a>
         </dd>
         <dt>
@@ -25,10 +25,10 @@
         </dt>
 
         <dd>
-            @foreach (var it in Model.Beer.BeerBreweries.Where(bb => bb.isPlace == false))
+            @foreach (var it in Model.BeerBreweries.Where(bb => bb.isPlace == false))
             {
                 <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
-                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    @Html.DisplayFor(modelItem => it.BreweryName)
                 </a>
             }
         </dd>
@@ -38,10 +38,10 @@
         </dt>
 
         <dd>
-            @foreach (var it in Model.Beer.BeerBreweries.Where(bb => bb.isPlace))
+            @foreach (var it in Model.BeerBreweries.Where(bb => bb.isPlace))
             {
                 <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
-                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    @Html.DisplayFor(modelItem => it.BreweryName)
                 </a>
             }
         </dd>

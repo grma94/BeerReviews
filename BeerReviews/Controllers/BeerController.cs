@@ -56,7 +56,7 @@ namespace BeerReviews.Controllers
 
             var httpClient = new HttpClient();
             var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
-            var beer = await response.Content.ReadAsAsync<Beer>();
+            var beer = await response.Content.ReadAsAsync<BeerFDetails>();
 
             if (beer == null)
             {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-//using System.Data.Entity;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BeerReviews.Database.Models
 {
-    public class Beer
+    public class BeerFDetails
     {
         public int BeerID { get; set; }
         public string Name { get; set; }
@@ -17,10 +17,9 @@ namespace BeerReviews.Database.Models
         public bool isLocked { get; set; }
         public string ImageUrl { get; set; }
         public int StyleID { get; set; }
+        public string StyleName { get; set; }
 
-        public virtual Style Style { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
-        public virtual ICollection<BeerBrewery> BeerBreweries { get; set; }
-
+        public virtual ICollection<BeerBreweryWPlace> BeerBreweries { get; set; }
     }
 }

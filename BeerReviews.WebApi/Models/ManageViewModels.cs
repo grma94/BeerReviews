@@ -10,8 +10,8 @@ namespace BeerReviews.WebApi.Models
     {
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool TwoFactor { get; set; }
+ //       public string PhoneNumber { get; set; }
+ //       public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
     }
 
@@ -59,7 +59,7 @@ namespace BeerReviews.WebApi.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class AddPhoneNumberViewModel
+  /*  public class AddPhoneNumberViewModel
     {
         [Required]
         [Phone]
@@ -84,4 +84,5 @@ namespace BeerReviews.WebApi.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+    */
 }

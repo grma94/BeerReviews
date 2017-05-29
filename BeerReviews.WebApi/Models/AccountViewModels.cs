@@ -4,7 +4,7 @@ using System.Data.Entity;
 
 namespace BeerReviews.WebApi.Models
 {
-    public class ExternalLoginConfirmationViewModel
+ /*   public class ExternalLoginConfirmationViewModel
     {
         [Required]
         [Display(Name = "Email")]
@@ -38,7 +38,7 @@ namespace BeerReviews.WebApi.Models
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
-    }
+    }*/
 
     public class ForgotViewModel
     {
@@ -113,5 +113,32 @@ namespace BeerReviews.WebApi.Models
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+    }
+
+    public class ManageInfoViewModel
+    {
+        public string LocalLoginProvider { get; set; }
+
+        public string Email { get; set; }
+
+        public IEnumerable<UserLoginInfoViewModel> Logins { get; set; }
+
+     //   public IEnumerable<ExternalLoginViewModel> ExternalLoginProviders { get; set; }
+    }
+
+    public class UserInfoViewModel
+    {
+        public string Email { get; set; }
+
+        public bool HasRegistered { get; set; }
+
+        public string LoginProvider { get; set; }
+    }
+
+    public class UserLoginInfoViewModel
+    {
+        public string LoginProvider { get; set; }
+
+        public string ProviderKey { get; set; }
     }
 }

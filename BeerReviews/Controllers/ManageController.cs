@@ -57,18 +57,18 @@ namespace BeerReviews.Controllers
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+ //               : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+//                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+//                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+//                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+//                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
@@ -98,7 +98,7 @@ namespace BeerReviews.Controllers
             }
             return RedirectToAction("ManageLogins", new { Message = message });
         }
-
+/*
         //
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
@@ -212,7 +212,7 @@ namespace BeerReviews.Controllers
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
-
+*/
         //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
@@ -298,7 +298,7 @@ namespace BeerReviews.Controllers
                 OtherLogins = otherLogins
             });
         }
-
+/*
         //
         // POST: /Manage/LinkLogin
         [HttpPost]
@@ -321,7 +321,7 @@ namespace BeerReviews.Controllers
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
-
+*/
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

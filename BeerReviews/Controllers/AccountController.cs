@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BeerReviews.Models;
+using System.Net.Http;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace BeerReviews.Controllers
 {
@@ -26,6 +29,97 @@ namespace BeerReviews.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
+        }
+
+        static async Task<Dictionary<string,string>> GetToken(string userName, string password)
+        {
+            var pairs = new List<KeyValuePair<string, string>>
+                        {
+                            new KeyValuePair<string, string>( "grant_type", "password" ),
+                            new KeyValuePair<string, string>( "username", userName ),
+                            new KeyValuePair<string, string> ( "Password", password )
+                        };
+            var content = new FormUrlEncodedContent(pairs);
+            using (var client = new HttpClient())
+            {
+                var response = await
+                    client.PostAsync("http://localhost:64635/Token", content);
+                var result = response.Content.ReadAsStringAsync().Result;
+                Dictionary<string, string> tokenDictionary =
+            JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+                return tokenDictionary;
+     //           return response.Content.ReadAsStringAsync().Result;
+            }
+        }
+
+        static string GetUserInfo(string token)
+        {
+            using (var client = CreateClient(token))
+            {
+                var response = client.GetAsync("http://localhost:62069/api/Account/UserInfo").Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
+        }
+
+        static HttpClient CreateClient(string accessToken = "")
+        {
+            var client = new HttpClient();
+            if (!string.IsNullOrWhiteSpace(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            }
+            return client;
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(LoginViewModel model, string returnUrl)
+        {
+   //         var getTokenUrl = "http://localhost:64635/Token";
+
+            using (HttpClient httpClient = new HttpClient())
+            {
+                HttpContent content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                    new KeyValuePair<string, string>("username", model.Username),
+                    new KeyValuePair<string, string>("password", model.Password)
+                });
+
+    //            HttpResponseMessage result = httpClient.PostAsync(getTokenUrl, content).Result;
+
+   //             string resultContent = result.Content.ReadAsStringAsync().Result;
+
+
+                    var response = 
+                        httpClient.PostAsync("http://localhost:64635/Token", content).Result;
+                    var result2 = response.Content.ReadAsStringAsync().Result;
+                    Dictionary<string, string> tokenDictionary =
+                JsonConvert.DeserializeObject<Dictionary<string, string>>(result2);
+
+
+      //              var token = JsonConvert.DeserializeObject<Token>(resultContent);
+
+                AuthenticationProperties options = new AuthenticationProperties();
+
+                options.AllowRefresh = true;
+                options.IsPersistent = true;
+                options.ExpiresUtc = DateTime.UtcNow.AddSeconds(int.Parse(tokenDictionary["expires_in"]));
+
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, model.Username),
+                    new Claim("AcessToken", string.Format("Bearer {0}", tokenDictionary["access_token"])),
+                };
+
+                var identity = new ClaimsIdentity(claims, "ApplicationCookie");
+
+                Request.GetOwinContext().Authentication.SignIn(options, identity);
+
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         public ApplicationSignInManager SignInManager
@@ -57,10 +151,11 @@ namespace BeerReviews.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+     
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
+/*
         //
         // POST: /Account/Login
         [HttpPost]
@@ -72,15 +167,16 @@ namespace BeerReviews.Controllers
             {
                 return View(model);
             }
-
+            var Token = await GetToken(model.Username, model.Password);
+            var userName = GetUserInfo(Token["access_token"]);
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+  //         var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
-                case SignInStatus.Success:
+//                case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
+ //               case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
@@ -88,8 +184,8 @@ namespace BeerReviews.Controllers
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
-            }
-        }
+//            }
+        }*/
         /*
         //
         // GET: /Account/VerifyCode
@@ -151,27 +247,31 @@ namespace BeerReviews.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                var httpClient = new HttpClient();
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/api/Account/Register/", model);
+                response.EnsureSuccessStatusCode();
+                return RedirectToAction("Index", "Home");
+                /*        var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+                       var result = await UserManager.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
+                        {
+                            await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
+                            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                            // Send an email with this link
+                            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                            return RedirectToAction("Index", "Home");
+                        }
+                        AddErrors(result);*/
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
+/*
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -184,7 +284,7 @@ namespace BeerReviews.Controllers
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
+*/
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -481,5 +581,18 @@ namespace BeerReviews.Controllers
             }
         }
         #endregion
+    }
+
+    internal class Token
+    {
+        public string expires_in { get; set; }
+        public string access_token { get; set; }
+
+        Token(string result) {
+        Dictionary<string, string> tokenDictionary =
+            JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+        access_token = (tokenDictionary["access_token"]);
+            expires_in = tokenDictionary["expires_in"];
+        }
     }
 }

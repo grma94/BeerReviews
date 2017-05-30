@@ -6,13 +6,24 @@ using System.Web.Mvc;
 using BeerReviews.Database.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace BeerReviews.Controllers
 {
     public class HomeController : Controller
     {
+
+/*        private readonly IUserSession _userSession;
+
+        public HomeController(IUserSession userSession)
+        {
+            _userSession = userSession;
+        }
+        */
         public ActionResult Index()
         {
+     //       ViewBag.EmailAddress = _userSession.Username;
+     //       ViewBag.AccessToken = _userSession.BearerToken;
             return View();
         }
 
@@ -35,5 +46,27 @@ namespace BeerReviews.Controllers
             }
             return View();
         }
+        /*
+        public interface IUserSession
+        {
+            string Username { get; }
+            string BearerToken { get; }
+        }
+
+        public class UserSession : IUserSession
+        {
+
+            public string Username
+            {
+                get { return ((ClaimsPrincipal)System.Web.HttpContext.Current.User).FindFirst(ClaimTypes.Name).Value; }
+            }
+
+            public string BearerToken
+            {
+                get { return ((ClaimsPrincipal)System.Web.HttpContext.Current.User).FindFirst("AcessToken").Value; }
+            }
+
+        }
+        */
     }
 }

@@ -59,7 +59,7 @@ namespace BeerReviews.WebApi.Controllers
 
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                Username = User.Identity.GetUserName(),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };
@@ -107,7 +107,7 @@ namespace BeerReviews.WebApi.Controllers
             return new ManageInfoViewModel
             {
                 LocalLoginProvider = LocalLoginProvider,
-                Email = user.UserName,
+                Username = user.UserName,
                 Logins = logins,
            //     ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
             };
@@ -327,7 +327,7 @@ namespace BeerReviews.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName = model.Username, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -338,7 +338,7 @@ namespace BeerReviews.WebApi.Controllers
 
             return Ok();
         }
-
+/*
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -371,7 +371,7 @@ namespace BeerReviews.WebApi.Controllers
             }
             return Ok();
         }
-
+        */
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

@@ -16,11 +16,15 @@ namespace BeerReviews.Controllers
         // GET: BeerBrewery/Create
         public async Task<ActionResult> Create(int? styleID)
         {
-            var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
-            var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name",styleID);
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                var httpClient = new HttpClient();
+                var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
+                var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+                ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", styleID);
+                return View();
+            }
+            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Create

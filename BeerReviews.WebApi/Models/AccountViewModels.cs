@@ -50,9 +50,9 @@ namespace BeerReviews.WebApi.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Username")]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -65,6 +65,7 @@ namespace BeerReviews.WebApi.Models
 
     public class RegisterViewModel
     {
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -119,7 +120,7 @@ namespace BeerReviews.WebApi.Models
     {
         public string LocalLoginProvider { get; set; }
 
-        public string Email { get; set; }
+        public string Username { get; set; }
 
         public IEnumerable<UserLoginInfoViewModel> Logins { get; set; }
 
@@ -128,7 +129,7 @@ namespace BeerReviews.WebApi.Models
 
     public class UserInfoViewModel
     {
-        public string Email { get; set; }
+        public string Username { get; set; }
 
         public bool HasRegistered { get; set; }
 

@@ -52,7 +52,7 @@ namespace BeerReviews.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public ActionResult Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
@@ -62,19 +62,22 @@ namespace BeerReviews.Controllers
 //                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
 //                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
+            //       ViewBag.EmailAddress = _userSession.Username;
+            //       ViewBag.AccessToken = _userSession.BearerToken;
 
-            var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+       //     var userId = User.Identity.GetUserName();
+       /*     var model = new IndexViewModel
             {
-                HasPassword = HasPassword(),
+    //            HasPassword = HasPassword(),
+                HasPassword = true,
 //                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
 //                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
-            return View(model);
+            };*/
+            return View();
         }
-
+/*
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -98,6 +101,7 @@ namespace BeerReviews.Controllers
             }
             return RedirectToAction("ManageLogins", new { Message = message });
         }
+        */
 /*
         //
         // GET: /Manage/AddPhoneNumber
@@ -243,7 +247,7 @@ namespace BeerReviews.Controllers
             AddErrors(result);
             return View(model);
         }
-
+/*
         //
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
@@ -298,6 +302,7 @@ namespace BeerReviews.Controllers
                 OtherLogins = otherLogins
             });
         }
+        */
 /*
         //
         // POST: /Manage/LinkLogin

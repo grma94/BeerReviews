@@ -16,25 +16,28 @@ namespace BeerReviews.WebApi.Data
             this.Configuration.LazyLoadingEnabled = false;
             //          this.Configuration.ProxyCreationEnabled = false;
         }
-          public DbSet<IdentityUserLogin> UserLogins { get; set; }
-          public DbSet<IdentityUserClaim> UserClaims { get; set; }
-          public DbSet<IdentityUserRole> UserRoles { get; set; }
-          public static BeerReviewsContext2 Create()
-          {
-              return new BeerReviewsContext2();
-          }
-
-    public DbSet<Beer> Beers { get; set; }
+        public DbSet<Beer> Beers { get; set; }
         public DbSet<BeerBrewery> BeerBreweries { get; set; }
         public DbSet<Brewery> Breweries { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Style> Styles { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<IdentityUserLogin> UserLogins { get; set; }
+        public DbSet<IdentityUserClaim> UserClaims { get; set; }
+        public DbSet<IdentityUserRole> UserRoles { get; set; }
+
+        public static BeerReviewsContext2 Create()
+        {
+            return new BeerReviewsContext2();
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             // Configure Asp Net Identity Tables
             modelBuilder.Entity<IdentityUser>().ToTable("User");

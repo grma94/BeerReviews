@@ -106,7 +106,13 @@ namespace BeerReviews.Controllers
 
                 options.AllowRefresh = true;
                 options.IsPersistent = true;
+                if (tokenDictionary.ContainsKey("error"))
+                {
+                    ViewBag.Error = "Wrong username or password";
+                    return View();
+                }
                 options.ExpiresUtc = DateTime.UtcNow.AddSeconds(int.Parse(tokenDictionary["expires_in"]));
+
 
                 var claims = new[]
                 {

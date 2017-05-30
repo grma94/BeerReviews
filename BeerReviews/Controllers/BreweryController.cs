@@ -67,17 +67,14 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Brewery/Create
+        [Authorize]
         public async Task<ActionResult> Create()
         {
-            if (User.Identity.IsAuthenticated)
-            {
                 var httpClient = new HttpClient();
                 var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
                 var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
                 ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
                 return View();
-            }
-            return RedirectToAction("Index");
         }
         
 
@@ -105,31 +102,29 @@ namespace BeerReviews.Controllers
             return View(brewery);
         }
         [HttpGet]
+        [Authorize]
         // GET: Brewery/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
-            if (User.Identity.IsAuthenticated)
+            if (id == null)
             {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
-                var brewery = await response.Content.ReadAsAsync<Brewery>();
-                if (brewery == null)
-                {
-                    return HttpNotFound();
-                }
-                return View(brewery);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return RedirectToAction("Index");
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
+            var brewery = await response.Content.ReadAsAsync<Brewery>();
+            if (brewery == null)
+            {
+                return HttpNotFound();
+            }
+            return View(brewery);
         }
 
         // POST: Brewery/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "BreweryID,Name,Phone,Description,Street,PostalCode,City, CountryID")] Brewery brewery, HttpPostedFileBase file)
         {
@@ -156,24 +151,21 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Brewery/Delete/5
+        [Authorize]
         public async Task<ActionResult> Delete(int? id)
         {
-            if (User.Identity.IsAuthenticated)
+            if (id == null)
             {
-                if (id == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
-                var brewery = await response.Content.ReadAsAsync<Brewery>();
-                if (brewery == null)
-                {
-                    return HttpNotFound();
-                }
-                return View(brewery);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return RedirectToAction("Index");
+            var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
+            var brewery = await response.Content.ReadAsAsync<Brewery>();
+            if (brewery == null)
+            {
+                return HttpNotFound();
+            }
+            return View(brewery);
         }
         [Authorize]
         // POST: Brewery/Delete/5

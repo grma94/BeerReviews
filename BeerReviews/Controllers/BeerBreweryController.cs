@@ -12,22 +12,20 @@ using System.Web.Mvc;
 namespace BeerReviews.Controllers
 {
     public class BeerBreweryController : Controller
-    {   
+    {
         // GET: BeerBrewery/Create
+        [Authorize]
         public async Task<ActionResult> Create(int? styleID)
         {
-            if (User.Identity.IsAuthenticated)
-            {
                 var httpClient = new HttpClient();
                 var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", styleID);
                 return View();
-            }
-            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Create
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
         {
@@ -109,10 +107,9 @@ namespace BeerReviews.Controllers
         }
 
         // GET: BeerBrewery/Edit/5
+        [Authorize]
         public async Task<ActionResult> Edit(int id)
         {
-            if (User.Identity.IsAuthenticated)
-            {
                 var httpClient = new HttpClient();
                 var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
                 var beer = await response.Content.ReadAsAsync<Beer>();
@@ -141,11 +138,10 @@ namespace BeerReviews.Controllers
                 var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
                 ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
                 return View(bbvm);
-            }
-            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Edit/5
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Edit([Bind] BeerBreweryViewModel beerBreweryVM, HttpPostedFileBase file)
         {

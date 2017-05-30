@@ -68,18 +68,22 @@ namespace BeerReviews.Controllers
         // GET: Beer/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
+                var beer = await response.Content.ReadAsAsync<Beer>();
+                if (beer == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(beer);
             }
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
-            var beer = await response.Content.ReadAsAsync<Beer>();
-            if (beer == null)
-            {
-                return HttpNotFound();
-            }
-            return View(beer);
+            return RedirectToAction("Index");
         }
 
         // POST: Beer/Delete/5

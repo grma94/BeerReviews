@@ -111,34 +111,38 @@ namespace BeerReviews.Controllers
         // GET: BeerBrewery/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
-            var beer = await response.Content.ReadAsAsync<Beer>();
-            var bbvm = new BeerBreweryViewModel();
-            bbvm.Abv = beer.Abv;
-            bbvm.BeerID = beer.BeerID;
-            List<String> listS = new List<string>();
-            foreach (var b in beer.BeerBreweries.Where(z=>!z.isPlace))
+            if (User.Identity.IsAuthenticated)
             {
-                listS.Add(b.Brewery.Name);
+                var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
+                var beer = await response.Content.ReadAsAsync<Beer>();
+                var bbvm = new BeerBreweryViewModel();
+                bbvm.Abv = beer.Abv;
+                bbvm.BeerID = beer.BeerID;
+                List<String> listS = new List<string>();
+                foreach (var b in beer.BeerBreweries.Where(z => !z.isPlace))
+                {
+                    listS.Add(b.Brewery.Name);
+                }
+                bbvm.BreweriesNames = listS;
+                List<String> listPS = new List<string>();
+                foreach (var b in beer.BeerBreweries.Where(z => z.isPlace))
+                {
+                    listPS.Add(b.Brewery.Name);
+                }
+                bbvm.BreweriesPlacesNames = listPS;
+                bbvm.Description = beer.Description;
+                bbvm.Gravity = beer.Gravity;
+                bbvm.IBU = beer.IBU;
+                bbvm.ImageUrl = beer.ImageUrl;
+                bbvm.Name = beer.Name;
+                bbvm.StyleID = beer.StyleID;
+                var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
+                var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
+                ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
+                return View(bbvm);
             }
-            bbvm.BreweriesNames = listS;
-            List<String> listPS = new List<string>();
-            foreach (var b in beer.BeerBreweries.Where(z => z.isPlace))
-            {
-                listPS.Add(b.Brewery.Name);
-            }
-            bbvm.BreweriesPlacesNames = listPS;
-            bbvm.Description = beer.Description;
-            bbvm.Gravity = beer.Gravity;
-            bbvm.IBU = beer.IBU;
-            bbvm.ImageUrl = beer.ImageUrl;
-            bbvm.Name = beer.Name;
-            bbvm.StyleID = beer.StyleID;
-            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/");
-            var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", beer.StyleID);
-            return View(bbvm);
+            return RedirectToAction("Index", "Beer");
         }
 
         // POST: BeerBrewery/Edit/5

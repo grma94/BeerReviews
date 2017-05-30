@@ -44,6 +44,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Style/Create
+        [Authorize]
         public async Task<ActionResult> Create()
         {
             //PopulateCategoriesDropDownList();
@@ -60,6 +61,7 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<ActionResult> Create([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
             var httpClient = new HttpClient();
@@ -77,6 +79,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Style/Edit/5
+        [Authorize]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,6 +107,7 @@ namespace BeerReviews.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<ActionResult> Edit([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
             if (ModelState.IsValid)
@@ -126,6 +130,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Style/Delete/5
+        [Authorize]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -143,6 +148,7 @@ namespace BeerReviews.Controllers
         }
 
         // POST: Style/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

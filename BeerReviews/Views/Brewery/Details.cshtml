@@ -71,8 +71,11 @@
 
     </dl>
 </div>
+@if (User.Identity.IsAuthenticated)
+{
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.BreweryID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BreweryID }) <span>|</span>
+    }
     @Html.ActionLink("Back to List", "Index")
 </p>
 
@@ -182,11 +185,12 @@
                 }
             </td>
             <td>
-                @if (item.Beer.isLocked != true)
+                @if (!item.Beer.isLocked && User.Identity.IsAuthenticated)
                 {
                     @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
-                }
+
                 @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+                }
             </td>
         </tr>
                     }
@@ -299,11 +303,12 @@
                 }
             </td>
             <td>
-                @if (item.Beer.isLocked != true)
+                @if (!item.Beer.isLocked && User.Identity.IsAuthenticated)
                 {
                     @Html.ActionLink("Edit |", "Edit", "BeerBrewery", new { id = item.BeerID }, null)
-                }
+
                 @Html.ActionLink("Delete", "Delete", new { id = item.BeerID })
+                }
             </td>
         </tr>
                     }

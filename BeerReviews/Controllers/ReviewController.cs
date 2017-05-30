@@ -55,7 +55,7 @@ namespace BeerReviews.Controllers
             }
             return View(review);
         }
-
+        [Authorize]
         // GET: Review/Create
         public ActionResult Create(int BeerID)
         {
@@ -72,6 +72,7 @@ namespace BeerReviews.Controllers
         // POST: Review/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Description,Overall,ImageUrl,UserName,BeerID")] Review review, HttpPostedFileBase file)
@@ -97,7 +98,7 @@ namespace BeerReviews.Controllers
 
             return View(review);
         }
-
+        [Authorize]
         // GET: Review/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
@@ -118,6 +119,7 @@ namespace BeerReviews.Controllers
         // POST: Review/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "ReviewID,Aroma,Taste,Palate,Apperance,Overall,Description,ImageUrl,Date,UserID,BeerID")] Review review)
@@ -133,6 +135,7 @@ namespace BeerReviews.Controllers
         }
 
         // GET: Review/Delete/5
+        [Authorize]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,6 +153,7 @@ namespace BeerReviews.Controllers
         }
 
         // DELETE: Review/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)

@@ -16,6 +16,7 @@ namespace BeerReviews.WebApi.Models
             // Add custom user claims here
             return userIdentity;
         }
+        public bool isAdmin { get; set; } 
     }
 
   /*  public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

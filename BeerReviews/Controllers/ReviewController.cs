@@ -80,6 +80,8 @@ namespace BeerReviews.Controllers
             if (ModelState.IsValid)
             {
                 review.Date = DateTime.Now;
+                review.UserName = User.Identity.Name;
+       //         review.UserID = User.Identity.GetUserId();
                 if (review.Overall == 0.0)
                 {
                     review.Overall = ((double)(review.Aroma + review.Apperance + review.Palate + review.Taste)) / 7;
@@ -88,7 +90,7 @@ namespace BeerReviews.Controllers
                 {
                     review.Overall = review.Overall / 7;
                 }
-                //        review.ImageUrl = FileUpload(file);
+                       review.ImageUrl = FileUpload(file);
 
                 var httpClient = new HttpClient();
                 var response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/post/", review);

@@ -130,6 +130,7 @@ namespace BeerReviews.WebApi.Models
     public class UserInfoViewModel
     {
         public string Username { get; set; }
+        public bool isAdmin { get; set; }
 
         public bool HasRegistered { get; set; }
 

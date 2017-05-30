@@ -51,12 +51,12 @@ namespace BeerReviews.Controllers
      //           return response.Content.ReadAsStringAsync().Result;
             }
         }
-
+        */
         static string GetUserInfo(string token)
         {
             using (var client = CreateClient(token))
             {
-                var response = client.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/api/Account/UserInfo").Result;
+                var response = client.GetAsync("http://localhost:64635/api/Account/UserInfo").Result;
                 return response.Content.ReadAsStringAsync().Result;
             }
         }
@@ -71,7 +71,7 @@ namespace BeerReviews.Controllers
             }
             return client;
         }
-        */
+        
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -94,7 +94,7 @@ namespace BeerReviews.Controllers
 
 
                     var response = 
-                        httpClient.PostAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/Token", content).Result;
+                        httpClient.PostAsync("http://localhost:64635/Token", content).Result;
                     var result2 = response.Content.ReadAsStringAsync().Result;
                     Dictionary<string, string> tokenDictionary =
                 JsonConvert.DeserializeObject<Dictionary<string, string>>(result2);
@@ -123,9 +123,9 @@ namespace BeerReviews.Controllers
                 var identity = new ClaimsIdentity(claims, "ApplicationCookie");
 
                 Request.GetOwinContext().Authentication.SignIn(options, identity);
-
+  //              ViewBag.isAdmin = GetUserInfo(tokenDictionary["access_token"]);
             }
-
+   //         ViewBag.isAdmin = "hdhdhdhdhhd";
             return RedirectToAction("Index", "Home");
         }
 
@@ -255,7 +255,7 @@ namespace BeerReviews.Controllers
             if (ModelState.IsValid)
             {
                 var httpClient = new HttpClient();
-                var response = await httpClient.PostAsJsonAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/api/Account/Register/", model);
+                var response = await httpClient.PostAsJsonAsync("http://localhost:64635/api/Account/Register/", model);
                 response.EnsureSuccessStatusCode();
                 return RedirectToAction("Index", "Home");
                 /*        var user = new ApplicationUser { UserName = model.Username, Email = model.Email };

@@ -60,6 +60,7 @@ namespace BeerReviews.WebApi.Controllers
             return new UserInfoViewModel
             {
                 Username = User.Identity.GetUserName(),
+                isAdmin = false,// Convert.ToBoolean(Extensions.IdentityExtensions.GetIsAdmin(User.Identity)),
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };

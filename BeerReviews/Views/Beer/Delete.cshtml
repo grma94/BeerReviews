@@ -1,4 +1,4 @@
-﻿@model BeerReviews.Database.Models.Beer
+﻿@model BeerReviews.Database.Models.BeerFDetails
 
 @{
     ViewBag.Title = "Delete beer";
@@ -78,7 +78,7 @@
             @foreach (var it in Model.BeerBreweries.Where(bb => !bb.isPlace))
             {
                 <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
-                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    @Html.DisplayFor(modelItem => it.BreweryName)
                 </a>
             }
         </dd>
@@ -95,11 +95,11 @@
             @foreach (var it in Model.BeerBreweries.Where(bb => bb.isPlace))
             {
                 <a href="@Url.Action("Details","Brewery", new { id = it.BreweryID })">
-                    @Html.DisplayFor(modelItem => it.Brewery.Name)
+                    @Html.DisplayFor(modelItem => it.BreweryName)
                 </a>
-                @it.Brewery.City;
+                @it.City;
                 <span>-</span>
-                @it.Brewery.Country.Name;
+                @it.CountryName;
             }
         </dd>
 

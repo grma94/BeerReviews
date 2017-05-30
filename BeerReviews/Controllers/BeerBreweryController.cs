@@ -112,20 +112,20 @@ namespace BeerReviews.Controllers
         {
                 var httpClient = new HttpClient();
                 var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/beers/single/" + id);
-                var beer = await response.Content.ReadAsAsync<Beer>();
+                var beer = await response.Content.ReadAsAsync<BeerFDetails>();
                 var bbvm = new BeerBreweryViewModel();
                 bbvm.Abv = beer.Abv;
                 bbvm.BeerID = beer.BeerID;
                 List<String> listS = new List<string>();
                 foreach (var b in beer.BeerBreweries.Where(z => !z.isPlace))
                 {
-                    listS.Add(b.Brewery.Name);
+                    listS.Add(b.BreweryName);
                 }
                 bbvm.BreweriesNames = listS;
                 List<String> listPS = new List<string>();
                 foreach (var b in beer.BeerBreweries.Where(z => z.isPlace))
                 {
-                    listPS.Add(b.Brewery.Name);
+                    listPS.Add(b.BreweryName);
                 }
                 bbvm.BreweriesPlacesNames = listPS;
                 bbvm.Description = beer.Description;

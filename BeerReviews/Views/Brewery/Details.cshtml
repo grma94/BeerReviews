@@ -71,9 +71,10 @@
 
     </dl>
 </div>
+
+<p>
 @if (User.Identity.IsAuthenticated)
 {
-<p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.BreweryID }) <span>|</span>
     }
     @Html.ActionLink("Back to List", "Index")

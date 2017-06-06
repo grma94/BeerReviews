@@ -22,19 +22,19 @@ namespace BeerReviews.Controllers
         {
 
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
+            var response1 = await httpClient.GetAsync("http://52.178.159.188:8001/wa/countries/");
             var countriesQuery = await response1.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
             if (CountryID == null)
             {
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + "all");
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/many/" + "all");
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
                 ViewBag.Country = CountryID;
                 return View(Sort(sortOrder, breweries.ToList()));
             }
             else
             {
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/many/" + CountryID);
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/many/" + CountryID);
                 var breweries = await response.Content.ReadAsAsync<IEnumerable<Brewery>>();
                 ViewBag.Country = CountryID;
                 return View(Sort(sortOrder, breweries.ToList()));
@@ -51,7 +51,7 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
                     httpClient.DefaultRequestHeaders.Accept.Clear();
                      httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
 
             if (brewery == null)
@@ -71,7 +71,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Create()
         {
                 var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/countries/");
                 var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
                 ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", null);
                 return View();
@@ -111,7 +111,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
@@ -133,7 +133,7 @@ namespace BeerReviews.Controllers
                 var httpClient = new HttpClient();
                 if (file == null)
                 {   
-                    var response1 = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + brewery.BreweryID);
+                    var response1 = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/single/" + brewery.BreweryID);
                     var breweryI = await response1.Content.ReadAsAsync<Brewery>();
                     brewery.ImageUrl = breweryI.ImageUrl;
    //                 brewery.ImageUrl = db.Breweries.AsNoTracking().Where(b=>b.BreweryID==brewery.BreweryID).First().ImageUrl;
@@ -159,7 +159,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/breweries/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/breweries/single/" + id);
             var brewery = await response.Content.ReadAsAsync<Brewery>();
             if (brewery == null)
             {
@@ -197,7 +197,7 @@ namespace BeerReviews.Controllers
         private async void PopulateCountriesDropDownList(object selectedCountry = null)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/countries/");
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/countries/");
             var countriesQuery = await response.Content.ReadAsAsync<IEnumerable<Country>>();
             ViewBag.CountryID = new SelectList(countriesQuery, "CountryID", "Name", selectedCountry);
         }

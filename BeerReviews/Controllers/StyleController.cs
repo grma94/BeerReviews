@@ -18,7 +18,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Index()
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/many/");
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/styles/many/");
             var styles = await response.Content.ReadAsAsync<IEnumerable<Category>>();
             return View(styles.ToList());
         }
@@ -31,7 +31,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/single/"+id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/styles/single/" + id);
             var style = await response.Content.ReadAsAsync<StyleNewBB>();
             if (style == null)
             {
@@ -49,7 +49,7 @@ namespace BeerReviews.Controllers
         {
             //PopulateCategoriesDropDownList();
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/categories/");
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/categories/");
             var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
 
             ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", null);
@@ -65,7 +65,7 @@ namespace BeerReviews.Controllers
         public async Task<ActionResult> Create([Bind(Include = "StyleID,Name,Description,CategoryID")] Style style)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/categories/");
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/categories/");
             var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
 
             ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
@@ -87,7 +87,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/styles/single/" + id);
             var style = await response.Content.ReadAsAsync<Style>();
             if (style == null)
             {
@@ -95,7 +95,7 @@ namespace BeerReviews.Controllers
             }
 
 
-            response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/categories/");
+            response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/categories/");
             var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
 
             ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
@@ -115,7 +115,7 @@ namespace BeerReviews.Controllers
                 var httpClient = new HttpClient();
 
      //           PopulateCategoriesDropDownList(style.CategoryID);
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/categories/");
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/categories/");
                 var categoriesQuery = await response.Content.ReadAsAsync<IEnumerable<Category>>();
 
                 ViewBag.CategoryID = new SelectList(categoriesQuery, "CategoryID", "Name", style.CategoryID);
@@ -138,7 +138,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/styles/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/styles/single/" + id);
             var style = await response.Content.ReadAsAsync<Style>();
             if (style == null)
             {

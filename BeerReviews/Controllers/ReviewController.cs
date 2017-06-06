@@ -19,14 +19,14 @@ namespace BeerReviews.Controllers
             var httpClient = new HttpClient();
             if (beerId == null && userId == null)
             {
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/many/" + "all");
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/reviews/many/" + "all");
                 var reviews = await response.Content.ReadAsAsync<List<ReviewWName>>();
                 return View(reviews);
             }
             else 
             //if (beerId != 0)
             {
-                var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/many/" + beerId);
+                var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/reviews/many/" + beerId);
                 var reviews = await response.Content.ReadAsAsync<List<ReviewWName>>();
                 if (reviews.Count() == 0) return Content("No reviews of this beer found");
                 return View(reviews);
@@ -47,7 +47,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<ReviewWName>();
             if (review == null)
             {
@@ -109,7 +109,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {
@@ -145,7 +145,7 @@ namespace BeerReviews.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("http://beerreviewswebapi20170525061826.azurewebsites.net/reviews/single/" + id);
+            var response = await httpClient.GetAsync("http://52.178.159.188:8001/wa/reviews/single/" + id);
             var review = await response.Content.ReadAsAsync<Review>();
             if (review == null)
             {

@@ -17,8 +17,13 @@ namespace BeerReviews.Controllers
         // GET: Beer
         public async Task<ActionResult> Index(string sortOrder, int? breweryId, bool? isPlace, int? styleId, bool? p)
         {
+            string address = "http://52.178.159.188:8001/";
+            string address2 = "http://52.169.111.92:8001/";
+            System.Random r = new System.Random();
+            bool a=(r.NextDouble() > 0.5);
+            address = a ? address2 : address; 
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync("http://52.178.159.188:8001/wa/styles/");
+            var response1 = await httpClient.GetAsync(address+"wa/styles/");
             var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
             ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -30,7 +35,7 @@ namespace BeerReviews.Controllers
             if (sortOrder == null) { sortOrder = "name"; }
             if (breweryId == null && styleId == null)
             {
-                response1 = await httpClient.GetAsync("http://52.178.159.188:8001/wa/beers/many/" + "all/" + sortOrder);
+                response1 = await httpClient.GetAsync(address + "wa/beers/many/" + "all/" + sortOrder);
                 var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
 
                 return View(beers);

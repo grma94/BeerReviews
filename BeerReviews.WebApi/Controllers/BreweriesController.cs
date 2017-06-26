@@ -20,10 +20,11 @@ namespace BeerReviews.WebApi.Controllers
         {
             using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
-                         var breweries =
-                         countryID.HasValue
-                         ? db.Breweries.Where(b => b.CountryID == countryID).Include(b=>b.Country).ToList()
-                         : db.Breweries.Include(b => b.Country).ToList();
+                var breweries =
+                countryID.HasValue
+                ? db.Breweries.Where(b => b.CountryID == countryID).Include(b => b.Country).Include(bb => bb.BeerBreweries.Select(b => b.Beer.Reviews))
+                         : db.Breweries.Include(b => b.Country).Include(bb => bb.BeerBreweries);
+                var reviews = db.Reviews.ToList();
                 var bnbb = new List<BreweryNewBB>();
                 foreach(var b in breweries)
                 {
@@ -35,6 +36,22 @@ namespace BeerReviews.WebApi.Controllers
                     bnbb1.Name = b.Name;
                     bnbb1.ImageUrl = b.ImageUrl;
                     bnbb.Add(bnbb1);
+                    var avg = 0.0;
+                    var count = 0;
+                    foreach (var bb in b.BeerBreweries)
+                    {
+                        foreach(Review r in reviews) {
+                            if (r.BeerID == bb.BeerID) { 
+                            avg += r.Overall;
+                            count++;
+                            }
+                        }
+                    }
+                    if (count > 0)
+                    {
+                        avg = avg / count;
+                    }
+                    bnbb1.ReviewsAvg = avg;
                 }
                 return bnbb;
             }

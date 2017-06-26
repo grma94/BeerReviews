@@ -208,6 +208,7 @@ namespace BeerReviews.Controllers
             ViewBag.CountrySortParm = sortOrder == "country" ? "country_desc" : "country";
             ViewBag.CitySortParm = sortOrder == "city" ? "city_desc" : "city";
             ViewBag.BeersSortParm = sortOrder == "bc" ? "bc_desc" : "bc";
+            ViewBag.BeersSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
 
             switch (sortOrder)
             {
@@ -231,6 +232,12 @@ namespace BeerReviews.Controllers
                     break;
                 case "bc_desc":
                     unsorted = unsorted.OrderByDescending(b => b.BeersCount).ToList();
+                    break;
+                case "avg":
+                    unsorted = unsorted.OrderBy(b => b.ReviewsAvg).ToList();
+                    break;
+                case "avg_desc":
+                    unsorted = unsorted.OrderByDescending(b => b.ReviewsAvg).ToList();
                     break;
                 default:
                     unsorted = unsorted.OrderBy(b => b.Name).ToList();

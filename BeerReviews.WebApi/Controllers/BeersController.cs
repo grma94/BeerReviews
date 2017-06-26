@@ -18,12 +18,18 @@ namespace BeerReviews.WebApi.Controllers
         [Route("beers/many/{styleId?}/{sortOrder}")]
         public List<BeerWithAvg> GetBeers(int? styleId, string sortOrder)
         {
+      //      var time = DateTime.Now;
             using (BeerReviewsContext2 db = new BeerReviewsContext2())
             {
+
                 var beers =
                 styleId.HasValue
-                ? db.Beers.Where(b => b.StyleID == styleId).Include(b => b.Style).Include(b => b.BeerBreweries).Include(b=>b.Reviews).ToList()
-                : db.Beers.Include(b => b.Style).Include(b=>b.BeerBreweries.Select(bbb=>bbb.Brewery)).Include(b => b.Reviews).ToList();
+                ? db.Beers.Where(b => b.StyleID == styleId).Include(b => b.Style).Include(b => b.BeerBreweries.Select(bbb => bbb.Brewery))
+                : db.Beers.Include(b => b.Style)
+                .Include(b => b.BeerBreweries.Select(bbb => bbb.Brewery))
+            //    .Include(b => b.Reviews)
+                ;
+                var reviews = db.Reviews.ToList();
                 List<BeerWithAvg> bwa=new List<BeerWithAvg>();
                 foreach (var b in beers)
                 {
@@ -48,16 +54,21 @@ namespace BeerReviews.WebApi.Controllers
                     a.StyleID = b.StyleID;
                     a.StyleName = b.Style.Name;
                     var avg = 0.0;
-                    var count =b.Reviews.Count();
-                    a.ReviewsCount = count;
-                    if (count>0) {
-                        foreach (var r in b.Reviews)
-                        {
+                    var count = 0;// b.Reviews.Count();
+                    foreach (var r in reviews)
+                    {
+                        if (r.BeerID == a.BeerID)
+                        { 
                             avg += r.Overall;
+                            count++;
                         }
+                    }
+                    if (count > 0)
+                    {
                         avg = avg / count;
-                     }
+                     }                     
                     a.ReviewsAvg = avg;
+                    a.ReviewsCount = count;
                     bwa.Add(a);
                 }
                 var bwaS = Sort(sortOrder,bwa);

@@ -20,6 +20,7 @@ namespace BeerReviews.WebApi.ViewModels
         public string FbUrl { get; set; }
         public string ImageUrl { get; set; }
         public int BeersCount { get; set; }
+        public double ReviewsAvg { get; set; }
         public string CountryName { get; set; }
         public virtual ICollection<BeerBreweryWName> BeerBreweries { get; set; }
     }

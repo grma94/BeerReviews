@@ -43,6 +43,9 @@
         <th>
             @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm, countryID = @ViewBag.Country })
         </th>
+        <th>
+            @Html.ActionLink("Average review", "Index", new { sortOrder = ViewBag.AvgSortParm, countryID = @ViewBag.Avg })
+        </th>
         <th></th>
     </tr>
 
@@ -67,6 +70,11 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CountryName)
+        </td>
+        <td>@if (item.ReviewsAvg > 0.0)
+        {
+            <span>@item.ReviewsAvg.ToString("N1")</span>
+        }
         </td>
         <td>
             @if (!item.isLocked && User.Identity.IsAuthenticated)

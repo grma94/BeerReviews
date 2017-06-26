@@ -308,8 +308,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170525055224 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170525061826 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170525061826 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170525063500 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170620023310 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviewsWebApi20170620025052 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Svr1 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\Svr1 - Web Deploy %283%29.pubxml" />
     <None Include="Properties\PublishProfiles\Svr1 - Web Deploy %284%29.pubxml" />

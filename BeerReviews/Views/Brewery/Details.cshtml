@@ -67,8 +67,16 @@
         <dd>
             @Html.DisplayFor(model => model.CountryName)
         </dd>
-        
+        @if (Model.ReviewsAvg > 0.0)
+        {
+        <dt>
+            Reviews average
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.ReviewsAvg)
+        </dd>
+        }
     </dl>
 </div>
 

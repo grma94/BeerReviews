@@ -17,38 +17,98 @@ namespace BeerReviews.Controllers
         // GET: Beer
         public async Task<ActionResult> Index(string sortOrder, int? breweryId, bool? isPlace, int? styleId, bool? p)
         {
-            string address = "http://52.178.159.188:8001/";
-            string address2 = "http://52.169.111.92:8001/";
-            System.Random r = new System.Random();
-            bool a=(r.NextDouble() > 0.5);
-            address = a ? address2 : address; 
+     //       var firstTime = DateTime.Now;
+            string address1 = "http://52.178.159.188:8001/";
+        /*      string address2 = "http://52.169.111.92:8001/";
+              System.Random r = new System.Random();
+              bool a=(r.NextDouble() > 0.5);
+              string address = a ? address2 : address1;
+            address2 = a ? address1 : address2;
+            */
+
+            
             var httpClient = new HttpClient();
-            var response1 = await httpClient.GetAsync(address+"wa/styles/");
-            var stylesQuery = await response1.Content.ReadAsAsync<IEnumerable<Style>>();
-            ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
+            var client2 = new HttpClient();
+     
+           
+     //       var response = await httpClient.GetAsync(address2 + "wa/styles/");
+            //  var timeE1 = (DateTime.Now - firstTime).ToString();
+            if (sortOrder == null) { sortOrder = "name"; }
+
+       //     var response1 = await client2.GetAsync(address + "wa/beers/many/" + "all/" + sortOrder);
+            //      var timeE1 = (DateTime.Now - firstTime).TotalMilliseconds.ToString();
+            /*     var tasks = new List<Task>();
+                 tasks.Add(response);
+                 tasks.Add(response1);
+                 var tasksT = tasks.ToArray();
+              */
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.GravitySortParm = sortOrder == "gravity" ? "gravity_desc" : "gravity";
             ViewBag.IbuSortParm = sortOrder == "ibu" ? "ibu_desc" : "ibu";
             ViewBag.AbvSortParm = sortOrder == "abv" ? "abv_desc" : "abv";
             ViewBag.ReviewsSortParm = sortOrder == "rc" ? "rc_desc" : "rc";
             ViewBag.AvgSortParm = sortOrder == "avg" ? "avg_desc" : "avg";
-            if (sortOrder == null) { sortOrder = "name"; }
+
+
+
+    //        var timeE2 = (DateTime.Now - firstTime).TotalMilliseconds.ToString();
+
+            //    var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
+            //        var styles = stylesQuery.Result;
+            //       var beersW = beers.Result;
+
+
             if (breweryId == null && styleId == null)
             {
-                response1 = await httpClient.GetAsync(address + "wa/beers/many/" + "all/" + sortOrder);
-                var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
+                Label:
+                try
+                {
+                    var response = httpClient.GetAsync(address1 + "wa/styles/");
+                    var response1 = client2.GetAsync(address1 + "wa/beers/many/" + "all/" + sortOrder);
+                await Task.WhenAll(response, response1);
+                var stylesQuery = response.Result.Content.ReadAsAsync<IEnumerable<Style>>().Result;
+                    var beers = response1.Result.Content.ReadAsAsync<List<BeerWithAvg>>().Result;
+                    if (stylesQuery.First().Beers != null || beers.First().BeerBreweries == null)
+                    {
+                        goto Label;
+                    }
+                    ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
+                    return View(beers);
+                }
+                                 catch (HttpRequestException e)
+                {
+                    goto Label;
+                }
 
-                return View(beers);
+
+                //  var response1 = await httpClient.GetAsync(address + "wa/beers/many/" + "all/" + sortOrder);
+                //   var beers = await response1.Content.ReadAsAsync<List<BeerWithAvg>>();
+                //    var timeE3 = (DateTime.Now - firstTime).TotalMilliseconds.ToString();
+                /*         beers.First().ImageUrl = timeE1;
+                         beers.First().Name = timeE2;
+                         beers.First().StyleName = timeE3;*/
+
                 //      return View(Sort(sortOrder, beers));
             }
             else
             {
-                response1 = await httpClient.GetAsync("http://52.178.159.188:8001/wa/beers/many/" + styleId + "/" + sortOrder);
-                var beers = await response1.Content.ReadAsAsync<IEnumerable<BeerWithAvg>>();
+                var response = httpClient.GetAsync(address1 + "wa/styles/");
+                var response2 = client2.GetAsync(address1+"wa/beers/many/" + "styleID="+styleId + "/" + sortOrder);
+         //       Task.WaitAll(response, response2);
+                var stylesQuery = response.Result.Content.ReadAsAsync<IEnumerable<Style>>().Result;
+                ViewBag.StyleID = new SelectList(stylesQuery, "StyleID", "Name", null);
+                var beers = response2.Result.Content.ReadAsAsync<IEnumerable<BeerWithAvg>>().Result;
+               
                 ViewBag.Style = styleId;
                 return View(beers);
                 // return View(Sort(sortOrder, beers.ToList()));
             }
+        }
+
+        async Task<int> ProcessURLAsync(string url, HttpClient client)
+        {
+            var byteArray = await client.GetByteArrayAsync(url);
+            return byteArray.Length;
         }
 
         // GET: Beer/Details/5

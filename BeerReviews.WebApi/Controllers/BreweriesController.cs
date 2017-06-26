@@ -38,7 +38,7 @@ namespace BeerReviews.WebApi.Controllers
                     bnbb.Add(bnbb1);
                     var avg = 0.0;
                     var count = 0;
-                    foreach (var bb in b.BeerBreweries)
+                    foreach (var bb in b.BeerBreweries.Where(bbb=>bbb.isPlace==false))
                     {
                         foreach(Review r in reviews) {
                             if (r.BeerID == bb.BeerID) { 

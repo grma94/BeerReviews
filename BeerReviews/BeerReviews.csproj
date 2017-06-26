@@ -295,6 +295,7 @@
     <None Include="Properties\PublishProfiles\BeerReviews20170523105843 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviews20170620021746 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviews20170620021746 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviews20170626113257 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviewsMVC.pubxml" />
     <None Include="Properties\PublishProfiles\website20170523104653 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\website20170523104653 - Web Deploy.pubxml" />

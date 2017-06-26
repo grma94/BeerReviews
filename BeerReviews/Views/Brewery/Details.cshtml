@@ -67,6 +67,30 @@
         <dd>
             @Html.DisplayFor(model => model.Country.Name)
         </dd>
+        <dt>
+            Average review
+        </dt>
+        <dd>
+            @{var bavg = 0.0;
+                var count = 0;
+
+                foreach (var bb in Model.BeerBreweries.Where(bbb => bbb.isPlace == false))
+                {
+                    if (bb.Beer.Reviews.Count() > 0)
+                    {
+
+                        foreach (var r in bb.Beer.Reviews)
+                        {
+                            bavg += r.Overall;
+                            count++;
+                        }
+                    }
+                }
+                bavg = bavg / count;
+            }
+            <span>@bavg.ToString("N1")</span>
+
+        </dd>
         
 
     </dl>

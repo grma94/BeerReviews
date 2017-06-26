@@ -43,6 +43,9 @@
         <th>
             @Html.ActionLink("Country", "Index", new { sortOrder = ViewBag.CountrySortParm, countryID = @ViewBag.Country })
         </th>
+        <th>
+            @Html.ActionLink("Reviews average", "Index", new { sortOrder = ViewBag.AvgSortParm, countryID = @ViewBag.Avg })
+        </th>
         <th></th>
     </tr>
 
@@ -67,6 +70,27 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Country.Name)
+        </td>
+        <td>
+            @{var avg = 0.0;
+                var count = 0;
+
+            foreach (var bb in item.BeerBreweries.Where(bbb => bbb.isPlace == false))
+            {
+                if (bb.Beer.Reviews.Count() > 0)
+                {
+
+                    foreach (var r in bb.Beer.Reviews)
+                    {
+                        avg += r.Overall;
+                        count++;
+                    }
+                }
+            }
+            avg = avg / count;
+                }
+                    <span>@avg.ToString("N1")</span>
+            
         </td>
         <td>
             @if (item.isLocked != true && User.Identity.IsAuthenticated)

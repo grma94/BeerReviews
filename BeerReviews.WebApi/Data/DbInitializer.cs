@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace BeerReviews.WebApi.Data
 {
-    public class DbInitializer : DropCreateDatabaseAlways<BeerReviewsContext2>
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<BeerReviewsContext2>
     {
         protected override void Seed(BeerReviewsContext2 context)
         {
@@ -380,7 +380,7 @@ namespace BeerReviews.WebApi.Data
                 new Beer {Name="Królewskie",Abv=5.8, StyleID=49, ImageUrl="/Content/Images/no_image.png"},
                 new Beer {Name="Warka",Abv=5.5, StyleID=49, ImageUrl="/Content/Images/no_image.png"},
                 new Beer {Name="Warka Strong",Abv=6.5, StyleID=47, ImageUrl="/Content/Images/no_image.png"}
-                
+
             };
             beers.ForEach(b => context.Beers.Add(b));
             context.SaveChanges();
@@ -389,12 +389,12 @@ namespace BeerReviews.WebApi.Data
             {
                 new Brewery {Name="Browar Artezan", City="Błonie", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=20},
                 new Brewery {Name="AleBrowar", City="Lębork", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=2},
-                new Brewery {Name="Pracownia Piwa", City="Modlniczka", Street="Kasztanowa 31", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=2},
-                new Brewery {Name="Warka", City="Warka", Street="Gosniewska 65", PostalCode="05-660", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=2},
-                new Brewery {Name="Piwne Podziemie", City="Rożdżałów", PostalCode="22-121", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=2},
-                new Brewery {Name="Browar Zarzecze", City="Zarzecze",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=1},
-                new Brewery {Name="Browar PINTA", City="Żywiec",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=1},
-                new Brewery {Name="Browar na Jurze", City="Zawiercie",Street="ul. Paderewskiego 114",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=1}
+                new Brewery {Name="Pracownia Piwa", City="Modlniczka", Street="Kasztanowa 31", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=0},
+                new Brewery {Name="Warka", City="Warka", Street="Gosniewska 65", PostalCode="05-660", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=3},
+                new Brewery {Name="Piwne Podziemie", City="Rożdżałów", PostalCode="22-121", CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=0},
+                new Brewery {Name="Browar Zarzecze", City="Zarzecze",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=0},
+                new Brewery {Name="Browar PINTA", City="Żywiec",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=6},
+                new Brewery {Name="Browar na Jurze", City="Zawiercie",Street="ul. Paderewskiego 114",CountryID=177, ImageUrl="/Content/Images/no_image.png",BeersCount=0}
 
             };
             breweries.ForEach(b => context.Breweries.Add(b));
@@ -867,7 +867,7 @@ namespace BeerReviews.WebApi.Data
                 new Review {Overall=1.6f, BeerID=28, Date=DateTime.Now, ImageUrl="/Content/Images/no_image.png",Description="Pusto. Słód i nic więcej. Smaku to piwo nie ma w ogóle, wodniste do bólu."},
                 new Review {Overall=2f, BeerID=28, Date=DateTime.Now, ImageUrl="/Content/Images/no_image.png",Description="Aromat słaby, głównie kukurydziany i słodowy. Barwa dość jasna, piana raczej słaba. W smaku jest kiepsko, głównie słodowo. Taka nieprzyjemna kwaśność, goryczka niska, wysycenie wysokie. Pełnia niska, zbyt wodniste i kompletnie bez wyrazu. Po prostu słabe piwo."},
                 new Review {Overall=1.4f, BeerID=28, Date=DateTime.Now, ImageUrl="/Content/Images/no_image.png",Description="Trudno sie czepiac tego piwa, bo ono smakuje i pachnie praktycznie jak woda... wiec z okazji wczorajszego swieta…"}
-                
+
             };
             reviews.ForEach(r => context.Reviews.Add(r));
             context.SaveChanges();

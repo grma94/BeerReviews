@@ -75,22 +75,23 @@
             @{var avg = 0.0;
                 var count = 0;
 
-            foreach (var bb in item.BeerBreweries.Where(bbb => bbb.isPlace == false))
-            {
-                if (bb.Beer.Reviews.Count() > 0)
+                foreach (var bb in item.BeerBreweries.Where(bbb => bbb.isPlace == false))
                 {
-
-                    foreach (var r in bb.Beer.Reviews)
+                    if (bb.Beer.Reviews.Count() > 0)
                     {
-                        avg += r.Overall;
-                        count++;
+
+                        foreach (var r in bb.Beer.Reviews)
+                        {
+                            avg += r.Overall;
+                            count++;
+                        }
                     }
                 }
-            }
-            avg = avg / count;
-                }
+                if (count > 0) { 
+                avg = avg / count;
                     <span>@avg.ToString("N1")</span>
-            
+                }
+            }
         </td>
         <td>
             @if (item.isLocked != true && User.Identity.IsAuthenticated)

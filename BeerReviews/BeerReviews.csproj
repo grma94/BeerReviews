@@ -290,12 +290,10 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Properties\PublishProfiles\BeerReviews20170523105843 - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\BeerReviews20170523105843 - Web Deploy %283%29.pubxml" />
-    <None Include="Properties\PublishProfiles\BeerReviews20170523105843 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviews20170620021746 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviews20170620021746 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviews20170626113257 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\BeerReviews20170627024628 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\BeerReviewsMVC.pubxml" />
     <None Include="Properties\PublishProfiles\website20170523104653 - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\website20170523104653 - Web Deploy.pubxml" />
